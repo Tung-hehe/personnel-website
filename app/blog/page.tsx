@@ -1,6 +1,6 @@
 import { allPosts } from 'contentlayer/generated'
 import { dateSortDesc } from '@/utils/date'
-import { BlogLayout } from '@/components/blog/BlogLayout'
+import { BlogsLayout } from '@/components/blog/BlogsLayout'
 
 import { generatePageSeo } from '@/utils/seo'
 
@@ -14,5 +14,5 @@ export const generateMetadata = () => {
 export default function Page() {
   const posts = allPosts.sort((a, b) => dateSortDesc(a.date, b.date))
 
-  return <BlogLayout posts={posts} title={commonConfig.blog.title}/>
+  return <BlogsLayout posts={posts} title={commonConfig.blog.title}/>
 }

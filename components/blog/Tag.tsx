@@ -5,7 +5,7 @@ export function Tag({ text }: { text: string }) {
   return (
     <Link
       href={`/tags/${kebabCase(text)}`}
-      className="mr-3 text-sm uppercase text-primary hover:text-sky-400"
+      className="mr-3 text-md uppercase text-primary hover:text-sky-400"
     >
       <span>{kebabCase(text)}</span>
     </Link>

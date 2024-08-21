@@ -13,7 +13,7 @@ export function Header() {
   let pathname = usePathname()
   return (
     <header className="sticky top-0 overflow-hidden py-5 backdrop-blur bg-dark/75">
-      <div className=" flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <Link className="rounded-lg flex items-center text-xl" href="/">
           <NextImage src={siteMetadata.siteLogo} alt="Site logo" width={40} height={40} className="mr-3"/>
           {siteMetadata.siteName}

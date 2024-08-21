@@ -1,6 +1,6 @@
 import { allPosts } from 'contentlayer/generated'
 import { dateSortDesc } from '@/utils/date'
-import { BlogLayout } from '@/components/blog/BlogLayout'
+import { BlogsLayout } from '@/components/blog/BlogsLayout'
 
 import { generatePageSeo } from '@/utils/seo'
 
@@ -19,7 +19,7 @@ export default function Page({ params }: { params: { tag: string } }) {
       return tags.includes(kebabCase(params.tag))
     }
   ).sort((a, b) => dateSortDesc(a.date, b.date))
-  return <BlogLayout
+  return <BlogsLayout
     posts={posts}
     title={`${commonConfig.tags.tagSelect}: ${kebabCase(params.tag)?.toUpperCase()}`}
   />

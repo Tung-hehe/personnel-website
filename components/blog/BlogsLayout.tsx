@@ -11,7 +11,7 @@ import { toLatin } from '@/utils/string';
 import { Pagination } from '../common/Pagination';
 
 
-export function BlogLayout({posts, title}: {posts: Post[], title: string}) {
+export function BlogsLayout({posts, title}: {posts: Post[], title: string}) {
   let [searchValue, setSearchValue] = useState('')
   let [currentPage, setCurrentPage] = useState(1)
   let filteredPosts = posts.filter((post) => {

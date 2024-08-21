@@ -10,7 +10,7 @@ export function MobileNav() {
   return (
     <Menu>
       <MenuButton className="inline-flex items-center rounded p-1.5 hover:bg-gray-700 sm:hidden">
-        <MenuIcon strokeWidth={1.5} size={20}/>
+        <MenuIcon strokeWidth={2} size={25}/>
       </MenuButton>
       <MenuItems
         transition
@@ -18,7 +18,7 @@ export function MobileNav() {
         className="w-32 origin-top-right rounded-xl border border-white/5 bg-[#262c3b] p-1 sm:hidden"
       >
         {headerNavLinks.map(({href, label}) => (
-          <MenuItem>
+          <MenuItem key={label}>
             <Link href={href} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
               {label}
             </Link>
