@@ -1,16 +1,15 @@
-import { Search } from 'lucide-react'
-import { blogConfig } from '@/data/config'
+import { Search as SearchIcon } from 'lucide-react'
+import { commonConfig } from '@/data/config'
 import { toLatin } from '@/utils/string';
 
-export function PostsSearch({ onChange }: { onChange: (value: string) => void }) {
-
+export function Search({ onChange }: { onChange: (value: string) => void }) {
   return (
     <div className="relative max-w-lg">
       <input
-        aria-label="search-posts"
+        aria-label="search"
         type="text"
         onChange={(e) => onChange(toLatin(e.target.value).toLowerCase())}
-        placeholder={blogConfig.search}
+        placeholder={commonConfig.search}
         className="
           block w-full rounded-md border border-gray-900
           bg-gray-800 px-4 py-2 text-gray-100 focus:border-sky-500
@@ -19,7 +18,7 @@ export function PostsSearch({ onChange }: { onChange: (value: string) => void })
         "
       />
       <button>
-        <Search
+        <SearchIcon
           strokeWidth={2}
           size={20}
           className="absolute right-3 top-3 h-5 w-5 text-gray-300"

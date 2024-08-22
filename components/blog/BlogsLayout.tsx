@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import { Post } from 'contentlayer/generated'
 
-import { PostCard } from '@/components/blog/PostCard'
-import { PostsSearch } from '@/components/blog/PostSearch'
+import { Search } from '@/components/common/Search'
 
-import { commonConfig } from '@/data/config'
+import { blogConfig } from '@/data/config'
 import { toLatin } from '@/utils/string';
 import { Pagination } from '../common/Pagination';
 import { ListPosts } from './ListPosts';
@@ -19,10 +18,10 @@ export function BlogsLayout({posts, title}: {posts: Post[], title: string}) {
     let searchContent = toLatin(post.title + post.summary + post.tags.join(' ')).toLowerCase()
     return searchContent.includes(searchValue)
   })
-  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / commonConfig.pagination.postsPerPage))
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / blogConfig.postsPerPage))
   let renderedPosts = filteredPosts.slice(
-    (currentPage - 1) * commonConfig.pagination.postsPerPage,
-    currentPage * commonConfig.pagination.postsPerPage
+    (currentPage - 1) * blogConfig.postsPerPage,
+    currentPage * blogConfig.postsPerPage
   )
 
   return (
@@ -36,14 +35,17 @@ export function BlogsLayout({posts, title}: {posts: Post[], title: string}) {
         >
           {title}
         </h1>
-        <PostsSearch onChange={setSearchValue} />
+        <Search onChange={setSearchValue} />
       </header>
       <ListPosts posts={renderedPosts}/>
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      {
+        totalPages > 1 &&
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      }
     </div>
   )
 }

@@ -1,11 +1,13 @@
-import { Twemoji } from "@/components/common/Twemoji"
+import projectsData from "@/data/projects";
 
+import { generatePageSeo } from '@/utils/seo'
+import { projectsConfig } from '@/data/config'
+import { ProjectsLayout } from "@/components/project/ProjectsLayout";
 
-export default function Page() {
-  return (
-    <div>
-      <span>Comming soon!</span>
-      <Twemoji className="mx-2" emoji="face-savouring-delicious-food" size=""/>
-    </div>
-  )
+export const generateMetadata = () => {
+  return generatePageSeo({ title: projectsConfig.title })
+}
+
+export default function Projects() {
+  return <ProjectsLayout projects={projectsData}/>
 }
