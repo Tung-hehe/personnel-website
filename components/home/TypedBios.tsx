@@ -35,7 +35,7 @@ export function TypedBios() {
           ))
         }
       </ul>
-      <span ref={el} className="text-neutral-900 dark:text-neutral-200" />
+      <span ref={el} className="text-neutral-200" />
     </div>
   )
 }

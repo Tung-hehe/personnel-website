@@ -22,7 +22,7 @@ export default function Page() {
               <span>{homeConfig.greating}</span>
               <Twemoji emoji="waving-hand" size="" className="ml-2"/>
             </div>
-            <h1 className="text-neutral-900 dark:text-neutral-200 pb-2">
+            <h1 className="text-neutral-200 pb-2">
               <span>{homeConfig.heading}</span>
               <span className="absolute ml-1.5 inline-flex pt-[3px]">
                 <Twemoji emoji="winking-face"/>
