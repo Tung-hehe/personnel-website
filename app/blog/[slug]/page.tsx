@@ -13,7 +13,7 @@ import { Tag } from '@/components/blog/Tag'
 import { generatePageSeo } from '@/utils/seo'
 
 const mdxComponents: MDXComponents = {
-  pre: ({ children }) => <Pre children={children}/>,
+  pre: ({ children }) => <Pre>{children}</Pre>,
 }
 
 export const generateStaticParams = async () => allPosts.map((post) => ({ slug: post._raw.flattenedPath }))
