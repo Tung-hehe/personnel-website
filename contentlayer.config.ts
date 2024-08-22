@@ -67,7 +67,7 @@ export const Serie = defineNestedType(() => ({
 
 export const Post = defineDocumentType(() => ({
   name: 'Post',
-  filePathPattern: 'blog/**/*.mdx',
+  filePathPattern: 'posts/**/*.mdx',
   contentType: 'mdx',
   fields: {
     title: { type: 'string', required: true },
