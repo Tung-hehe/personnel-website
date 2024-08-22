@@ -13,7 +13,8 @@ const config: Config = {
         sky: colors.sky,
         gray: colors.neutral,
         primary: '#7aa2f7',
-        dark: '#1A2130'
+        dark: '#1A2130',
+        'primary-dark': '#262c3b'
       },
       typography: (theme: Function) => ({
         DEFAULT: {

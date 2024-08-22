@@ -15,7 +15,7 @@ export function MobileNav() {
       <MenuItems
         transition
         anchor="bottom end"
-        className="w-32 origin-top-right rounded-xl border border-white/5 bg-[#262c3b] p-1 sm:hidden"
+        className="w-32 z-10 origin-top-right rounded-xl border border-white/5 bg-primary-dark p-1 sm:hidden"
       >
         {headerNavLinks.map(({href, label}) => (
           <MenuItem key={label}>

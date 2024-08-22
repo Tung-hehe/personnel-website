@@ -4,12 +4,12 @@ import { allPosts } from 'contentlayer/generated'
 import { kebabCase } from '@/utils/string'
 import { getTagsCount } from "@/utils/tag"
 import { Tag } from '@/components/blog/Tag'
-import { commonConfig } from '@/data/config'
+import { tagsConfig } from '@/data/config'
 import { generatePageSeo } from '@/utils/seo'
 
 
 export const generateMetadata = () => {
-  return generatePageSeo({ title: commonConfig.tags.title })
+  return generatePageSeo({ title: tagsConfig.title })
 }
 
 export default function Page() {
@@ -31,18 +31,18 @@ export default function Page() {
               md:border-r-2 md:px-6 md:text-6xl md:leading-14
             "
           >
-            {commonConfig.tags.title}
+            {tagsConfig.title}
           </h2>
         </div>
         <div className="flex max-w-lg flex-wrap">
-          {Object.keys(tags).length === 0 && commonConfig.tags.noTageFound}
+          {Object.keys(tags).length === 0 && tagsConfig.noTageFound}
           {sortTags.map((tag) => {
             return (
               <div key={tag} className="mb-2 mr-5 mt-2">
                 <Tag text={tag} />
                 <Link
                   href={`/${kebabCase(tag)}`}
-                  className="-ml-2 text-sm uppercase text-gray-600 dark:text-gray-300"
+                  className="-ml-2 text-sm uppercase text-gray-300"
                 >
                   ({tags[tag]})
                 </Link>

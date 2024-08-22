@@ -4,5 +4,5 @@ export const siteMetadata = {
   siteName: '3TBlog',
   description: 'T.T.Tung personal website',
   siteUrl: 'http://localhost:3000', // Your site url
-  socialBanner: '/avatar.jpg',
+  socialBanner: '/profile.jpg',
 }

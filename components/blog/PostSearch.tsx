@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react'
-import { commonConfig } from '@/data/config'
+import { blogConfig } from '@/data/config'
 import { toLatin } from '@/utils/string';
 
 export function PostsSearch({ onChange }: { onChange: (value: string) => void }) {
@@ -10,7 +10,7 @@ export function PostsSearch({ onChange }: { onChange: (value: string) => void })
         aria-label="search-posts"
         type="text"
         onChange={(e) => onChange(toLatin(e.target.value).toLowerCase())}
-        placeholder={commonConfig.blog.search}
+        placeholder={blogConfig.search}
         className="
           block w-full rounded-md border border-gray-900
           bg-gray-800 px-4 py-2 text-gray-100 focus:border-sky-500

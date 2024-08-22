@@ -9,6 +9,7 @@ import { PostsSearch } from '@/components/blog/PostSearch'
 import { commonConfig } from '@/data/config'
 import { toLatin } from '@/utils/string';
 import { Pagination } from '../common/Pagination';
+import { ListPosts } from './ListPosts';
 
 
 export function BlogsLayout({posts, title}: {posts: Post[], title: string}) {
@@ -37,15 +38,7 @@ export function BlogsLayout({posts, title}: {posts: Post[], title: string}) {
         </h1>
         <PostsSearch onChange={setSearchValue} />
       </header>
-      <ul className="space-y-14 py-12 min-h-[35rem]">
-        {
-          !renderedPosts.length
-          ? commonConfig.blog.noPost
-          : renderedPosts.map((post, idx) => (
-            <PostCard key={idx} {...post} />
-          ))
-        }
-      </ul>
+      <ListPosts posts={renderedPosts}/>
       <Pagination
         totalPages={totalPages}
         currentPage={currentPage}

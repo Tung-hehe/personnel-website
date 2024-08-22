@@ -1,6 +1,6 @@
 import { Twemoji } from '@/components/common/Twemoji'
 
-import { commonConfig } from '@/data/config'
+import { commonConfig, blogConfig } from '@/data/config'
 import { formatDate } from '@/utils/date'
 
 type BlogInformationProps = {
@@ -22,14 +22,14 @@ export function BlogInformation({
       <div className="flex items-center">
         <Twemoji emoji="hourglass-not-done" size="" />
         <span className="ml-1.5 md:ml-2">
-          {`${Math.ceil(readingTime)} ${commonConfig.blog.readingTime}`}
+          {`${Math.ceil(readingTime)} ${blogConfig.readingTime}`}
         </span>
       </div>
       <span className="mx-2">{` • `}</span>
       <div className="flex items-center">
         <Twemoji emoji="notebook" size=""/>
         <span className="ml-1.5 md:ml-2">
-          {`${Math.ceil(words)} ${commonConfig.blog.words}`}
+          {`${Math.ceil(words)} ${blogConfig.words}`}
         </span>
       </div>
     </div>
