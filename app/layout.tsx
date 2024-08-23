@@ -9,6 +9,7 @@ import { Footer } from "@/components/common/Footer"
 
 import { siteMetadata } from "@/data/siteMetadata"
 import { commonConfig } from '@/data/config'
+import { ScrollTopButton } from "@/components/common/ScrollTopButton";
 
 const font = Roboto({weight: "500", subsets: ['vietnamese']});
 
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body className={`${font.className} bg-dark text-white mx-auto max-w-5xl px-3 sm:px-6 xl:max-w-5xl xl:px-0`}>
         <Header/>
         <div className="flex flex-col">
+          <ScrollTopButton/>
           <main style={{ minHeight: commonConfig.mainContentMinHeight }}>{children}</main>
         </div>
         <Footer />
