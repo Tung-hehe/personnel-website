@@ -28,7 +28,10 @@ export function ScrollTopButton() {
       type="button"
       onClick={handleClick}
       style={{ opacity: show ? 1 : 0 }}
-      className="fixed bottom-8 right-8 hidden rounded-full bg-gray-600 p-2 text-gray-100 transition-opacity hover:bg-gray-600 md:inline-block"
+      className="
+        fixed bottom-8 right-8 hidden rounded-full bg-gray-600 p-2
+        text-gray-100 transition-opacity hover:bg-gray-600 md:inline-block
+      "
     >
       <MoveUp strokeWidth={1} />
     </button>
