@@ -2,6 +2,7 @@
 
 import { MoveUp } from 'lucide-react'
 import { useEffect, useState } from 'react'
+// @ts-ignore
 import smoothscroll from 'smoothscroll-polyfill'
 
 export function ScrollTopButton() {
