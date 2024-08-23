@@ -1,45 +1,141 @@
 ---
-title: Giải một bài toán LP bằng python
+title: Giải một bài toán MILP bằng python
 date: 2024-07-22
-tags: [modeling, math, LP, python]
-summary: Sử dụng thư viện python-mip để giải quyết một mô hình LP.
+tags: [modeling, math, MILP, python]
+summary: Sử dụng thư viện python-mip để giải quyết một mô hình MILP.
 image:
 authors: [default]
 ---
 
-```python showLineNumbers
-def bar(*,
-        df: pd.DataFrame,
-        x: str,
-        y: str | list[str] | dict[str, str],
-        category: str | list[str] = None,
-        colors: dict = None,
-        text: str = None,
-        texttemplate: str = None,
-        sortCategory: list = None,
-        **kwargs,
-    ) -> go.Figure:
-    """
-        NOTE. Can change bar mode via argument `barmode` (stack or group)
-    """
-    fig = go.Figure()
-    if isinstance(y, dict):
-        assert category is None
-        for k, v in y.items():
-            fig.add_trace(go.Bar(
-                x=df[x],
-                y=df[v],
-                name=k,
-                legendgroup=k,
-                marker=dict(
-                    color=colors[k] if colors is not None and k in colors else None
-                ),
-                text=df[text[k]] if text is not None else None,
-                texttemplate=texttemplate
-            ))
-    else:
-        raise ValueError()
-    return fig
+Python-MIP là một thư viện tập hợp rất nhiều công cụ để mô hình hóa và giải các bài toán
+Tối ưu tuyến tính hỗn hợp nguyên (MILP) với ưu điểm dễ dàng sử dụng cùng với hiệu suất khá cao
+thì đây là một thư viện không tồi để giải các bài toán MILP. Trong bài này, ta sẽ tìm hiểu
+cách để giải một mô hình MILP bằng Python-Mip
+
+## 1. Cài đặt và chuẩn bị
+Hãy chắc chắn rằng bạn đã cài đặt [Python](https://www.python.org/). Cài đặt Python-Mip bằng câu lệnh sau
+```terminal
+pip install mip
 ```
 
-Trần Thanh Tùng `test`
+Import Python-Mip
+```python
+import mip
+```
+
+## 2. Khởi tạo mô hình
+
+Đoạn code dưới đây tạo ra một mô hình MILP rỗng với cấu hình mặc định.
+```python
+model = mip.Model()
+```
+Mô hình với cầu hình mặc định có hàm mục tiêu là *Minimize* và solver sử dụng là
+[*CBC*](https://www.coin-or.org/). Để thay đổi các cài đặt này, hãy sử dụng đoạn code sau
+```python
+# use GRB for Gurobi
+model = mip.Model(sense=mip.MAXIMIZE, solver_name=mip.CBC)
+```
+
+## 3. Thêm biến
+Thêm biến vào mô hình bằng phương thức [add_var()](https://docs.python-mip.com/en/latest/classes.html#mip.Model.add_var).
+```python
+x = m.add_var()
+```
+Biến với cấu hình mặc định là biến thuộc tập $\mathbb{R}^+$. Thay đổi kiểu, cận trên và cận dưới
+của biến bằng các tham số `var_type`, `ub`, `lb`
+```python
+x = m.add_var(var_type=mip.BINARY) # x in {0; 1}
+y = m.add_var(var_type=mip.INTEGER) # y is integer
+z = m.add_var(lb=0, ub=5) # 0 ≤ z ≤ 5
+```
+
+## 4. Thêm ràng buộc
+Thêm ràng buộc bằng phương thức [add_constr()](https://docs.python-mip.com/en/latest/classes.html)
+```python
+# add constraint ex + y ≤ 11
+model.add_constr(4*x + y <= 11)
+
+# add constraint ex + y = 11
+model.add_constr(4*x + y == 11)
+
+# add constraint ex + y ≥ 11
+model.add_constr(4*x + y == 11)
+```
+
+## 5. Hàm mục tiêu và giải mô hình
+
+```python
+# Set objective min(2x + y)
+model = mip.Model(sense=mip.MINIMIZE)
+model.objective = 2*x+y
+
+# Solve model
+model.optimize()
+```
+
+## 6. Ví dụ
+
+```math
+\begin{aligned}
+  \text{min} \quad & 2x + y && \\
+  \text{s.t} \quad & 4x + y & \leq & \quad 11 \\
+                   & x + y & = & \quad 0 \\
+                   & x & \geq & \quad 0 \\
+                   & y & \geq & \quad 0 \\
+                   & x, y & \in & \quad \mathbb{Z}^+\\
+
+\end{aligned}
+```
+Đoạn code dưới đây giải mô hình MILP trên
+```python
+"""
+filename: main.py
+run command: python main.py
+"""
+import mip
+
+model = mip.Model(sense=mip.MINIMIZE, solver_name=mip.CBC)
+x = model.add_var(lb=0, ub=mip.INF, var_type=mip.INTEGER)
+y = model.add_var(lb=0, ub=mip.INF, var_type=mip.INTEGER)
+
+# Set objective function
+model.objective = 2*x+y
+# Set constraints
+model.add_constr(4*x + y <= 11)
+model.add_constr(x + y == 5)
+
+model.optimize() # Solve model
+print('-------------------------------------------------')
+# Print solution
+print(f'x: {x.x}')
+print(f'y: {y.x}')
+```
+
+Dưới đây là kết quả khi chạy đoạn code trên với nguyện tối ưu là $x = 0$, $y = 5$,
+giá trị tối ưu là 5 và thời gian giải là 0.04s
+```terminal
+Welcome to the CBC MILP Solver
+Version: Trunk
+Build Date: Oct 28 2021
+
+Starting solution of the Linear programming relaxation problem using Primal Simplex
+
+Coin0506I Presolve 0 (-2) rows, 0 (-2) columns and 0 (-4) elements
+Clp0000I Optimal - objective value 5
+Coin0511I After Postsolve, objective 5, infeasibilities - dual 0 (0), primal 0 (0)
+Clp0032I Optimal objective 5 - 0 iterations time 0.032, Presolve 0.02, Idiot 0.00
+
+Starting MIP optimization
+Cgl0004I processed model has 0 rows, 0 columns (0 integer (0 of which binary)) and 0 elements
+Cgl0015I Clique Strengthening extended 0 cliques, 0 were dominated
+Cbc3007W No integer variables
+Total time (CPU seconds):       0.04   (Wallclock seconds):       0.04
+
+-------------------------------------------------
+x: 0.0
+y: 5.0
+```
+
+## 7. Tham khảo
+
+- [Python-Mip document](https://docs.python-mip.com/en/latest/index.html)
