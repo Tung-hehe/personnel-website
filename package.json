@@ -12,6 +12,7 @@
     "@headlessui/react": "^2.1.2",
     "@next/bundle-analyzer": "^14.2.5",
     "@tailwindcss/typography": "^0.5.13",
+    "@types/smoothscroll-polyfill": "^0.3.4",
     "clsx": "^2.1.1",
     "contentlayer": "^0.3.4",
     "lucide-react": "^0.424.0",
