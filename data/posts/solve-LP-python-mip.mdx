@@ -37,61 +37,9 @@ def bar(*,
                 text=df[text[k]] if text is not None else None,
                 texttemplate=texttemplate
             ))
-    elif isinstance(y, str):
-        if category is not None:
-            group = df.groupby(category)
-            if sortCategory is not None:
-                order = sortCategory
-            else:
-                order = group.groups.keys()
-            for c in order:
-                drawDf = group.get_group(c)
-                fig.add_trace(go.Bar(
-                x=drawDf[x],
-                y=drawDf[y],
-                name=c,
-                legendgroup=c,
-                marker=dict(
-                    color=colors[c] if colors is not None and c in colors else None
-                ),
-                text=drawDf[text] if text is not None else None,
-                texttemplate=texttemplate
-            ))
-        else:
-            fig.add_trace(go.Bar(
-                x=df[x],
-                y=df[y],
-                name='',
-                marker=dict(
-                    color=colors[y] if colors is not None and y in colors else None
-                ),
-                text=df[text] if text is not None else None,
-                texttemplate=texttemplate
-            ))
-    elif isinstance(y, list):
-        assert category is None
-        for c in y:
-            fig.add_trace(go.Bar(
-                x=df[x],
-                y=df[c],
-                name=c,
-                legendgroup=c,
-                marker=dict(color=colors[c] if colors is not None and c in colors else None),
-                text=df[text[c]] if text is not None else None,
-                texttemplate=texttemplate
-            ))
     else:
         raise ValueError()
-
-    layout = cls.getLayoutSetup(**kwargs)
-    fig.update_layout(**layout)
     return fig
-```
-
-```js showLineNumbers
-const post = allPosts.find((post) => post.slug === params.slug)
-if (!post) notFound()
-const MDXContent = useMDXComponent(post.body.code)
 ```
 
 Trần Thanh Tùng `test`
