@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Author } from 'contentlayer/generated'
 import { Mail, Github, Facebook } from 'lucide-react';
 
-export default function AuthorInfo({ author }: {author: Author}) {
+export function AuthorInfo({ author }: {author: Author}) {
 
   return (
     <div className="flex flex-col items-center space-x-2 pt-8 sm:pt-8">
