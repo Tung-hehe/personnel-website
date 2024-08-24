@@ -78,5 +78,6 @@ export const projectsConfig = {
 }
 
 export const aboutConfig = {
-  title: 'Về Trần Thanh Tùng'
+  title: 'Về Trần Thanh Tùng',
+  greating: 'Chào bạn!'
 }
