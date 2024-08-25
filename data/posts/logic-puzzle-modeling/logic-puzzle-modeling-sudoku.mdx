@@ -10,6 +10,21 @@ image:
 authors: [default]
 ---
 
-import { Twemoji } from '@/components/common/Twemoji.tsx'
+## 1. Giới thiệu
 
-Comming soon! <Twemoji className="mx-2" emoji="face-savouring-delicious-food" size=""/>
+Sudoku, ban đầu có tên gọi là Number Place là một trò chơi câu đố dựa trên logic theo tổ hợp.
+Mục tiêu của trò chơi là điền các chữ số vào một lưới $9×9$ sao cho mỗi cột, mỗi hàng,
+và mỗi phần trong số chín lưới con $3×3$ cấu tạo nên lưới chính (cũng gọi là "hộp", "khối", hoặc "vùng")
+đều chứa tất cả các chữ số từ 1 tới 9. Một vài ô trong lưới đã được điền sẵn, người chơi phải hoàn thiện
+bằng cách điền số vào những ô còn lại. Câu đố được thiết lập tốt là câu đố chỉ có một lời giải duy nhất.
+
+*Tham khảo [wikipedia](https://vi.wikipedia.org/wiki/Sudoku)*
+
+## 2. Mô hình hóa câu đố
+
+Một số ký hiệu dùng trong bài toán
+- $n$ là một số chính phương biểu diễn cho cỡ của lưới
+- $F$ là tập hợp các cặp $(i, j)$ biểu diễn tọa độ của các ô đã điền sẵn trên lưới
+- $v_(i, j)$ là giá trị của ô $(i, j) \in F$
+
+### 2.1 Biến quyết định
