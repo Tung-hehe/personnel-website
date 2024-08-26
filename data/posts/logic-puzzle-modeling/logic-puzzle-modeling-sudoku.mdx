@@ -1,6 +1,6 @@
 ---
 title: Mô hình hóa câu đố Sudoku
-date: 2024-08-24
+date: 2024-08-26
 series:
   order: 1
   title: Mô hình hóa các câu đố logic
@@ -32,7 +32,7 @@ Một số ký hiệu dùng trong bài toán
 - $V(i, j)$ là số được điền trong ô $(i, j) /in F$
 - $B_b$ là tập hợp các ô $(i, j)$ trong khối thứ $b$ ($0 \leq b < n$).
 
-### 2.1 Biến quyết định
+### 2.1. Biến quyết định
 
 Với mỗi ô $(i, j)$ trong lưới và một số $k$, xây dựng biến
 $x(i, j, k)$ thỏa mãn
@@ -44,7 +44,7 @@ x(i, j, k) = \begin{cases}
 \end{cases}
 ```
 
-### 2.2 Các điều kiện
+### 2.2. Các ràng buộc
 
 - Mỗi ô chứa một số
 ```math
@@ -72,7 +72,7 @@ x(i, j, k) = \begin{cases}
 x(i, j, V(i, j)) = 1, \forall (i, j) \in F
 ```
 
-### 2.3 Hàm mục tiêu
+### 2.3. Hàm mục tiêu
 
 Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
 cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
@@ -86,6 +86,6 @@ của bài toàn đã được mô hình hóa một cách rất dễ dàng với
 hay được sử dụng khi mô hình hóa, chúng ta sẽ còn gặp lại các biến nhị phân kiểu này ở các bài viết cùng
 series.
 
-*Code mô hình hóa Sudoku có tại [LogicPuzzlesSolver](https://github.com/Tung-hehe/LogicPuzzlesSolver)*
+*Code mô hình hóa Sudoku bằng python có tại [LogicPuzzlesSolver](https://github.com/Tung-hehe/LogicPuzzlesSolver)
 
-Chúc bạn đọc vui vẻ! <Twemoji emoji="clinking-beer-mugs" />
+Happly modeling! <Twemoji emoji="clinking-beer-mugs" />
