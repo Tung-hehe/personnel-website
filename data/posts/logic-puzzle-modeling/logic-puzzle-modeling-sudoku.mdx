@@ -10,21 +10,82 @@ image:
 authors: [default]
 ---
 
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
 ## 1. Giới thiệu
 
 Sudoku, ban đầu có tên gọi là Number Place là một trò chơi câu đố dựa trên logic theo tổ hợp.
 Mục tiêu của trò chơi là điền các chữ số vào một lưới $9×9$ sao cho mỗi cột, mỗi hàng,
-và mỗi phần trong số chín lưới con $3×3$ cấu tạo nên lưới chính (cũng gọi là "hộp", "khối", hoặc "vùng")
+và mỗi phần trong số chín lưới con $3×3$ cấu tạo nên lưới chính (còn được gọi là "hộp", "khối", hoặc "vùng")
 đều chứa tất cả các chữ số từ 1 tới 9. Một vài ô trong lưới đã được điền sẵn, người chơi phải hoàn thiện
 bằng cách điền số vào những ô còn lại. Câu đố được thiết lập tốt là câu đố chỉ có một lời giải duy nhất.
 
 *Tham khảo [wikipedia](https://vi.wikipedia.org/wiki/Sudoku)*
+
+![sudoku-example](/posts/Sudoku.jpg)
 
 ## 2. Mô hình hóa câu đố
 
 Một số ký hiệu dùng trong bài toán
 - $n$ là một số chính phương biểu diễn cho cỡ của lưới
 - $F$ là tập hợp các cặp $(i, j)$ biểu diễn tọa độ của các ô đã điền sẵn trên lưới
-- $v_(i, j)$ là giá trị của ô $(i, j) \in F$
+- $V(i, j)$ là số được điền trong ô $(i, j) /in F$
+- $B_b$ là tập hợp các ô $(i, j)$ trong khối thứ $b$ ($0 \leq b < n$).
 
 ### 2.1 Biến quyết định
+
+Với mỗi ô $(i, j)$ trong lưới và một số $k$, xây dựng biến
+$x(i, j, k)$ thỏa mãn
+
+```math
+x(i, j, k) = \begin{cases}
+  1 & \text{ nếu ô } (i, j)\text{ được điền giá trị } {k} \\
+  0 & \text{ ngược lại }
+\end{cases}
+```
+
+### 2.2 Các điều kiện
+
+- Mỗi ô chứa một số
+```math
+\sum\limits_{k = 1}^{n}{x(i, j, k)} \leq 1, \forall 0 \leq i, j < n
+```
+
+- Mỗi hàng chứa đủ các số từ 1 đến $n$
+
+```math
+\sum\limits_{j = 0}^{n - 1}{x(i, j, k)} = 1, \forall 0 \leq i  < n, 1 \leq k  \leq n
+```
+
+- Mỗi cột chứa đủ các số từ 1 đến $n$
+```math
+\sum\limits_{i = 0}^{n - 1}{x(i, j, k)} = 1, \forall 0 \leq j < n, 1 \leq k  \leq n
+```
+
+- Mỗi khối chứa đủ các số từ 1 đến $n$
+```math
+\sum\limits_{(i, j) \in B_b}{x(i, j, k)} = 1, \forall 0 \leq b < n, 1 \leq k  \leq n
+```
+
+- Các ô đã có giá trị từ trước
+```math
+x(i, j, V(i, j)) = 1, \forall (i, j) \in F
+```
+
+### 2.3 Hàm mục tiêu
+
+Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
+cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+mục tiêu là một hằng số (mình hay chọn số 0).
+
+## 3. Kết luận
+
+Sudoku là một trong những bài tập cơ bản để thành thạo kỹ năng mô hình hóa, khi mới bắt đầu học mô hình
+hóa mình đã rất ấn tượng với ý tưởng đặt biến nhị nhân ba chiều của bài toán này. Mọi ràng buộc còn lại
+của bài toàn đã được mô hình hóa một cách rất dễ dàng với cách đặt biến này. Đây cùng là một phương pháp
+hay được sử dụng khi mô hình hóa, chúng ta sẽ còn gặp lại các biến nhị phân kiểu này ở các bài viết cùng
+series.
+
+*Code mô hình hóa Sudoku có tại [LogicPuzzlesSolver](https://github.com/Tung-hehe/LogicPuzzlesSolver)*
+
+Chúc bạn đọc vui vẻ! <Twemoji emoji="clinking-beer-mugs" />

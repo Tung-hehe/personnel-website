@@ -11,7 +11,7 @@ const config: Config = {
     extend: {
       colors: {
         sky: colors.sky,
-        gray: colors.neutral,
+        gray: colors.slate,
         primary: '#7aa2f7',
         dark: '#1A2130',
         'primary-dark': '#262c3b'
@@ -42,6 +42,7 @@ const config: Config = {
               color: theme('colors.gray.100'),
             },
             'h4,h5,h6': {
+              fontWeight: '400',
               color: theme('colors.gray.100'),
             },
             pre: {

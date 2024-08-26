@@ -15,7 +15,7 @@ const projectsData: Project[] = [
     href: '/',
   },
   {
-    title: 'Logic Puzzle Solver',
+    title: 'Logic Puzzles Solver',
     description: 'Mô hình hóa và giải các câu đố logic như Sudoku, Binox, Triox, Slitherlink, ...',
     imgSrc: '/projects/LogicPuzzle.jpg',
     builtWith: ['Python', 'MILP'],
