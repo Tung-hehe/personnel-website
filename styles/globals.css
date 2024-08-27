@@ -19,6 +19,9 @@ html {
 }
 
 /* START: CSS Prose */
+.prose .katex-html {
+  white-space: wrap;
+}
 .prose {
   font-size: 18px;
 }
