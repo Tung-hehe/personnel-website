@@ -12,4 +12,14 @@ authors: [default]
 
 import { Twemoji } from '@/components/common/Twemoji.tsx'
 
-Comming soon! <Twemoji className="mx-2" emoji="face-savouring-delicious-food" size=""/>
+## 1. Giới thiệu
+
+Trinox là một câu đố logic được mô tả như sau, cho một lưới các ô vuông với một số ô đã được điền sẵn
+$X$, $O$ hoặc $I$. Người chơi cần hoàn thiện lưới bằng cách điền vào những ô trống $X$, $O$ và $I$ thỏa mãn:
+- Lưới được phủ kín bởi $X$, $O$ và $I$
+- Trên mỗi hàng/cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- Trên mỗi hàng/cột số lượng $X$ bằng số lượng $O$
+
+Dưới đây là ví dụ cho một câu đố Triox cỡ 12×12 và lời giải
+
+![triox-example](/posts/Triox.png)
