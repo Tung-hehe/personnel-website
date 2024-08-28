@@ -1,8 +1,8 @@
 ---
 title: Mô hình hóa câu đố Binox
-date: 2024-09-05
+date: 2024-08-30
 series:
-  order: 4
+  order: 5
   title: Mô hình hóa các câu đố logic
 tags: [modeling, math, MILP, programing, python]
 summary: Mô hình hóa và giải câu đố Binox bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
@@ -12,4 +12,16 @@ authors: [default]
 
 import { Twemoji } from '@/components/common/Twemoji.tsx'
 
-Comming soon! <Twemoji className="mx-2" emoji="face-savouring-delicious-food" size=""/>
+
+## 1. Giới thiệu
+
+Binox là một câu đố logic được mô tả như sau, cho một lưới các ô vuông với một số ô đã được điền sẵn $X$ hoặc $O$.
+Người chơi cần hoàn thiện lưới bằng cách điền vào những ô trống $X$ hoặc $O$ thỏa mãn:
+- Lưới được phủ kín bởi $X$ và $O$
+- Trên mỗi hàng/cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- Trên mỗi hàng/cột số lượng $X$ bằng số lượng $O$
+- Mỗi hàng/cột là duy nhất (Không có 2 hàng nào giống nhau, không có 2 cột nào giống nhau)
+
+Dưới đây là ví dụ cho một câu đố Binox cỡ 6×6 và lời giải
+
+![binox-example](/posts/Binox.png)
