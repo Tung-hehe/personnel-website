@@ -29,7 +29,7 @@ bằng cách điền số vào những ô còn lại. Câu đố được thiế
 Một số ký hiệu dùng trong bài toán
 - $n$ là một số chính phương biểu diễn cho cỡ của lưới
 - $F$ là tập hợp các cặp $(i, j)$ biểu diễn tọa độ của các ô đã điền sẵn trên lưới
-- $V(i, j)$ là số được điền trong ô $(i, j) \in F$
+- $$V_{ij}$$ là số được điền trong ô $(i, j) \in F$
 - $B_b$ là tập hợp các ô $(i, j)$ trong khối thứ $b$ ($0 \leq b < n$).
 
 ### 2.1. Biến quyết định
@@ -48,28 +48,28 @@ x(i, j, k) = \begin{cases}
 
 - Mỗi ô chứa một số
 ```math
-\sum\limits_{k = 1}^{n}{x(i, j, k)} \leq 1, \forall 0 \leq i, j < n
+\sum\limits_{k = 1}^{n}{x(i, j, k)} \leq 1, \\ \forall 0 \leq i, j < n
 ```
 
 - Mỗi hàng chứa đủ các số từ 1 đến $n$
 
 ```math
-\sum\limits_{j = 0}^{n - 1}{x(i, j, k)} = 1, \forall 0 \leq i  < n, 1 \leq k  \leq n
+\sum\limits_{j = 0}^{n - 1}{x(i, j, k)} = 1, \\ \forall 0 \leq i  < n, 1 \leq k  \leq n
 ```
 
 - Mỗi cột chứa đủ các số từ 1 đến $n$
 ```math
-\sum\limits_{i = 0}^{n - 1}{x(i, j, k)} = 1, \forall 0 \leq j < n, 1 \leq k  \leq n
+\sum\limits_{i = 0}^{n - 1}{x(i, j, k)} = 1, \\ \forall 0 \leq j < n, 1 \leq k  \leq n
 ```
 
 - Mỗi khối chứa đủ các số từ 1 đến $n$
 ```math
-\sum\limits_{(i, j) \in B_b}{x(i, j, k)} = 1, \forall 0 \leq b < n, 1 \leq k  \leq n
+\sum\limits_{(i, j) \in B_b}{x(i, j, k)} = 1, \\ \forall 0 \leq b < n, 1 \leq k  \leq n
 ```
 
 - Các ô đã có giá trị từ trước
 ```math
-x(i, j, V(i, j)) = 1, \forall (i, j) \in F
+x(i, j, V_{ij}) = 1, \\ \forall (i, j) \in F
 ```
 
 ### 2.3. Hàm mục tiêu
@@ -86,6 +86,6 @@ của bài toàn đã được mô hình hóa một cách rất dễ dàng với
 hay được sử dụng khi mô hình hóa, chúng ta sẽ còn gặp lại các biến nhị phân kiểu này ở các bài viết cùng
 series.
 
-*Code mô hình hóa Sudoku bằng python có tại [LogicPuzzlesSolver](https://github.com/Tung-hehe/LogicPuzzlesSolver)
+*Code mô hình hóa Sudoku bằng python có tại [LogicPuzzlesSolver/sudoku](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/sudoku.py)
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

@@ -24,14 +24,104 @@ khu vực gọi là các thiên hà thỏa mãn các điều kiện sau:
 
 Dưới đây là ví dụ cho một câu đố Galaxies cỡ 10×18 và lời giải
 
-![star-battle-example](/posts/Galaxies.png)
+![galaxies-example](/posts/Galaxies.png)
 
 ## 2. Mô hình hóa câu đố
 
-Comming soon! <Twemoji className="mx-2" emoji="face-savouring-delicious-food" size=""/>
+- $n_R$ là số hàng của lưới
+- $n_C$ là số cột của lưới
+- $n_G$ là số lượng thiên hà (bằng số lượng ngôi sao trong lưới)
+- $C_g$ là tập hợp các ô có tọa độ $(i, j)$ chứa tâm của thiên hà $g$
+- $F_g$ là tập hợp các ô có khả năng thuộc thiên hà $g$
+- $$P_{ijg}$$ là tập hợp tất cả đường đi từ ô $(i, j)$ đến trung tâm của thiên hà $g$
+
+Ví dụ, trong hình dưới đây, với $g$ là thiên hà chứa ngôi sao màu đen, khi đó $C_g$ là các
+ô nằm trong hình chữ nhật có viền màu xanh dương, $F_g$ là tập hợp các ô có khả năng thuộc thiên hà
+$g$ và đường màu xanh lá là một đường đi từ ô màu cam đến tâm.
+![galaxies-objects](/posts/GalaxiesObjects.png)
+
+- $V_p$ là tập hợp tất cả các ô thuộc đường đi $p$
+- $n_p = |V_p|$ là số lượng ô thuộc đường đi $p$
+
+### 2.1. Biến quyết định
+
+Với mỗi ô $(i, j)$ trên lưới và một thiên hà $g$ ($0 \leq g < n_G$), xây dựng biên $x(i, j, g)$ thỏa mãn
+```math
+x(i, j, g) = \begin{cases}
+  1 & \text{nếu thiên hà } g \text{ chứa ô } (i, j) \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Lưới được phủ kín bởi các thiên hà, các thiên hà không chồng chéo lên nhau. Hai điều kiện này tương đương
+với điều kiện sau, mỗi ô trên lưới phải và chỉ thuộc một thiên hà
+```math
+\sum_{g = 0}^{n_G - 1}{x(i, j, g)} = 1,  \\ \forall 0 \leq i < n_C, 0 \leq j < n_R
+```
+
+- Mỗi thiên hà phải chứa tâm của nó
+```math
+x(i, j, g) = 1, \\ \forall 0 \leq g < n_G, (i, j) \in C_g
+```
+
+- Mỗi thiên hà phải đối xứng tâm qua tâm của nó
+```math
+x(i, j, g) = x(u_{ijg}, v_{ijg}, g), \\ \forall 0 \leq g < n_G, (i, j) \in F_g
+```
+  Trong đó $$(u_{ijg}, v_{ijg})$$ là ô đối xứng của ô $(i, j)$ qua tâm của thiên hà $g$
+
+**Chú ý:** Các điều kiện trên đã đủ để giải một câu đố Galaxies cỡ nhỏ (7×7, 8×8, ...). Tuy nhiên
+khi giải một câu đố có cỡ lớn hơn (10×10 trở lên) ta sẽ gặp phải một vấn đề đó là thiên hà có thể bị chia thành
+nhiều mảnh nhỏ rời nhau.
+
+- Các ô trong một thiên hà phải kết nối với nhau. Điều kiện này tương đương với điều kiện sau, giữa 2 ô bất
+kỳ thuộc cùng một thiên hà phải tồn tại ít nhất 1 đường đi giữa chúng mà tất cả ô trên đường đi này cũng thuộc
+thiên hà đó.
+
+  Để tuyến tình hóa điều kiện này ta phải tạo thêm các biến trung gian $$t_{ijgp}$$ với mỗi thiên hà
+  $g$, ô $(i, j) \in F_g$ và mỗi đường đi $$p \in P_{ijg}$$ thỏa mãn
+
+  ```math
+  t_{ijgp} = \begin{cases}
+    1 & x(u, v, g) = 1, \forall (u, v) \in V_p\\
+    0 & \text{otherwise }
+  \end{cases}
+  ```
+  Hay có thể hiểu biến $$t_{ijgp}$$ bằng 1 nếu ô $(i, j)$ kết nối với tâm của thiên hà $g$ qua đường đi $p$.
+  Bằng [phương pháp hình học](/blog/modeling-tips-trick#2-m%C3%B4-h%C3%ACnh-h%C3%B3a-r%C3%A0ng-bu%E1%BB%99c-phi-tuy%E1%BA%BFn-b%E1%BA%B1ng-h%C3%ACnh-h%E1%BB%8Dc)
+  ta biểu diễn các biến $t$ thông qua các biến $x$ bằng các điều kiện sau
+
+  ```math
+  \begin{cases}
+    \sum\limits_{(u, v) \in V_p}{x(u, v)} \geq n_p \cdot t_{ijgp} \\
+    \sum\limits_{(u, v) \in V_p}{x(u, v)} + 1\leq t_{ijgp} + n_p\\
+  \end{cases} \\\ \forall 0 \leq g < n_G, (i, j) \in F_g, p \in P_{ijg}
+  ```
+
+  Cuối cùng, điều kiện ban đầu sẽ được tuyến tính hóa như sau
+  ```math
+  x(i, j, g) \leq \sum\limits_{p \in P_{ijg}}{t_{ijgp}}, \\ \forall 0 \leq g < n_G, (i, j) \in F_g
+  ```
+- Ngoài ra, để thu nhỏ không gian tìm kiếm của bài toán ta có thể thêm điều kiện, các ô không thuộc $F_g$ thì
+sẽ không thuộc thiên hà $g$
+```math
+x(i, j, g) = 0, \\ \forall 0 \leq g < n_G, (i, j) \notin F_g
+```
+
+### 2.3. Hàm mục tiêu
+
+Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
+cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+mục tiêu là một hằng số (mình hay chọn số 0).
 
 ## 3. Kết luận
 
-*Code mô hình hóa Star Battle bằng python có tại [LogicPuzzlesSolver](https://github.com/Tung-hehe/LogicPuzzlesSolver).*
+Điểm nhấn của câu đố này nằm ở 2 điều kiện cuối, mỗi điều kiện lại có một tác dụng khác nhau nhưng
+đều có một điểm chung là nếu không để ý kỹ ta rất có thể sẽ bỏ qua chúng. Để tránh trường hợp này
+ta cần suy nghĩ kỹ về bài toán đồng thời thử giải nhiều trường hợp khác nhau để phát hiện ra vấn đề (nếu có).
+
+*Code mô hình hóa Galaxies bằng python có tại [LogicPuzzlesSolver/galaxies](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/galaxies.py).*
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />
