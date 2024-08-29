@@ -12,8 +12,7 @@ export const commonConfig = {
   search: 'Tìm kiếm',
   pagination: {
     next: 'Next',
-    previous: 'Previous',
-    of: 'of'
+    previous: 'Previous'
   }
 }
 
