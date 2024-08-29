@@ -12,6 +12,7 @@ import { Pre } from '@/components/blog/Pre'
 import { Tag } from '@/components/blog/Tag'
 
 import { generatePageSeo } from '@/utils/seo'
+import { siteMetadata } from '@/data/siteMetadata'
 
 const mdxComponents: MDXComponents = {
   pre: ({ children }) => <Pre>{children}</Pre>,
@@ -78,6 +79,11 @@ export default function Page({ params }: { params: { slug: string } }) {
         <div className="prose max-w-none pb-8 pt-6 text-justify space-y-6">
           <MDXContent components={mdxComponents}/>
         </div>
+        <div
+          className="fb-comments"
+          data-href={`${siteMetadata.siteUrl}/blog/logic-puzzle-modeling-binox`}
+          data-width="" data-numposts="5"
+        />
       </div>
     </article>
   )

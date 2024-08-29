@@ -3,6 +3,6 @@ export const siteMetadata = {
   siteLogo: '/puzzle.png',
   siteName: 'TungTT',
   description: 'T.T.Tung website',
-  siteUrl: 'https://thanh-tung.vercel.app/', // Your site url
+  siteUrl: 'https://tungtt.dev/', // Your site url
   socialBanner: '/profile.jpg',
 }
