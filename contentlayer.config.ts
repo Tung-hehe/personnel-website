@@ -51,6 +51,13 @@ export const Author = defineDocumentType(() => ({
   computedFields,
 }))
 
+export const PrivacyPolicy = defineDocumentType(() => ({
+  name: 'PrivacyPolicy',
+  filePathPattern: 'privacy-policy/privacy-policy.mdx',
+  contentType: 'mdx',
+  computedFields,
+}))
+
 export const Serie = defineNestedType(() => ({
   name: 'Serie',
   fields: {
@@ -84,7 +91,7 @@ export const Post = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Post, Author],
+  documentTypes: [Post, Author, PrivacyPolicy],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
