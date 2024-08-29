@@ -77,16 +77,18 @@ x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
   x(i, j) + x(i, j + 1) + x(i, j + 2) \leq 2 \\
   y(i, j) + y(i, j + 1) + y(i, j + 2) \leq 2 \\
   z(i, j) + z(i, j + 1) + z(i, j + 2) \leq 2 \\
-\end{cases}, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C - 2
+\end{cases}
+\\ \forall 0 \leq i < n_R, 0 \leq j < n_C - 2
 ```
 
-- Trên cột hàng không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- Trên mỗi cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
 ```math
 \begin{cases}
   x(i, j) + x(i + 1, j) + x(i + 2, j) \leq 2 \\
   y(i, j) + y(i + 1, j) + y(i + 2, j) \leq 2 \\
   z(i, j) + z(i + 1, j) + z(i + 2, j) \leq 2 \\
-\end{cases}, \\ \forall 0 \leq i < n_R - 2, 0 \leq j < n_C
+\end{cases}
+\\ \forall 0 \leq i < n_R - 2, 0 \leq j < n_C
 ```
 
 - Trên mỗi hàng số lượng $X$, $O$ và $I$ bằng nhau
@@ -95,7 +97,8 @@ x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
   \sum\limits_{j = 0}^{n_C - 1}{x(i, j)} = {n_C \over 3} \\
   \sum\limits_{j = 0}^{n_C - 1}{y(i, j)} = {n_C \over 3} \\
   \sum\limits_{j = 0}^{n_C - 1}{z(i, j)} = {n_C \over 3} \\
-\end{cases}, \\ \forall 0 \leq i < n_R
+\end{cases}
+\\ \forall 0 \leq i < n_R
 ```
 
 - Trên mỗi cột số lượng $X$, $O$ và $I$ bằng nhau
@@ -104,7 +107,8 @@ x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
   \sum\limits_{i = 0}^{n_R - 1}{x(i, j)} = {n_R \over 3} \\
   \sum\limits_{i = 0}^{n_R - 1}{y(i, j)} = {n_R \over 3} \\
   \sum\limits_{i = 0}^{n_R - 1}{z(i, j)} = {n_R \over 3} \\
-\end{cases}, \\ \forall 0 \leq j < n_C
+\end{cases}
+\\ \forall 0 \leq j < n_C
 ```
 
 ### 2.3. Hàm mục tiêu
@@ -114,6 +118,9 @@ cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt 
 mục tiêu là một hằng số (mình hay chọn số 0).
 
 ## 3. Kết luận
+
+Tham khảo thêm các câu đố Triox và biến thể tại [Krazydad/triox](https://krazydad.com/troix/). Hãy thử mô
+hình hóa các biến thể của câu đố này nhé!
 
 *Code mô hình hóa Troix bằng python có tại [LogicPuzzlesSolver/triox](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/troix.py)
 
