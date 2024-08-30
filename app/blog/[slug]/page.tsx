@@ -12,7 +12,6 @@ import { Pre } from '@/components/blog/Pre'
 import { Tag } from '@/components/blog/Tag'
 
 import { generatePageSeo } from '@/utils/seo'
-import { siteMetadata } from '@/data/siteMetadata'
 
 const mdxComponents: MDXComponents = {
   pre: ({ children }) => <Pre>{children}</Pre>,
