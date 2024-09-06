@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import '@/styles/twemoji.css';
 
 import type { Metadata, Viewport } from "next"
+import { Analytics } from "@vercel/analytics/react"
 import { Roboto } from "next/font/google"
 
 import { Header } from "@/components/common/Header"
@@ -50,6 +51,7 @@ export default function RootLayout({
           <main style={{ minHeight: commonConfig.mainContentMinHeight }}>{children}</main>
         </div>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
