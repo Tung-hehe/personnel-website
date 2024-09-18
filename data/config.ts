@@ -24,6 +24,9 @@ export const homeConfig = {
     'Mình thích Toán và lúc nào cũng có nhiều ý tưởng trong đầu.',
     'Lập trình là công cụ giúp mình hiện thực hóa các ý tưởng đó.',
     'Blog này nhằm chia sẻ kiến thức và kinh nghiệm của mình.'
+    // 'I love mathematics and always have many ideas in my head.',
+    // 'Programming is a tool that helps me to realize those ideas.',
+    // 'This blog aims to share my knowledge and experiences.',
   ],
   bios: [
     {text: 'Sinh năm 2001 tại Nam Định.', emoji: null},
