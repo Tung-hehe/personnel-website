@@ -21,7 +21,7 @@ export function PostCard({ post, locale }: { post: Post, locale: LocaleType }) {
           </h3>
           <div className="flex flex-wrap">
             {post.tags.map((tag) => (
-              <Tag key={tag} text={tag} />
+              <Tag key={tag} text={tag} locale={locale}/>
             ))}
           </div>
         </div>
