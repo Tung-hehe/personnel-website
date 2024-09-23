@@ -2,15 +2,15 @@ import Link from 'next/link'
 import { Post } from 'contentlayer/generated'
 
 import { formatDate } from '@/utils/date'
-import { commonConfig } from '@/data/config'
 import { Tag } from '@/components/blog/Tag'
+import { LocaleType } from '@/data/config'
 
 
-export function PostCard(post: Post) {
+export function PostCard({ post, locale }: { post: Post, locale: LocaleType }) {
   return (
     <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
       <dd className="font-medium leading-6 text-gray-400">
-        <time dateTime={post.date}>{formatDate(post.date, commonConfig.language)}</time>
+        <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
       </dd>
       <div className="space-y-3 xl:col-span-3">
         <div className="space-y-3">

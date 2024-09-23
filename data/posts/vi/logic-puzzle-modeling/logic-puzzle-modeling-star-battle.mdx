@@ -1,0 +1,93 @@
+---
+title: Mô hình hóa câu đố Star Battle
+date: 2024-08-27
+series:
+  order: 2
+  title: Mô hình hóa các câu đố logic
+tags: [modeling, math, MILP, programing, python]
+summary: Mô hình hóa và giải câu đố Star Battle bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
+image: /posts/StarBattle.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Giới thiệu
+
+Star Battle là một câu đố logic được mô tả như sau, cho một lưới cỡ $m×n$ được
+chia thành các khu vực, người chơi cần điền các ngôi sao vào lưới thỏa mãn các
+yêu cầu dưới đây:
+- Mỗi hàng, cột, khu vực chỉ chứa một số lượng ngôi sao cho trước
+- Một ngôi sao không được nằm cạnh một ngôi sao khác (bất kể theo hướng nào)
+
+Dưới đây là ví dụ cho một câu đố Star Battle cỡ 10×10, và 2 ngôi sao mỗi hàng, cột, khu vực
+
+![star-battle-example](/posts/StarBattle.png)
+
+## 2. Mô hình hóa câu đố
+
+Một số ký hiệu dùng trong bài toán
+- $n_R$ là số hàng của lưới
+- $n_C$ là số cột của lưới
+- $n$ là số ngôi sao cần điền vào mỗi hàng, cột, khu vực
+- $S$ là tập hợp các khu vực
+- $C_s$ là các ô $(i, j)$ thuộc khu vực $s \in S$
+- $$N_{ij}$$ là tập hợp các ô cạnh ô $(i, j)$ (theo cả hướng chéo)
+- $$f_{ij}$$ là số ô kề ô $(i, j)$ (theo cả hướng chéo)
+
+### 2.1. Biến quyết định
+
+Với mỗi ô $(i, j)$ trong lưới, xây dựng biến $x_(i, j)$ thỏa mãn
+```math
+x(i, j) = \begin{cases}
+    1 & \text{nếu ô } (i, j) \text{ được điền ngôi sao } \\
+    0 & \text{ngược lại}
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Mỗi hàng chứa đúng $n$ ngôi sao
+```math
+\sum\limits_{j = 0}^{n_C - 1}{x(i, j)} = n, \\ \forall 0 \leq i < n_R
+```
+
+- Mỗi cột chứa đúng $n$ ngôi sao
+```math
+\sum\limits_{i = 0}^{n_R - 1}{x(i, j)} = n, \\ \forall 0 \leq j < n_C
+```
+
+- Mỗi khu vực chứa đúng $n$ ngôi sao
+```math
+\sum\limits_{\forall (i, j) \in C_s}{x(i, j)} = n, \\ \forall s \in S
+```
+
+- Một ngôi sao không nằm cạnh bất kỳ ngôi sao nào khác
+
+  Điều kiện này được mô tả lại như sau, nếu ô $(i, j)$ được điền ngôi sao
+  thì tất cả các ô kề ô $(i, j)$ không được điền ngôi sao
+
+  ```math
+    x(i, j) = 1 \Rightarrow \sum\limits_{\forall (p, q) \in N_{ij}}{x(p, q)} = 0, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
+  ```
+
+  Tuyến tính hóa điều kiện trên bằng [phương pháp hình học](/blog/modeling-tips-trick#2-m%C3%B4-h%C3%ACnh-h%C3%B3a-r%C3%A0ng-bu%E1%BB%99c-phi-tuy%E1%BA%BFn-b%E1%BA%B1ng-h%C3%ACnh-h%E1%BB%8Dc)
+  ta thu được điều kiện dưới đây và đó chính là điều kiện sử dụng trong mô hình
+
+```math
+  f_{ij} \cdot x(i, j) + \sum\limits_{\forall (p, q) \in N_{ij}}{x(p, q)} \leq f_{ij}, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
+```
+
+### 2.3. Hàm mục tiêu
+
+Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
+cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+mục tiêu là một hằng số (mình hay chọn số 0).
+
+## 3. Kết luận
+
+Tham khảo thêm các câu đố Star Battle và biến thể tại [Krazydad/start-battle](https://krazydad.com/starbattle/).
+
+*Code mô hình hóa Star Battle bằng python có tại [LogicPuzzlesSolver/startBattle](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/starBattle.py).*
+
+Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

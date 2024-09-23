@@ -11,8 +11,8 @@ import rehypePrettyCode from "rehype-pretty-code"
 import rehypeSlug from 'rehype-slug'
 import remarkMath from 'remark-math'
 
-const computedFields: ComputedFields = {
-  readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
+
+const authorComputedFields: ComputedFields = {
   slug: {
     type: 'string',
     resolve: (doc) => {
@@ -21,12 +21,12 @@ const computedFields: ComputedFields = {
       return pathParts[pathParts.length - 1];
     },
   },
-  path: {
+  locale: {
     type: 'string',
     resolve: (doc) => {
       // Split the flattenedPath by '/' and take the last part
       const pathParts = doc._raw.flattenedPath.split('/');
-      return `/blog/${pathParts[pathParts.length - 1]}`
+      return pathParts[1]
     },
   },
   filePath: {
@@ -48,7 +48,7 @@ export const Author = defineDocumentType(() => ({
     facebook: { type: 'string' },
     github: { type: 'string' },
   },
-  computedFields,
+  computedFields: authorComputedFields,
 }))
 
 export const Serie = defineNestedType(() => ({
@@ -65,6 +65,38 @@ export const Serie = defineNestedType(() => ({
   },
 }))
 
+const postComputedFields: ComputedFields = {
+  readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
+  slug: {
+    type: 'string',
+    resolve: (doc) => {
+      // Split the flattenedPath by '/' and take the last part
+      const pathParts = doc._raw.flattenedPath.split('/');
+      return pathParts[pathParts.length - 1];
+    },
+  },
+  path: {
+    type: 'string',
+    resolve: (doc) => {
+      // Split the flattenedPath by '/' and take the last part
+      const pathParts = doc._raw.flattenedPath.split('/');
+      return `/${pathParts[1]}/blog/${pathParts[pathParts.length - 1]}`
+    },
+  },
+  locale: {
+    type: 'string',
+    resolve: (doc) => {
+      // Split the flattenedPath by '/' and take the last part
+      const pathParts = doc._raw.flattenedPath.split('/');
+      return pathParts[1]
+    },
+  },
+  filePath: {
+    type: 'string',
+    resolve: (doc) => doc._raw.sourceFilePath,
+  },
+};
+
 export const Post = defineDocumentType(() => ({
   name: 'Post',
   filePathPattern: 'posts/**/*.mdx',
@@ -79,7 +111,7 @@ export const Post = defineDocumentType(() => ({
     authors: { type: 'list', of: { type: 'string' }, required: true },
     layout: { type: 'string' },
   },
-  computedFields
+  computedFields: postComputedFields
 }))
 
 export default makeSource({

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Twemoji } from '../common/Twemoji';
-import { homeConfig } from '@/data/config';
+import { homeConfig, LocaleType } from '@/data/config';
 
-export function Navigation() {
+export function Navigation({ locale }: { locale: LocaleType }) {
   return (
     <>
       <div className="flex flex-row divide-gray-500 divide-x hidden sm:block">
@@ -24,7 +24,7 @@ export function Navigation() {
           <Link key={i} href={href}>
             <Twemoji emoji={emoji}/>
             <span className="ml-2 underline">
-              {label}
+              {label[locale]}
             </span>
           </Link>
         ))

@@ -1,15 +1,15 @@
 import { Search as SearchIcon } from 'lucide-react'
-import { commonConfig } from '@/data/config'
+import { commonConfig, LocaleType } from '@/data/config'
 import { toLatin } from '@/utils/string';
 
-export function Search({ onChange }: { onChange: (value: string) => void }) {
+export function Search({ onChange, locale }: { onChange: (value: string) => void, locale: LocaleType }) {
   return (
     <div className="relative max-w-lg">
       <input
         aria-label="search"
         type="text"
         onChange={(e) => onChange(toLatin(e.target.value).toLowerCase())}
-        placeholder={commonConfig.search}
+        placeholder={commonConfig.search[locale]}
         className="
           block w-full rounded-md border border-gray-900
           bg-gray-800 px-4 py-2 text-gray-100 focus:border-sky-500

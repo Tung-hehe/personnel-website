@@ -1,0 +1,149 @@
+---
+title: Mô hình hóa câu đố Binox
+date: 2024-08-30
+series:
+  order: 5
+  title: Mô hình hóa các câu đố logic
+tags: [modeling, math, MILP, programing, python]
+summary: Mô hình hóa và giải câu đố Binox bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
+image: /posts/Binox.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+
+## 1. Giới thiệu
+
+Binox là một câu đố logic được mô tả như sau, cho một lưới các ô vuông với một số ô đã được điền sẵn $X$ hoặc $O$.
+Người chơi cần hoàn thiện lưới bằng cách điền vào những ô trống $X$ hoặc $O$ thỏa mãn:
+- Lưới được phủ kín bởi $X$ và $O$
+- Trên mỗi hàng/cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- Trên mỗi hàng/cột số lượng $X$ bằng số lượng $O$
+- Mỗi hàng/cột là duy nhất (Không có 2 hàng nào giống nhau, không có 2 cột nào giống nhau)
+
+Dưới đây là ví dụ cho một câu đố Binox cỡ 6×6 và lời giải
+
+![binox-example](/posts/Binox.png)
+
+## 2. Mô hình hóa câu đố
+
+- $n_R$ là số hàng của lưới ($n_R$ là một số chẵn)
+- $n_C$ là số cột của lưới ($n_C$ là một số chẵn)
+- $F_X$ là tập hợp những ô $(i, j)$ đã được điền $X$
+- $F_O$ là tập hợp những ô $(i, j)$ đã được điền $O$
+
+### 2.1. Biến quyết định
+
+Với mỗi $(i, j)$ trong lưới xây dựng biến $x(i, j)$ thỏa mãn
+
+```math
+x(i, j) = \begin{cases}
+  1 & \text{nếu ô } (i, j) \text{ được điền X } \\
+  0 & \text{nếu ô } (i, j) \text{ được điền O }
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Các ô đã được điền từ đầu
+```math
+\begin{cases}
+    x(i, j) = 1, \forall (i, j) \in F_X\\
+    x(i, j) = 0, \forall (i, j) \in F_O
+\end{cases}
+```
+
+- Trên mỗi hàng không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+```math
+\begin{cases}
+    x(i, j) + x(i, j + 1) + x(i, j + 2) \leq 2 \\
+    x(i, j) + x(i, j + 1) + x(i, j + 2) \geq 1
+\end{cases}
+\\ \forall 0 \leq i < n_R, 0 \leq j < n_C - 2
+```
+
+- Trên mỗi cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+```math
+\begin{cases}
+    x(i, j) + x(i + 1, j) + x(i + 2, j) \leq 2 \\
+    x(i, j) + x(i + 1, j) + x(i + 2, j) \geq 1
+\end{cases}
+\\ \forall 0 \leq i < n_R - 2, 0 \leq j < n_C
+```
+
+- Trên mỗi hàng số lượng $X$ và $O$ bằng nhau
+```math
+\sum\limits_{j = 0}^{n_C - 1}{x(i, j)} = {n_C \over 2}, \\ \forall 0 \leq i < n_R
+```
+
+- Trên mỗi cột số lượng $X$ và $O$ bằng nhau
+```math
+\sum\limits_{i = 0}^{n_R - 1}{x(i, j)} = {n_R \over 2}, \\ \forall 0 \leq j < n_C
+```
+
+- Mỗi hàng là duy nhất. Để tuyến tính ràng buộc này ta diễn đạt lại như sau, với 2 hàng $i, j$ bất
+kỳ, tồn tại ít nhất một vị trí $k$ sao cho $x(i, k) \ne x(j, k)$ .
+
+  Với 2 hàng $i \ne j$ bất kỳ, và mỗi cột $k$, xây dựng biến trung gian $y(i, j, k)$ thỏa mãn
+  ```math
+  y(i, j, k) = \begin{cases}
+    1 & \text{nếu } x(i, k) = x(j, k) \\
+    0 & \text{ngược lại}
+  \end{cases}
+  ```
+  Sử dụng [phương pháp hình học](/blog/modeling-tips-trick#2-m%C3%B4-h%C3%ACnh-h%C3%B3a-r%C3%A0ng-bu%E1%BB%99c-phi-tuy%E1%BA%BFn-b%E1%BA%B1ng-h%C3%ACnh-h%E1%BB%8Dc)
+  ta có thể biểu diễn được mối quan hệ giữa biến $y$ và các biến $x$ như sau
+  ```math
+  \begin{cases}
+    y(i, j, k) + x(i, k) + x(j, k) \geq 1 \\
+    y(i, j, k) + x(i, k) \leq x(j, k) + 1 \\
+    y(i, j, k) + x(j, k) \leq x(i, k) + 1 \\
+    x(i, k) + x(j, k) \leq y(i, j, k) + 1
+  \end{cases} \\ \forall 0 \leq i, j < n_R, i \ne j, 0 \leq k < n_C
+  ```
+  Sử dụng các biến $y$ ta tuyến tính hóa điều kiện ban đầu như sau
+  ```math
+  \sum\limits_{k = 0}^{n_C - 1}{y(i, j, k)} \leq n_C - 1, \\ \forall 0 \leq i, j < n_R, i \ne j
+  ```
+- Mỗi cột là duy nhất. Tương tự với điều kiện trên, với 2 cột $i \ne j$ bất kỳ, và mỗi hangd $k$,
+xây dựng biến trung gian $z(i, j, k)$ thỏa mãn
+  ```math
+  z(i, j, k) = \begin{cases}
+    1 & \text{nếu } x(k, i) = x(k, j) \\
+    0 & \text{ngược lại}
+  \end{cases}
+  ```
+  Biểu diễn $z$ qua các $x$ bằng hệ điều kiện
+  ```math
+  \begin{cases}
+    z(i, j, k) + x(k, i) + x(k, j) \geq 1 \\
+    z(i, j, k) + x(k, i) \leq x(k, j) + 1 \\
+    z(i, j, k) + x(k, j) \leq x(k, i) + 1 \\
+    x(k, i) + x(k, j) \leq z(i, j, k) + 1
+  \end{cases}
+  \\ \forall 0 \leq k < n_R, 0 \leq i, j < n_C, i \ne j
+  ```
+  Tuyến tính hóa điều kiện ban đầu như sau
+  ```math
+  \sum\limits_{k = 0}^{n_R - 1}{z(i, j, k)} \leq n_R - 1, \\ \forall 0 \leq i, j < n_C, i \ne j
+  ```
+
+### 2.3. Hàm mục tiêu
+
+Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
+cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+mục tiêu là một hằng số (mình hay chọn số 0).
+
+## 3. Kết luận
+
+Điểm nhấn của câu đố này nằm ở điều kiện hàng/cột duy nhất, trên thực tế những điều kiện dạng này
+thường rất khó mô hình hóa một cách hiệu quả. Thử tưởng tượng chúng ta có số lượng
+hàng/cột lên đến 1000 khi đó số điều kiện sẽ là một con số rất lớn, trong trường hợp đó ta phải
+tìm ra những cách khác để giải quyết bài toán một cách hiệu quả.
+
+Tham khảo thêm các câu đố Binox và biến thể tại [Krazydad/binox](https://krazydad.com/binox/).
+
+*Code mô hình hóa Binox bằng python có tại [LogicPuzzlesSolver/binox](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/binox.py)*
+
+Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

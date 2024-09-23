@@ -12,6 +12,7 @@ import { Pre } from '@/components/blog/Pre'
 import { Tag } from '@/components/blog/Tag'
 
 import { generatePageSeo } from '@/utils/seo'
+import { LocaleType } from '@/data/config'
 
 const mdxComponents: MDXComponents = {
   pre: ({ children }) => <Pre>{children}</Pre>,
@@ -19,19 +20,19 @@ const mdxComponents: MDXComponents = {
 
 export const generateStaticParams = async () => allPosts.map((post) => ({ slug: post.slug }))
 
-export const generateMetadata = ({ params }: { params: { slug: string } }) => {
-  const post = allPosts.find((post) => post.slug === params.slug)
+export const generateMetadata = ({ params }: { params: { slug: string, locale: LocaleType } }) => {
+  const post = allPosts.find((post) => post.slug === params.slug && post.locale === params.locale)
   if (!post) throw new Error(`Post not found for slug: ${params.slug}`)
   return generatePageSeo({ title: post.title, image: post.image, description: post.summary })
 }
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const post = allPosts.find((post) => post.slug === params.slug)
+export default function Page({ params }: { params: { slug: string, locale: LocaleType } }) {
+  const post = allPosts.find((post) => post.slug === params.slug && post.locale === params.locale)
   if (!post) notFound()
   const postsInSeries = allPosts.filter(
-    p => post.series ? p.series?.title === post.series.title : false
+    p => post.series ? p.series?.title === post.series.title && p.locale === params.locale : false
   ).map(
-    p => {return {title: p.title, slug: p.slug, order: p.series?.order ? p.series.order : 0}}
+    p => {return {title: p.title, path: p.path, order: p.series?.order ? p.series.order : 0}}
   ).sort(
     (a, b) => a.order - b.order
   )
@@ -48,7 +49,12 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className="flex flex-wrap">
               {post.tags.map(tag => <Tag key={tag} text={tag} />)}
             </div>
-            <BlogInformation date={post.date} readingTime={post.readingTime.minutes} words={post.readingTime.words}/>
+            <BlogInformation
+              date={post.date}
+              readingTime={post.readingTime.minutes}
+              words={post.readingTime.words}
+              locale={params.locale}
+            />
           </div>
         </header>
         {
@@ -62,11 +68,11 @@ export default function Page({ params }: { params: { slug: string } }) {
             </span>
             <ul>
             {
-              postsInSeries.map(({title, order, slug}) => (
+              postsInSeries.map(({title, order, path}) => (
                 <li key={order}>
                   {
-                    slug !== post.slug
-                    ? <Link className='no-underline' href={`/blog/${slug}`}>{title}</Link>
+                    path !== post.path
+                    ? <Link className='no-underline' href={path}>{title}</Link>
                     : <span className='text-sky-400'>{title}</span>
                   }
                 </li>

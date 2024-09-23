@@ -1,0 +1,113 @@
+---
+title: Một số kỹ thuật mô hình hóa
+date: 2024-08-25
+tags: [modeling, math, LP, MILP, tip and trick]
+summary: Giới thiệu một số kỹ thuật mô hình hóa hay sử dụng.
+image:
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Sử dụng biến nhị phân
+
+Phương pháp này được sử dụng nếu ta có thể biết chính xác các giá trị có thể có của một biến số.
+Chẳng hạn ta có một biến $x \in \mathbb{Z}$ với điều kiện $0 \leq x \leq 9$ thì ta có thể tách biến
+$x$ thành 9 biến nhị phân $x_i$ ($0 \leq i \leq 9$) thỏa mãn
+```math
+x_i = \begin{cases}
+  1 & \text{ nếu biến } x\text{ nhận giá trị } i \\
+  0 & \text{ ngược lại }
+\end{cases}
+```
+Câu hỏi đặt ra là tại sao ta lại cần phải tách một biến thành nhiều biến hơn, liệu nó có tác dụng gì
+không? Câu trả lời là có, giả sử ta không chỉ có 1 biến $x$ như trên mà có thêm 1 biến $y \in \mathbb{Z}$
+với điều kiện $0 \leq y \leq 9$ nữa. Khi đó sẽ rất khó để tuyến tính hóa điều kiện $x \neq y$ nếu ta sử
+dụng 2 biến này. Ngược lại nếu ta tách cả $x$ và $y$ thành các biến nhị phân thì điều kiện này sẽ được mô
+hình hóa một cách dễ dàng như sau $x_i + y_i \leq 1, \forall 0 \leq i \leq 9$.
+
+## 2. Mô hình hóa ràng buộc phi tuyến bằng hình học
+
+Phương pháp này được sử dụng khi ta có thể tìm được một bao lồi chỉ chứa các điểm thỏa mãn điều kiện
+cần mô hình hóa. Ví dụ tuyến tính hóa điều kiện $x = y \Leftrightarrow z = 1$ với $x, y, z$ là các biến nhị phân.
+Nhận thấy các bộ $(x, y, z)$ thỏa mãn điều kiện là $(1, 1, 1), (0, 0, 1), (1, 0, 0), (0, 1, 0)$. Biểu diễn trong
+không gian ba chiều ta được tứ diện $ABCD$ dưới đây
+
+![modeling-tips-tricks](/posts/ModelingTipsTricks.png)
+
+Những điểm nằm trong tứ diện $ABCD$ chính là những điểm thỏa mãn điều kiện trên. Các phương
+trình biều diễn tứ diện này chính là các điều kiện cần để tuyến tính hóa điều kiện ban đầu,
+cụ thể là các điều kiện sau
+```math
+\begin{cases}
+  x + y - z \geq 1 \\
+  y + z - x \geq 1 \\
+  z + x - y \geq 1 \\
+  x + y = z \geq 1 \\
+\end{cases}
+```
+
+**Một số lưu ý:**
+- Sử dụng phương pháp này khi biết được tất cả các điểm thỏa mãn điều kiện ban đầu
+- Phải tồn tại một tập lồi chứa đủ và chỉ chứa các điểm thỏa mãn điều kiện
+- Tập lồi trên phải được biểu diễn dễ dàng qua các điều kiện tuyến tính khác
+- Trong các bải viết tiếp theo mình sẽ gọi tắt kỹ thuật này là **phương pháp hình học**
+(tên gọi này hoàn toàn bắt nguồn từ cá nhân mình, không hề tham khảo từ bất kỳ tài liệu nào,
+nên có thể nó chưa phải một thuật ngữ chính xác, nếu bạn biết thuật ngữ cho phương pháp này hãy
+cho mình biết để chỉnh sửa nhé)
+
+## 3. Mô hình hóa ràng buộc phi tuyến dạng “$A$ hoặc $B$”
+
+Ràng buộc này thường sẽ có dạng như sau:
+```math
+\left[
+\begin{array}{ll}
+    f(x) & \geq A \\
+    g(x) & \geq B
+\end{array}
+\right .
+```
+
+Phương pháp chung để tuyến tính dạng này đó là đặt thêm một biến nhị phân trung gian tương ứng
+với 2 trường hợp của ràng buộc gốc và cố gắng biểu diễn lại điều kiện ban đầu sao cho chúng
+không mâu thuẫn với nhau. Ví dụ tuyến tính hóa điều kiện sau với $x, y \geq 0$
+
+```math
+\begin{cases}
+  \left[
+  \begin{array}{ll}
+      2x + y \geq 5 \\
+      x + 2y \geq 5
+  \end{array}
+  \right .\\
+  x, y \geq 0
+\end{cases}
+
+```
+Tạo thêm biến nhị phân $y$ thỏa mãn
+
+```math
+z = \begin{cases}
+  1 & \text{nếu } 2x + y \geq 5 \\
+  0 & \text{nếu } x + 2y \geq 5 \\
+\end{cases}
+```
+
+Khi đó điều kiện gốc sẽ được biểu diễn lại như sau
+```math
+\begin{cases}
+  2x + y \geq Az \\
+  x + 2y \geq A - A(1-z)\\
+  x, y \geq 0
+\end{cases}
+```
+
+***Chú ý***: *Phương pháp này khá khó sử dụng và phải tùy vào từng trường hợp cụ thể ta mới có
+cách tuyến tính hóa hợp lý.*
+
+## 4. Kết luận
+
+Trên đây là 3 kỹ thuật mô hình hóa hay được sử dụng, bạn đọc có thể tham khảo thêm các kỹ thuật khác
+tại [MOSEK Modeling Cookbook](https://docs.mosek.com/modeling-cookbook/index.html). Happy learning!
+
+Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

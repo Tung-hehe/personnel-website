@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Typed from 'typed.js';
 import { Twemoji } from '../common/Twemoji';
-import { homeConfig } from '@/data/config';
+import { homeConfig, LocaleType } from '@/data/config';
 
 function createTypedInstance(el: HTMLElement) {
   return new Typed(el, {
@@ -15,7 +15,7 @@ function createTypedInstance(el: HTMLElement) {
   })
 }
 
-export function TypedBios() {
+export function TypedBios({ locale }: { locale: LocaleType }) {
   let el = useRef<any>(null)
   let typed = useRef<any>(null)
   useEffect(() => {
@@ -29,7 +29,7 @@ export function TypedBios() {
         {
           homeConfig.bios.map(({text, emoji}, i) => (
             <li key={i}>
-              {text}
+              {text[locale]}
               {emoji && <Twemoji emoji={emoji} size='md' className='ml-1.5'/>}
             </li>
           ))

@@ -1,25 +1,25 @@
 import { allPosts } from "@/.contentlayer/generated"
 import Link from 'next/link'
 
-import { blogConfig, homeConfig } from "@/data/config"
+import { blogConfig, homeConfig, LocaleType } from "@/data/config"
 import { dateSortDesc } from '@/utils/date'
 import { ListPosts } from "../blog/ListPosts"
 
 
-export function FeaturePost() {
+export function FeaturePost({ locale }: { locale: LocaleType }) {
 
   const featuredPosts = allPosts.sort(
     (a, b) => dateSortDesc(a.date, b.date)
   ).slice(0, homeConfig.featuredPosts)
   return (
     <div>
-      <ListPosts posts={featuredPosts}/>
+      <ListPosts posts={featuredPosts} locale={locale}/>
       <div className="flex justify-end font-medium">
         <Link
           href="/blog"
           className="text-primary hover:text-sky-400"
         >
-          <span> {blogConfig.title} &rarr;</span>
+          <span> {blogConfig.title[locale]} &rarr;</span>
         </Link>
       </div>
     </div>

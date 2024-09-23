@@ -1,0 +1,127 @@
+---
+title: Mô hình hóa câu đố Troix
+date: 2024-08-29
+series:
+  order: 4
+  title: Mô hình hóa các câu đố logic
+tags: [modeling, math, MILP, programing, python]
+summary: Mô hình hóa và giải câu đố Troix bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
+image: /posts/Troix.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Giới thiệu
+
+Troix là một câu đố logic được mô tả như sau, cho một lưới các ô vuông với một số ô đã được điền sẵn
+$X$, $O$ hoặc $I$. Người chơi cần hoàn thiện lưới bằng cách điền vào những ô trống $X$, $O$ và $I$ thỏa mãn:
+- Lưới được phủ kín bởi $X$, $O$ và $I$
+- Trên mỗi hàng/cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- Trên mỗi hàng/cột số lượng $X$, $O$ và $I$ bằng nhau
+
+Dưới đây là ví dụ cho một câu đố Troix cỡ 12×12 và lời giải
+
+![triox-example](/posts/Troix.png)
+
+## 2. Mô hình hóa câu đố
+
+- $n_R$ là số hàng của lưới ($n_R$ là số chia hết cho 3)
+- $n_C$ là số cột của lưới ($n_C$  là số chia hết cho 3)
+- $F_X$ là tập hợp những ô $(i, j)$ đã được điền $X$
+- $F_O$ là tập hợp những ô $(i, j)$ đã được điền $O$
+- $F_I$ là tập hợp những ô $(i, j)$ đã được điền $I$
+
+### 2.1. Biến quyết định
+Với mỗi ô $(i, j)$ trong lưới xây dựng các biến $x(i, j)$, $y(i, j)$, $z(i, j)$ thỏa mãn
+```math
+x(i, j) = \begin{cases}
+  1 & \text{nếu ô } (i, j) \text{ được điền } X \\
+  0 & \text{ngược lại }
+\end{cases}
+```
+
+```math
+y(i, j) = \begin{cases}
+  1 & \text{nếu ô } (i, j) \text{ được điền } O\\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+```math
+z(i, j) = \begin{cases}
+  1 & \text{nếu ô } (i, j) \text{ được điền } I\\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Các ô đã được điền từ đầu
+```math
+\begin{cases}
+  x(i, j) = 1, \forall (i, j) \in F_X \\
+  y(i, j) = 1, \forall (i, j) \in F_O \\
+  z(i, j) = 1, \forall (i, j) \in F_I
+\end{cases}
+```
+
+- Lưới được phủ kín bới $X$, $O$ và $I$
+```math
+x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
+```
+
+- Trên mỗi hàng không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+```math
+\begin{cases}
+  x(i, j) + x(i, j + 1) + x(i, j + 2) \leq 2 \\
+  y(i, j) + y(i, j + 1) + y(i, j + 2) \leq 2 \\
+  z(i, j) + z(i, j + 1) + z(i, j + 2) \leq 2 \\
+\end{cases}
+\\ \forall 0 \leq i < n_R, 0 \leq j < n_C - 2
+```
+
+- Trên mỗi cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+```math
+\begin{cases}
+  x(i, j) + x(i + 1, j) + x(i + 2, j) \leq 2 \\
+  y(i, j) + y(i + 1, j) + y(i + 2, j) \leq 2 \\
+  z(i, j) + z(i + 1, j) + z(i + 2, j) \leq 2 \\
+\end{cases}
+\\ \forall 0 \leq i < n_R - 2, 0 \leq j < n_C
+```
+
+- Trên mỗi hàng số lượng $X$, $O$ và $I$ bằng nhau
+```math
+\begin{cases}
+  \sum\limits_{j = 0}^{n_C - 1}{x(i, j)} = {n_C \over 3} \\
+  \sum\limits_{j = 0}^{n_C - 1}{y(i, j)} = {n_C \over 3} \\
+  \sum\limits_{j = 0}^{n_C - 1}{z(i, j)} = {n_C \over 3} \\
+\end{cases}
+\\ \forall 0 \leq i < n_R
+```
+
+- Trên mỗi cột số lượng $X$, $O$ và $I$ bằng nhau
+```math
+\begin{cases}
+  \sum\limits_{i = 0}^{n_R - 1}{x(i, j)} = {n_R \over 3} \\
+  \sum\limits_{i = 0}^{n_R - 1}{y(i, j)} = {n_R \over 3} \\
+  \sum\limits_{i = 0}^{n_R - 1}{z(i, j)} = {n_R \over 3} \\
+\end{cases}
+\\ \forall 0 \leq j < n_C
+```
+
+### 2.3. Hàm mục tiêu
+
+Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
+cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+mục tiêu là một hằng số (mình hay chọn số 0).
+
+## 3. Kết luận
+
+Tham khảo thêm các câu đố Triox và biến thể tại [Krazydad/triox](https://krazydad.com/troix/). Hãy thử mô
+hình hóa các biến thể của câu đố này nhé!
+
+*Code mô hình hóa Troix bằng python có tại [LogicPuzzlesSolver/triox](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/troix.py)*
+
+Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

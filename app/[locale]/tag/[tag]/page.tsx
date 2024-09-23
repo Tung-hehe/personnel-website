@@ -4,7 +4,7 @@ import { BlogsLayout } from '@/components/blog/BlogsLayout'
 
 import { generatePageSeo } from '@/utils/seo'
 
-import { tagsConfig } from '@/data/config'
+import { tagsConfig, LocaleType } from '@/data/config'
 import { kebabCase } from '@/utils/string'
 
 
@@ -12,7 +12,7 @@ export const generateMetadata = ({ params }: { params: { tag: string } }) => {
   return generatePageSeo({ title: `${tagsConfig.tagSelect} ${params.tag}` })
 }
 
-export default function Page({ params }: { params: { tag: string } }) {
+export default function Page({ params }: { params: { tag: string, locale: LocaleType } }) {
   const posts = allPosts.filter(
     post => {
       const tags = post.tags.map(tag => kebabCase(tag))
@@ -22,5 +22,6 @@ export default function Page({ params }: { params: { tag: string } }) {
   return <BlogsLayout
     posts={posts}
     title={`${tagsConfig.tagSelect}: ${kebabCase(params.tag)?.toUpperCase()}`}
+    locale={params.locale}
   />
 }

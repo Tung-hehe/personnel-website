@@ -5,13 +5,13 @@ import { Post } from 'contentlayer/generated'
 
 import { Search } from '@/components/common/Search'
 
-import { blogConfig } from '@/data/config'
+import { blogConfig, LocaleType } from '@/data/config'
 import { toLatin } from '@/utils/string';
 import { Pagination } from '../common/Pagination';
 import { ListPosts } from './ListPosts';
 
 
-export function BlogsLayout({posts, title}: {posts: Post[], title: string}) {
+export function BlogsLayout({posts, title, locale}: {posts: Post[], title: string, locale: LocaleType}) {
   let [searchValue, setSearchValue] = useState('')
   let [currentPage, setCurrentPage] = useState(1)
   let filteredPosts = posts.filter((post) => {
@@ -35,9 +35,9 @@ export function BlogsLayout({posts, title}: {posts: Post[], title: string}) {
         >
           {title}
         </h1>
-        <Search onChange={setSearchValue} />
+        <Search onChange={setSearchValue} locale={locale}/>
       </header>
-      <ListPosts posts={renderedPosts}/>
+      <ListPosts posts={renderedPosts} locale={locale}/>
       {
         totalPages > 1 &&
         <Pagination

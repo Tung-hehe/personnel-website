@@ -2,10 +2,10 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
 import Link from 'next/link'
 import { Menu as MenuIcon } from "lucide-react";
-import { headerNavLinks } from "@/data/config";
+import { headerNavLinks, LocaleType } from "@/data/config";
 
 
-export function MobileNav() {
+export function MobileNav({locale}: {locale: LocaleType}) {
 
   return (
     <Menu>
@@ -19,7 +19,10 @@ export function MobileNav() {
       >
         {headerNavLinks.map(({href, label}) => (
           <MenuItem key={label}>
-            <Link href={href} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <Link
+              href={`/${locale}${href}`}
+              className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10"
+            >
               {label}
             </Link>
           </MenuItem>

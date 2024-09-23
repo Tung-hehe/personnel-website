@@ -4,10 +4,13 @@ import { Description } from "@/components/home/Description"
 import { TypedBios } from "@/components/home/TypedBios"
 import { Navigation } from "@/components/home/Navigation"
 import { FeaturePost } from "@/components/home/FeaturedPosts"
-import { homeConfig } from "@/data/config"
+import { homeConfig, LocaleType } from "@/data/config"
 
+type HomeProps = {
+  params: { locale: LocaleType }
+}
 
-export default function Page() {
+export default function Page({ params: { locale } }: HomeProps) {
   return (
     <div className="relative divide-gray-700 divide-y">
       <div className="mt-8 md:mt-12 pb-8">
@@ -19,20 +22,20 @@ export default function Page() {
                 text-4xl font-extrabold tracking-tight text-transparent
               "
             >
-              <span>{homeConfig.greating}</span>
+              <span>{homeConfig.greating[locale]}</span>
               <Twemoji emoji="waving-hand" size="" className="ml-2"/>
             </div>
             <h1 className="text-neutral-200 pb-2">
-              <span>{homeConfig.heading}</span>
+              <span>{homeConfig.heading[locale]}</span>
               <span className="absolute ml-1.5 inline-flex pt-[3px]">
                 <Twemoji emoji="winking-face"/>
               </span>
             </h1>
-            <TypedBios/>
-            <Description/>
-            <Navigation/>
+            <TypedBios locale={locale}/>
+            <Description locale={locale}/>
+            <Navigation locale={locale}/>
             <p className="my-8 flex">
-              <span className="mr-2">{homeConfig.happyReading}</span>
+              <span className="mr-2">{homeConfig.happyReading[locale]}</span>
               <Twemoji emoji="clinking-beer-mugs" />
             </p>
           </div>
@@ -41,7 +44,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <FeaturePost/>
+      <FeaturePost locale={locale}/>
     </div>
   )
 }

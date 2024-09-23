@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Search } from '@/components/common/Search'
 
-import { projectsConfig } from '@/data/config'
+import { projectsConfig, LocaleType } from '@/data/config'
 import { toLatin } from '@/utils/string';
 import { Pagination } from '../common/Pagination';
 import { ProjectCard } from './ProjectCard';
@@ -11,11 +11,11 @@ import { ProjectCard } from './ProjectCard';
 import type { Project } from '@/data/projects'
 
 
-export function ProjectsLayout({projects}: {projects: Project[]}) {
+export function ProjectsLayout({ projects, locale }: {projects: Project[], locale: LocaleType}) {
   let [searchValue, setSearchValue] = useState('')
   let [currentPage, setCurrentPage] = useState(1)
   let filteredProjects = projects.filter((project) => {
-    let searchContent = toLatin(project.title + project.description).toLowerCase()
+    let searchContent = toLatin(project.title[locale] + project.description[locale]).toLowerCase()
     return searchContent.includes(searchValue)
   })
   const totalPages = Math.max(1, Math.ceil(filteredProjects.length / projectsConfig.projectsPerPage))
@@ -33,9 +33,9 @@ export function ProjectsLayout({projects}: {projects: Project[]}) {
             text-gray-100 sm:text-4xl sm:leading-10 md:text-4xl md:leading-12
           "
         >
-          {projectsConfig.title}
+          {projectsConfig.title[locale]}
         </h1>
-        <Search onChange={setSearchValue} />
+        <Search onChange={setSearchValue} locale={locale}/>
       </header>
       <div className="container py-8">
         {
@@ -43,17 +43,14 @@ export function ProjectsLayout({projects}: {projects: Project[]}) {
           ? <div className="-m-4 flex flex-wrap">
             {renderedProjects.map((project) => (
                 <ProjectCard
-                  key={project.title}
-                  title={project.title}
-                  builtWith={project.builtWith}
-                  description={project.description}
-                  imgSrc={project.imgSrc}
-                  href={project.href}
+                  key={project.title[locale]}
+                  project={project}
+                  locale={locale}
                 />
               ))
             }
           </div>
-          : projectsConfig.noProject
+          : projectsConfig.noProject[locale]
         }
       </div>
       {

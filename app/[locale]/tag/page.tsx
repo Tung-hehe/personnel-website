@@ -4,7 +4,7 @@ import { allPosts } from 'contentlayer/generated'
 import { kebabCase } from '@/utils/string'
 import { getTagsCount } from "@/utils/tag"
 import { Tag } from '@/components/blog/Tag'
-import { tagsConfig } from '@/data/config'
+import { LocaleType, tagsConfig } from '@/data/config'
 import { generatePageSeo } from '@/utils/seo'
 
 
@@ -12,7 +12,7 @@ export const generateMetadata = () => {
   return generatePageSeo({ title: tagsConfig.title })
 }
 
-export default function Page() {
+export default function Page({ params }: { params: { locale: LocaleType } }) {
   const tags = getTagsCount(allPosts)
   const sortTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
   return (
@@ -35,13 +35,12 @@ export default function Page() {
           </h2>
         </div>
         <div className="flex max-w-lg flex-wrap">
-          {Object.keys(tags).length === 0 && tagsConfig.noTageFound}
           {sortTags.map((tag) => {
             return (
               <div key={tag} className="mb-2 mr-5 mt-2">
-                <Tag text={tag} />
+                <Tag text={tag} locale={params.locale}/>
                 <Link
-                  href={`/${kebabCase(tag)}`}
+                  href={`/${params.locale}/${kebabCase(tag)}`}
                   className="-ml-2 text-sm uppercase text-gray-300"
                 >
                   ({tags[tag]})

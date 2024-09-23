@@ -10,7 +10,8 @@ import { Footer } from "@/components/common/Footer"
 
 import { siteMetadata } from "@/data/siteMetadata"
 import { commonConfig } from '@/data/config'
-import { ScrollTopButton } from "@/components/common/ScrollTopButton";
+import { ScrollTopButton } from "@/components/common/ScrollTopButton"
+import { LocaleType } from "@/data/config";
 
 const font = Roboto({weight: "500", subsets: ['vietnamese']});
 
@@ -39,13 +40,15 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
+  params: { locale },
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode,
+  params: { locale: LocaleType }
 }>) {
   return (
-    <html lang={commonConfig.language}>
+    <html lang={locale}>
       <body className={`${font.className} bg-dark text-white mx-auto max-w-5xl px-3 sm:px-6 xl:max-w-5xl xl:px-0`}>
-        <Header/>
+        <Header locale={locale}/>
         <div className="flex flex-col">
           <ScrollTopButton/>
           <main style={{ minHeight: commonConfig.mainContentMinHeight }}>{children}</main>
