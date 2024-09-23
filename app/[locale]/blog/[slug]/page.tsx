@@ -47,7 +47,7 @@ export default function Page({ params }: { params: { slug: string, locale: Local
               {post.title}
             </h1>
             <div className="flex flex-wrap">
-              {post.tags.map(tag => <Tag key={tag} text={tag} />)}
+              {post.tags.map(tag => <Tag key={tag} text={tag} locale={params.locale}/>)}
             </div>
             <BlogInformation
               date={post.date}
