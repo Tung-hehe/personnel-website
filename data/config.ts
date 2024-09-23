@@ -74,10 +74,10 @@ export const homeConfig: {
     {label: 'About', href: '/about', emoji: 'face-with-monocle'},
   ],
   mobileNavigation: [
-    {label: {vi: 'Các dự án mình đã làm', en: ''}, href: '/projects', emoji: 'hammer-and-wrench'},
-    {label: {vi: 'Các bài viết của mình', en: ''}, href: '/blog', emoji: 'memo'},
-    {label: {vi: 'Các chủ đề bài viết', en: ''}, href: '/tags', emoji: 'dna'},
-    {label: {vi: 'Nhiều hơn về mình', en: ''}, href: '/about', emoji: 'face-with-monocle'},
+    {label: {vi: 'Các dự án mình đã làm', en: 'What have I built?'}, href: '/projects', emoji: 'hammer-and-wrench'},
+    {label: {vi: 'Các bài viết của mình', en: 'My writtings'}, href: '/blog', emoji: 'memo'},
+    {label: {vi: 'Các chủ đề bài viết', en: 'All tags'}, href: '/tags', emoji: 'dna'},
+    {label: {vi: 'Nhiều hơn về mình', en: 'More about me'}, href: '/about', emoji: 'face-with-monocle'},
   ],
   happyReading: {vi: "Chúc bạn đọc vui vẻ!", en: 'Happy reading!'}
 }
