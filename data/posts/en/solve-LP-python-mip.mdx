@@ -1,19 +1,20 @@
 ---
-title: Giải một bài toán MILP bằng python
-date: 2024-08-20
+title: Solve MILP problem using python
+date: 2024-09-25
 tags: [modeling, math, MILP, python]
-summary: Sử dụng thư viện python-mip để giải quyết một mô hình MILP.
+summary: Use python-mip library to solve a MILP model.
 image:
 authors: [default]
 ---
 
-Python-MIP là một thư viện tập hợp rất nhiều công cụ để mô hình hóa và giải các bài toán
-Tối ưu tuyến tính hỗn hợp nguyên (MILP) với ưu điểm dễ dàng sử dụng cùng với hiệu suất khá cao
-thì đây là một thư viện không tồi để giải các bài toán MILP. Trong bài này, ta sẽ tìm hiểu
-cách để giải một mô hình MILP bằng Python-Mip
+Python-MIP is a library that includes many tools for modeling and solving
+Mixed-Integer Linear Programming (MILP) problems. With user-friendly interface and
+relatively high performance, it's a good choice for solving MILP problems. In this post,
+we will dive into how to solve a MILP model by Python-MIP.
 
-## 1. Cài đặt và chuẩn bị
-Hãy chắc chắn rằng bạn đã cài đặt [Python](https://www.python.org/). Cài đặt Python-Mip bằng câu lệnh sau
+## 1. Install and set up
+Make sure you have installed [Python](https://www.python.org/).
+Install Python-MIP by running the following command
 ```terminal
 pip install mip
 ```
@@ -23,34 +24,34 @@ Import Python-Mip
 import mip
 ```
 
-## 2. Khởi tạo mô hình
+## 2. Initialize model
 
-Đoạn code dưới đây tạo ra một mô hình MILP rỗng với cấu hình mặc định.
+The following code creates an empty MILP model with default settings.
 ```python
 model = mip.Model()
 ```
-Mô hình với cầu hình mặc định có hàm mục tiêu là *Minimize* và solver sử dụng là
-[*CBC*](https://www.coin-or.org/). Để thay đổi các cài đặt này, hãy sử dụng đoạn code sau
+The model with default setting has objective function *Minimize* and use solver [*CBC*](https://www.coin-or.org/).
+To modify these settings, use the following code.
 ```python
 # use GRB for Gurobi
 model = mip.Model(sense=mip.MAXIMIZE, solver_name=mip.CBC)
 ```
 
-## 3. Thêm biến
-Thêm biến vào mô hình bằng phương thức [add_var()](https://docs.python-mip.com/en/latest/classes.html#mip.Model.add_var).
+## 3. Add variables
+Add a variable to model using method [add_var()](https://docs.python-mip.com/en/latest/classes.html#mip.Model.add_var).
 ```python
 x = m.add_var()
 ```
-Biến với cấu hình mặc định là biến thuộc tập $\mathbb{R}^+$. Thay đổi kiểu, cận trên và cận dưới
-của biến bằng các tham số `var_type`, `ub`, `lb`
+The varible with default config belongs to set $\mathbb{R}^+$. Change variable type, upper bound, lower bound
+using parameters `var_type`, `ub`, `lb`
 ```python
 x = m.add_var(var_type=mip.BINARY) # x in {0; 1}
 y = m.add_var(var_type=mip.INTEGER) # y is integer
 z = m.add_var(lb=0, ub=5) # 0 ≤ z ≤ 5
 ```
 
-## 4. Thêm ràng buộc
-Thêm ràng buộc bằng phương thức [add_constr()](https://docs.python-mip.com/en/latest/classes.html)
+## 4. Add constraints
+Add a constraint to model using method [add_constr()](https://docs.python-mip.com/en/latest/classes.html)
 ```python
 # add constraint ex + y ≤ 11
 model.add_constr(4*x + y <= 11)
@@ -62,7 +63,7 @@ model.add_constr(4*x + y == 11)
 model.add_constr(4*x + y == 11)
 ```
 
-## 5. Hàm mục tiêu và giải mô hình
+## 5. Objective function and optimize model
 
 ```python
 # Set objective min(2x + y)
@@ -73,7 +74,7 @@ model.objective = 2*x+y
 model.optimize()
 ```
 
-## 6. Ví dụ
+## 6. Example
 
 ```math
 \begin{aligned}
@@ -86,7 +87,7 @@ model.optimize()
 
 \end{aligned}
 ```
-Đoạn code dưới đây giải mô hình MILP trên
+The following code solves the MILP model above
 ```python
 """
 filename: main.py
@@ -110,9 +111,8 @@ print('-------------------------------------------------')
 print(f'x: {x.x}')
 print(f'y: {y.x}')
 ```
-
-Dưới đây là kết quả khi chạy đoạn code trên với nguyện tối ưu là $x = 0$, $y = 5$,
-giá trị tối ưu là 5 và thời gian giải là 0.04s
+Running the code above yields the following results:
+optimal solution $x = 0$, $y = 5$, optimal value 5, and solving time 0.04 seconds
 ```terminal
 Welcome to the CBC MILP Solver
 Version: Trunk
@@ -136,6 +136,6 @@ x: 0.0
 y: 5.0
 ```
 
-## 7. Tham khảo
+## 7. References
 
 - [Python-Mip document](https://docs.python-mip.com/en/latest/index.html)
