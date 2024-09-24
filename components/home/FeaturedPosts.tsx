@@ -8,7 +8,7 @@ import { ListPosts } from "../blog/ListPosts"
 
 export function FeaturePost({ locale }: { locale: LocaleType }) {
 
-  const featuredPosts = allPosts.sort(
+  const featuredPosts = allPosts.filter(p => p.locale === locale).sort(
     (a, b) => dateSortDesc(a.date, b.date)
   ).slice(0, homeConfig.featuredPosts)
   return (
@@ -16,7 +16,7 @@ export function FeaturePost({ locale }: { locale: LocaleType }) {
       <ListPosts posts={featuredPosts} locale={locale}/>
       <div className="flex justify-end font-medium">
         <Link
-          href="/blog"
+          href={`/${locale}/blog`}
           className="text-primary hover:text-sky-400"
         >
           <span> {blogConfig.title[locale]} &rarr;</span>
