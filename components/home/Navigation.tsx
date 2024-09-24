@@ -9,7 +9,7 @@ export function Navigation({ locale }: { locale: LocaleType }) {
         {
           homeConfig.navigation.map(({label, href, emoji}, i) => (
 
-            <Link key={i} href={href} className={i !== 0 ? 'pl-3 ml-3': ''}>
+            <Link key={i} href={`/${locale}${href}`} className={i !== 0 ? 'pl-3 ml-3': ''}>
               <Twemoji emoji={emoji}/>
               <span className="ml-2 hover:underline">
                 {label}
@@ -19,17 +19,17 @@ export function Navigation({ locale }: { locale: LocaleType }) {
         }
       </div>
       <div className="flex flex-col sm:hidden space-y-1.5">
-      {
-        homeConfig.mobileNavigation.map(({label, href, emoji}, i) => (
-          <Link key={i} href={href}>
-            <Twemoji emoji={emoji}/>
-            <span className="ml-2 underline">
-              {label[locale]}
-            </span>
-          </Link>
-        ))
-      }
-    </div>
+        {
+          homeConfig.mobileNavigation.map(({label, href, emoji}, i) => (
+            <Link key={i} href={`/${locale}${href}`}>
+              <Twemoji emoji={emoji}/>
+              <span className="ml-2 underline">
+                {label[locale]}
+              </span>
+            </Link>
+          ))
+        }
+      </div>
     </>
   )
 }
