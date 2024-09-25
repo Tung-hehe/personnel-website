@@ -12,31 +12,27 @@ authors: [default]
 
 import { Twemoji } from '@/components/common/Twemoji.tsx'
 
-## 1. Giới thiệu
+## 1. Introduction
 
-Sudoku, ban đầu có tên gọi là Number Place là một trò chơi câu đố dựa trên logic theo tổ hợp.
-Mục tiêu của trò chơi là điền các chữ số vào một lưới $9×9$ sao cho mỗi cột, mỗi hàng,
-và mỗi phần trong số chín lưới con $3×3$ cấu tạo nên lưới chính (còn được gọi là "hộp", "khối", hoặc "vùng")
-đều chứa tất cả các chữ số từ 1 tới 9. Một vài ô trong lưới đã được điền sẵn, người chơi phải hoàn thiện
-bằng cách điền số vào những ô còn lại. Câu đố được thiết lập tốt là câu đố chỉ có một lời giải duy nhất.
+Sudoku, originally called Number Place l is a logic-based, combinatorial number-placement puzzle.
+In classic Sudoku, the objective is to fill a $9×9$ grid with digits so that each column, each row,
+and each of the nine $3×3$ subgrids that compose the grid (also called "boxes", "blocks", or "regions")
+contains all of the digits from 1 to 9. The puzzle setter provides a partially completed grid, which
+for a well-posed puzzle has a single solution.
 
-*Tham khảo [wikipedia](https://vi.wikipedia.org/wiki/Sudoku)*
+*Source [wikipedia](https://wikipedia.org/wiki/Sudoku)*
 
 ![sudoku-example](/posts/Sudoku.jpg)
 
-## 2. Mô hình hóa câu đố
+## 2. Modeling the puzzle
+Some symbols used in this problem
+- $n$ is a perfect square representing the size of the grid.
+- $F$ is the set of pairs $(i, j)$ representing the coordinates of the pre-filled cells in the grid.
+- $$V_{ij}$$ is the number filled in the cell $(i, j) \in F$
+- $B_b$ is the set of cells $(i, j)$ in the $b$-th block($0 \leq b < n$).
 
-Một số ký hiệu dùng trong bài toán
-- $n$ là một số chính phương biểu diễn cho cỡ của lưới
-- $F$ là tập hợp các cặp $(i, j)$ biểu diễn tọa độ của các ô đã điền sẵn trên lưới
-- $$V_{ij}$$ là số được điền trong ô $(i, j) \in F$
-- $B_b$ là tập hợp các ô $(i, j)$ trong khối thứ $b$ ($0 \leq b < n$).
-
-### 2.1. Biến quyết định
-
-Với mỗi ô $(i, j)$ trong lưới và một số $k$, xây dựng biến
-$x(i, j, k)$ thỏa mãn
-
+### 2.1. Decision variables
+For each cell $(i, j)$ in the grid and a number $k$, we define a variable $x(i,j,k)$ such that
 ```math
 x(i, j, k) = \begin{cases}
   1 & \text{ nếu ô } (i, j)\text{ được điền giá trị } {k} \\
@@ -44,50 +40,51 @@ x(i, j, k) = \begin{cases}
 \end{cases}
 ```
 
-### 2.2. Các ràng buộc
+### 2.2. Constraints
 
-- Mỗi ô chứa một số
+- Each cell contains only one number.
 ```math
 \sum\limits_{k = 1}^{n}{x(i, j, k)} \leq 1, \\ \forall 0 \leq i, j < n
 ```
 
-- Mỗi hàng chứa đủ các số từ 1 đến $n$
-
+- Each row contains all numbers from 1 to $n$
 ```math
 \sum\limits_{j = 0}^{n - 1}{x(i, j, k)} = 1, \\ \forall 0 \leq i  < n, 1 \leq k  \leq n
 ```
 
-- Mỗi cột chứa đủ các số từ 1 đến $n$
+- Each column contains all numbers from 1 to $n$
 ```math
 \sum\limits_{i = 0}^{n - 1}{x(i, j, k)} = 1, \\ \forall 0 \leq j < n, 1 \leq k  \leq n
 ```
 
-- Mỗi khối chứa đủ các số từ 1 đến $n$
+- Each block contains all numbers from 1 to $n$
 ```math
 \sum\limits_{(i, j) \in B_b}{x(i, j, k)} = 1, \\ \forall 0 \leq b < n, 1 \leq k  \leq n
 ```
 
-- Các ô đã có giá trị từ trước
+- Pre-filled cells
 ```math
 x(i, j, V_{ij}) = 1, \\ \forall (i, j) \in F
 ```
 
-### 2.3. Hàm mục tiêu
+### 2.3. Objective function
 
-Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
-cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
-mục tiêu là một hằng số (mình hay chọn số 0).
+This problem does not have an objective function, as we are not aiming to minimize
+or maximize any value. Our goal is simply to find a feasible solution. Technically,
+when programming, we can set the objective function to a constant (I often choose 0)
 
-## 3. Kết luận
+## 3. Conclusion
 
-Sudoku là một trong những bài tập cơ bản để thành thạo kỹ năng mô hình hóa, khi mới bắt đầu học mô hình
-hóa mình đã rất ấn tượng với ý tưởng đặt biến nhị nhân ba chiều của bài toán này. Mọi ràng buộc còn lại
-của bài toàn đã được mô hình hóa một cách rất dễ dàng với cách đặt biến này. Đây cùng là một phương pháp
-hay được sử dụng khi mô hình hóa, chúng ta sẽ còn gặp lại các biến nhị phân kiểu này ở các bài viết cùng
-series.
+Sudoku is one of the fundamental exercises for mastering modeling skills. When I
+first started learning modeling, I was very impressed by the idea of using a
+three-dimensional binary variable for this problem. All the remaining constraints
+of the problem were modeled very easily with this variable assignment. This is also
+a common technique used in modeling, and we will encounter these binary variables
+again in future articles of this series.
 
-Tham khảo thêm các câu đố Sudoku và biến thể tại [Krazydad/sudoku](https://krazydad.com/sudoku/).
+For more Sudoku puzzles and variations, please refer to [Krazydad/sudoku](https://krazydad.com/sudoku/).
 
-*Code mô hình hóa Sudoku bằng python có tại [LogicPuzzlesSolver/sudoku](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/sudoku.py)*
+*The Python code for Sudoku modeling is available at
+[Tung-hehe/LogicPuzzlesSolver/sudoku](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/sudoku.py)*
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

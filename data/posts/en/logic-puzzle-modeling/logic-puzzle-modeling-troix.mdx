@@ -12,52 +12,54 @@ authors: [default]
 
 import { Twemoji } from '@/components/common/Twemoji.tsx'
 
-## 1. Giới thiệu
+## 1. Introduction
 
-Troix là một câu đố logic được mô tả như sau, cho một lưới các ô vuông với một số ô đã được điền sẵn
-$X$, $O$ hoặc $I$. Người chơi cần hoàn thiện lưới bằng cách điền vào những ô trống $X$, $O$ và $I$ thỏa mãn:
-- Lưới được phủ kín bởi $X$, $O$ và $I$
-- Trên mỗi hàng/cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
-- Trên mỗi hàng/cột số lượng $X$, $O$ và $I$ bằng nhau
+Troix is a logic puzzle described as follows: given a grid of squares
+with some cells already filled with $X$, $O$, or $I$. Player needs to complete
+the grid by filling in the empty cells with $X$, $O$, and $I$, satisfying the
+following constraints:
+- The grid is completely covered by $X$, $O$ and $I$
+- In each row/column, there is no sequence of more than 2 consecutive cells filled with the same symbol.
+- In each row/column, the number of $X$, $O$, and $I$ is equal.
 
-Dưới đây là ví dụ cho một câu đố Troix cỡ 12×12 và lời giải
+Below is an example of a 12×12 Troix puzzle and its solution.
 
 ![triox-example](/posts/Troix.png)
 
-## 2. Mô hình hóa câu đố
+## 2. Modeling puzzle
 
-- $n_R$ là số hàng của lưới ($n_R$ là số chia hết cho 3)
-- $n_C$ là số cột của lưới ($n_C$  là số chia hết cho 3)
-- $F_X$ là tập hợp những ô $(i, j)$ đã được điền $X$
-- $F_O$ là tập hợp những ô $(i, j)$ đã được điền $O$
-- $F_I$ là tập hợp những ô $(i, j)$ đã được điền $I$
+- $n_R$ is the number of rows in the grid ($n_R$ is a multiple of 3)
+- $n_C$ is the number of columns in the grid ($n_C$ is a multiple of 3)
+- $F_X$ is the set of all cells $(i, j)$ already filled with $X$
+- $F_O$ is the set of all cells $(i, j)$ already filled with $O$
+- $F_I$ is the set of all cells $(i, j)$ already filled with $I$
 
-### 2.1. Biến quyết định
-Với mỗi ô $(i, j)$ trong lưới xây dựng các biến $x(i, j)$, $y(i, j)$, $z(i, j)$ thỏa mãn
+### 2.1. Decision variables
+For each cell $(i, j)$ in the grid,  we define variables $x(i, j)$, $y(i, j)$, $z(i, j)$ such that
 ```math
 x(i, j) = \begin{cases}
-  1 & \text{nếu ô } (i, j) \text{ được điền } X \\
-  0 & \text{ngược lại }
+  1 & \text{if cell } (i, j) \text{ filled with } X \\
+  0 & \text{otherwise }
 \end{cases}
 ```
 
 ```math
 y(i, j) = \begin{cases}
-  1 & \text{nếu ô } (i, j) \text{ được điền } O\\
-  0 & \text{ngược lại}
+  1 & \text{if cell } (i, j) \text{ filled with } O\\
+  0 & \text{otherwise}
 \end{cases}
 ```
 
 ```math
 z(i, j) = \begin{cases}
-  1 & \text{nếu ô } (i, j) \text{ được điền } I\\
-  0 & \text{ngược lại}
+  1 & \text{if cell } (i, j) \text{ filled with } I\\
+  0 & \text{otherwise}
 \end{cases}
 ```
 
 ### 2.2. Các ràng buộc
 
-- Các ô đã được điền từ đầu
+- Cells already filled
 ```math
 \begin{cases}
   x(i, j) = 1, \forall (i, j) \in F_X \\
@@ -66,12 +68,12 @@ z(i, j) = \begin{cases}
 \end{cases}
 ```
 
-- Lưới được phủ kín bới $X$, $O$ và $I$
+- The grid is completely covered by $X$, $O$ and $I$
 ```math
 x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
 ```
 
-- Trên mỗi hàng không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- In each row, there is no sequence of more than 2 consecutive cells filled with the same symbol.
 ```math
 \begin{cases}
   x(i, j) + x(i, j + 1) + x(i, j + 2) \leq 2 \\
@@ -81,7 +83,7 @@ x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
 \\ \forall 0 \leq i < n_R, 0 \leq j < n_C - 2
 ```
 
-- Trên mỗi cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- In each column, there is no sequence of more than 2 consecutive cells filled with the same symbol.
 ```math
 \begin{cases}
   x(i, j) + x(i + 1, j) + x(i + 2, j) \leq 2 \\
@@ -91,7 +93,7 @@ x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
 \\ \forall 0 \leq i < n_R - 2, 0 \leq j < n_C
 ```
 
-- Trên mỗi hàng số lượng $X$, $O$ và $I$ bằng nhau
+- In each row, the number of $X$, $O$, and $I$ is equal.
 ```math
 \begin{cases}
   \sum\limits_{j = 0}^{n_C - 1}{x(i, j)} = {n_C \over 3} \\
@@ -101,7 +103,7 @@ x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
 \\ \forall 0 \leq i < n_R
 ```
 
-- Trên mỗi cột số lượng $X$, $O$ và $I$ bằng nhau
+- In each column, the number of $X$, $O$, and $I$ is equal.
 ```math
 \begin{cases}
   \sum\limits_{i = 0}^{n_R - 1}{x(i, j)} = {n_R \over 3} \\
@@ -111,17 +113,16 @@ x(i, j) + y(i, j) + z(i, j) == 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
 \\ \forall 0 \leq j < n_C
 ```
 
-### 2.3. Hàm mục tiêu
+### 2.3. Objective function
+This problem does not have an objective function, as we are not aiming to minimize
+or maximize any value. Our goal is simply to find a feasible solution. Technically,
+when programming, we can set the objective function to a constant (I often choose 0)
 
-Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
-cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
-mục tiêu là một hằng số (mình hay chọn số 0).
+## 3. Conclusion
+For more Triox puzzles and variations, please refer to [Krazydad/triox](https://krazydad.com/troix/).
+Try modeling the variations of this puzzle!
 
-## 3. Kết luận
-
-Tham khảo thêm các câu đố Triox và biến thể tại [Krazydad/triox](https://krazydad.com/troix/). Hãy thử mô
-hình hóa các biến thể của câu đố này nhé!
-
-*Code mô hình hóa Troix bằng python có tại [LogicPuzzlesSolver/triox](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/troix.py)*
+*The Python code for Star Battle modeling is available at
+[Tung-hehe/LogicPuzzlesSolver/sudoku](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/troix.py)*
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

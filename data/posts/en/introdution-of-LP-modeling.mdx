@@ -7,9 +7,8 @@ image:
 authors: [default]
 ---
 
-Tối ưu hóa tuyến tính là một kỹ thuật tìm ra kết quả tối ưu trong một mô hình
-toán học với hàm mục tiêu và ràng buộc tuyến tính. Một mô hình tối ưu tuyến tính
-có dạng sau
+Linear programming is a technique to find the optimal solution in a mathematical model with
+a linear objective function and linear constraints. A linear programming model has the following form
 ```math
 \begin{aligned}
   \text{min} \quad & c^Tx && \\
@@ -17,25 +16,25 @@ có dạng sau
       & x & \geq & \quad 0 \\
 \end{aligned}
 ```
-Trong đó $b$, $c$ là các vector cột hằng số, $A$ là ma trận hằng số,
-$x$ là một vector cột đại diện cho các biến số.
+Where $b$ and $c$ are constant column vectors, $A$ is a constant matrix,
+and $x$ is a column vector representing the variables.
 
-Hiện nay đã có nhiều solver giải mô hình LP rất hiệu quả, tiêu biểu như
-[gurobi](https://www.gurobi.com/), [scip](https://www.scipopt.org/) hay
-[coin-or](https://www.coin-or.org/). Vì vậy nếu ta có thể mô hình hóa được bài toán
-về một mô hình LP thì bài toán coi như đã được giải quyết. Tuy nhiên mô hình hóa bài
-toán không phải lúc nào cũng dễ dàng vì một số lý do sau.
+There are many efficient LP solvers available today, such as
+[Gurobi](https://www.gurobi.com/), [SCIP](https://www.scipopt.org/),
+and [COIN-OR](https://www.coin-or.org/). Therefore, if we can model
+a problem as an LP, it can be considered solved. However, modeling a problem
+is not always easy due to the following reasons.
 
-- Để mô hình hóa tất cả các điều kiện của một bài toán về dạng tuyến tính không hề đơn giản.
-- Có nhiều cách mô hình hóa một bài toán, nhưng không phải mô hình nào cũng hiệu quả. Một mô hình
-dù mô tả chính xác bài toán nhưng lại quá lớn hoặc các điều kiện không chặt chẽ có thể dẫn đến việc tốn
-rất rất nhiều thời gian để giải mô hình.
-- Đôi khi phải xây dựng nhiều mô hình để giải quyết một bài toán, việc xây dựng từng mô hình và tương
-tác giữa các mô hình sao cho hiệu quả cũng là một vấn đề.
+- It is not straightforward to model all the conditions of a problem in a linear form.
+- There are multiple ways to model a problem, but not all models are equally efficient.
+A model, even if it accurately represents the problem, can be too large or have loose constraints,
+leading to significant computational time.
+- Sometimes, multiple models need to be constructed to solve a single problem. Building
+each model and ensuring effective interactions between them is also a challenge.
 
-Trong công việc của mình, tối ưu tuyến tính được sử dụng rất nhiều và cũng không ít lần mình thấy
-được sự đột phá từ cách mô hình hóa. Vì vậy đối với mình, kỹ năng mô hình hóa là một kỹ năng vô
-cùng quan trọng và không dễ dàng để thành thạo.
+In my work, linear programming is used extensively, and I have often witnessed breakthroughs
+stemming from innovative modeling techniques. Therefore, I believe that modeling skills
+are crucial and not easily mastered.
 
-*Bạn đọc có thể tham khảo các kỹ thuật mô hình hóa tại
+*Discover other modeling techniques by visiting
 [MOSEK Modeling Cookbook](https://docs.mosek.com/modeling-cookbook/index.html). Happy learning!*

@@ -11,33 +11,35 @@ import { Twemoji } from '@/components/common/Twemoji.tsx'
 
 ## 1. Binary variables
 
-Phương pháp này được sử dụng nếu ta có thể biết chính xác các giá trị có thể có của một biến số.
-Chẳng hạn ta có một biến $x \in \mathbb{Z}$ với điều kiện $0 \leq x \leq 9$ thì ta có thể tách biến
-$x$ thành 9 biến nhị phân $x_i$ ($0 \leq i \leq 9$) thỏa mãn
+This method is used when we can precisely determine the possible values of a variable.
+CFor instance, given an integer variable $x \in \mathbb{Z}$ with the condition $0 \leq x \leq 9$,
+we can decompose the variable $x$ into 9 binary variables $x_i$ ($0 \leq i \leq 9$) to satisfy
 ```math
 x_i = \begin{cases}
-  1 & \text{ nếu biến } x\text{ nhận giá trị } i \\
-  0 & \text{ ngược lại }
+  1 & \text{ if } x\text{ is equal to } i \\
+  0 & \text{ otherwise }
 \end{cases}
 ```
-Câu hỏi đặt ra là tại sao ta lại cần phải tách một biến thành nhiều biến hơn, liệu nó có tác dụng gì
-không? Câu trả lời là có, giả sử ta không chỉ có 1 biến $x$ như trên mà có thêm 1 biến $y \in \mathbb{Z}$
-với điều kiện $0 \leq y \leq 9$ nữa. Khi đó sẽ rất khó để tuyến tính hóa điều kiện $x \neq y$ nếu ta sử
-dụng 2 biến này. Ngược lại nếu ta tách cả $x$ và $y$ thành các biến nhị phân thì điều kiện này sẽ được mô
-hình hóa một cách dễ dàng như sau $x_i + y_i \leq 1, \forall 0 \leq i \leq 9$.
+Why do we need to decompose a variable into multiple variables? What is the benefit?
+The answer is, suppose we have not only one variable $x$ as above but also another
+variable $y \in \mathbb{Z}$ with the condition $0 \leq y \leq 9$. Then, it would be
+very difficult to linearize the condition $x \neq y$ if we use these two variables.
+On the other hand, if we decompose both $x$ and $y$ tinto binary variables, this condition
+can be easily modeled as follows:  $x_i + y_i \leq 1, \forall 0 \leq i \leq 9$.
 
-## 2. Mô hình hóa ràng buộc phi tuyến bằng hình học
+## 2. Modeling nonlinear constraints geometrically
 
-Phương pháp này được sử dụng khi ta có thể tìm được một bao lồi chỉ chứa các điểm thỏa mãn điều kiện
-cần mô hình hóa. Ví dụ tuyến tính hóa điều kiện $x = y \Leftrightarrow z = 1$ với $x, y, z$ là các biến nhị phân.
-Nhận thấy các bộ $(x, y, z)$ thỏa mãn điều kiện là $(1, 1, 1), (0, 0, 1), (1, 0, 0), (0, 1, 0)$. Biểu diễn trong
-không gian ba chiều ta được tứ diện $ABCD$ dưới đây
+This method is applicable when we can find a convex hull containing only points that
+satisfy the desired constraint. For instance, to linearize the condition
+$x = y \Leftrightarrow z = 1$ where $x, y, z$ are binary variables. We observe that the
+feasible points are $(1, 1, 1), (0, 0, 1), (1, 0, 0), (0, 1, 0)$. Geometrically representing
+these points in three-dimensional space, we obtain the tetrahedron $ABCD$ shown below
 
 ![modeling-tips-tricks](/posts/ModelingTipsTricks.png)
 
-Những điểm nằm trong tứ diện $ABCD$ chính là những điểm thỏa mãn điều kiện trên. Các phương
-trình biều diễn tứ diện này chính là các điều kiện cần để tuyến tính hóa điều kiện ban đầu,
-cụ thể là các điều kiện sau
+The points within the tetrahedron $ABCD$ are precisely those that satisfy the given condition.
+The equations defining this tetrahedron are the exact constraints needed to linearize the
+original condition, specifically, the following conditions
 ```math
 \begin{cases}
   x + y - z \geq 1 \\
@@ -47,18 +49,17 @@ cụ thể là các điều kiện sau
 \end{cases}
 ```
 
-**Một số lưu ý:**
-- Sử dụng phương pháp này khi biết được tất cả các điểm thỏa mãn điều kiện ban đầu
-- Phải tồn tại một tập lồi chứa đủ và chỉ chứa các điểm thỏa mãn điều kiện
-- Tập lồi trên phải được biểu diễn dễ dàng qua các điều kiện tuyến tính khác
-- Trong các bải viết tiếp theo mình sẽ gọi tắt kỹ thuật này là **phương pháp hình học**
-(tên gọi này hoàn toàn bắt nguồn từ cá nhân mình, không hề tham khảo từ bất kỳ tài liệu nào,
-nên có thể nó chưa phải một thuật ngữ chính xác, nếu bạn biết thuật ngữ cho phương pháp này hãy
-cho mình biết để chỉnh sửa nhé)
+**A few notes:**
+- Use this method when we can determine all points satisfy original contraint
+- There must exist a convex set that contains all and only the points satisfying the contraint
+- The above convex set should be easily representable by other linear constraints
+- From this point forward, I will use the term **geometric method** to describe this technique.
+(This name is entirely my own creation, and I haven't consulted any references. It might not be
+the correct terminology. If you know the proper term for this method, please let me know so I can correct it.)
 
-## 3. Mô hình hóa ràng buộc phi tuyến dạng “$A$ hoặc $B$”
+## 3. Modeling nonlinear “$A$ or $B$” constraints
 
-Ràng buộc này thường sẽ có dạng như sau:
+The typical form of these constraints is:
 ```math
 \left[
 \begin{array}{ll}
@@ -68,9 +69,10 @@ Ràng buộc này thường sẽ có dạng như sau:
 \right .
 ```
 
-Phương pháp chung để tuyến tính dạng này đó là đặt thêm một biến nhị phân trung gian tương ứng
-với 2 trường hợp của ràng buộc gốc và cố gắng biểu diễn lại điều kiện ban đầu sao cho chúng
-không mâu thuẫn với nhau. Ví dụ tuyến tính hóa điều kiện sau với $x, y \geq 0$
+A common approach to linearize this type of constraint is to introduce an additional binary
+variable that corresponds to the two cases of the original constraint and then try to reformulate
+the original condition so that they are not contradictory. For example, consider linearizing the
+following constraint with  $x, y \geq 0$
 
 ```math
 \begin{cases}
@@ -84,7 +86,7 @@ không mâu thuẫn với nhau. Ví dụ tuyến tính hóa điều kiện sau v
 \end{cases}
 
 ```
-Tạo thêm biến nhị phân $y$ thỏa mãn
+Create binary variable $y$ satisfy
 
 ```math
 z = \begin{cases}
@@ -93,7 +95,7 @@ z = \begin{cases}
 \end{cases}
 ```
 
-Khi đó điều kiện gốc sẽ được biểu diễn lại như sau
+Then the original condition can be reformulated as follows
 ```math
 \begin{cases}
   2x + y \geq Az \\
@@ -102,12 +104,12 @@ Khi đó điều kiện gốc sẽ được biểu diễn lại như sau
 \end{cases}
 ```
 
-***Chú ý***: *Phương pháp này khá khó sử dụng và phải tùy vào từng trường hợp cụ thể ta mới có
-cách tuyến tính hóa hợp lý.*
+***Note***: *This method is quite difficult to apply and requires case-by-case analysis to find
+an appropriate linearization.*
 
-## 4. Kết luận
+## 4. Conclusion
 
-Trên đây là 3 kỹ thuật mô hình hóa hay được sử dụng, bạn đọc có thể tham khảo thêm các kỹ thuật khác
-tại [MOSEK Modeling Cookbook](https://docs.mosek.com/modeling-cookbook/index.html). Happy learning!
+We have discussed 3 common modeling techniques. Additional methods can be found in
+[MOSEK Modeling Cookbook](https://docs.mosek.com/modeling-cookbook/index.html).
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

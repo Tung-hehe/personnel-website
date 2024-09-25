@@ -38,9 +38,8 @@ Dưới đây là ví dụ cho một câu đố Galaxies cỡ 10×18 và lời g
 - $$P_{ijg}$$ là tập hợp tất cả đường đi từ ô $(i, j)$ đến trung tâm của thiên hà $g$
 
 Ví dụ, trong hình dưới đây, với $g$ là thiên hà chứa ngôi sao màu đen, khi đó $C_g$ là các
-ô nằm trong hình chữ nhật có viền màu xanh dương, $F_g$ là tập hợp các ô có khả năng thuộc thiên hà
-$g$ và đường màu xanh lá là một đường đi từ ô màu cam đến tâm.
-![galaxies-objects](/posts/GalaxiesObjects.png)
+ô nằm trong hình chữ nhật có viền màu xanh dương, $F_g$ là tập hợp các ô nằm trong vùng có viền màu đỏ
+và đường màu xanh lá là một đường đi từ ô màu cam đến tâm. ![galaxies-objects](/posts/GalaxiesObjects.png)
 
 - $V_p$ là tập hợp tất cả các ô thuộc đường đi $p$
 - $n_p = |V_p|$ là số lượng ô thuộc đường đi $p$
@@ -116,7 +115,7 @@ x(i, j, g) = 0, \\ \forall 0 \leq g < n_G, (i, j) \notin F_g
 ### 2.3. Hàm mục tiêu
 
 Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
-cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+cần làm chỉ làm tìm ra một nghiệm chấp nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
 mục tiêu là một hằng số (mình hay chọn số 0).
 
 ## 3. Kết luận
@@ -127,6 +126,6 @@ ta cần suy nghĩ kỹ về bài toán đồng thời thử giải nhiều trư
 
 Tham khảo thêm các câu đố Galaxies và biến thể tại [Krazydad/galaxies](https://krazydad.com/galaxies/).
 
-*Code mô hình hóa Galaxies bằng python có tại [LogicPuzzlesSolver/galaxies](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/galaxies.py).*
+*Code mô hình hóa Galaxies bằng python có tại [Tung-hehe/LogicPuzzlesSolver/galaxies](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/galaxies.py).*
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

@@ -3,7 +3,7 @@ title:  Modeling Galaxies puzzle
 date: 2024-09-30
 series:
   order: 3
-  title:Modeling logic puzzles
+  title: Modeling logic puzzles
 tags: [modeling, math, MILP, programing, python]
 summary: Modeling and solving Galaxies puzzle using mixed-integer linear programming.
 image: /posts/Galaxies.png
@@ -12,78 +12,78 @@ authors: [default]
 
 import { Twemoji } from '@/components/common/Twemoji.tsx'
 
-## 1. Giới thiệu
+## 1. Introduction
 
-Galaxies là một câu đố logic được mô tả như sau, cho một lưới các ô vuông
-với các chấm tượng trưng cho các ngôi sao, người chơi cần chia lưới thành các
-khu vực gọi là các thiên hà thỏa mãn các điều kiện sau:
-- Lưới được phủ kín bởi các thiên hà
-- Các thiên hà không chồng chéo lên nhau
-- Mỗi thiên hà phải và chỉ chứa một ngôi sao ở giữa làm tâm
-- Mỗi thiên hà phải đối xứng tâm qua ngôi sao ở giữa
+Galaxies is a logic puzzle described as follows: given a grid of squares with dots representing stars,
+player needs to divide the grid into regions called galaxies, satisfying the following conditions:
+- The grid is completely covered by galaxies.
+- Galaxies do not overlap.
+- Each galaxy must and only contains one star in the center as its core.
+- Each galaxy must be centrally symmetric with respect to the star in the center.
 
-*Tham khảo [wikipedia](https://en.wikipedia.org/wiki/Tentai_Show)*
+*Reference [wikipedia](https://en.wikipedia.org/wiki/Tentai_Show)*
 
-Dưới đây là ví dụ cho một câu đố Galaxies cỡ 10×18 và lời giải
+Below is an example of a 10×18 Galaxies puzzle and its solution
 
 ![galaxies-example](/posts/Galaxies.png)
 
-## 2. Mô hình hóa câu đố
+## 2. Modeling the puzzle
 
-- $n_R$ là số hàng của lưới
-- $n_C$ là số cột của lưới
-- $n_G$ là số lượng thiên hà (bằng số lượng ngôi sao trong lưới)
-- $C_g$ là tập hợp các ô có tọa độ $(i, j)$ chứa tâm của thiên hà $g$
-- $F_g$ là tập hợp các ô có khả năng thuộc thiên hà $g$
-- $$P_{ijg}$$ là tập hợp tất cả đường đi từ ô $(i, j)$ đến trung tâm của thiên hà $g$
+- $n_R$ is the number of rows in the grid
+- $n_C$ is the number of columns in the grid
+- $n_G$ is the number of galaxies (equal the number of stars in the grd)
+- $C_g$ is the set of cells with coordinates $(i, j)$ containing the centers of galaxy $g$
+- $F_g$ is the set of cells that can possibly belong to galaxy $g$
+- $$P_{ijg}$$ is the set of all paths from $(i, j)$ to the center of galaxy $g$
 
-Ví dụ, trong hình dưới đây, với $g$ là thiên hà chứa ngôi sao màu đen, khi đó $C_g$ là các
-ô nằm trong hình chữ nhật có viền màu xanh dương, $F_g$ là tập hợp các ô có khả năng thuộc thiên hà
-$g$ và đường màu xanh lá là một đường đi từ ô màu cam đến tâm.
+For example, in the figure below, with $g$ being the galaxy containing the black star,
+$C_g$ contains all cells in blue border rectangle, $F_g$ contains all cells in red border region
+and green line is a path from orange cell to the center of galaxy $g$.
 ![galaxies-objects](/posts/GalaxiesObjects.png)
 
-- $V_p$ là tập hợp tất cả các ô thuộc đường đi $p$
-- $n_p = |V_p|$ là số lượng ô thuộc đường đi $p$
+- $V_p$ is the set of cells that belong to path $p$
+- $n_p = |V_p|$ is the number of cells in path $p$
 
-### 2.1. Biến quyết định
+### 2.1. Decision variables
 
-Với mỗi ô $(i, j)$ trên lưới và một thiên hà $g$ ($0 \leq g < n_G$), xây dựng biên $x(i, j, g)$ thỏa mãn
+For each cell $(i, j)$ in the grid and a galaxy $g$ ($0 \leq g < n_G$), we define a variable $x(i,j, g)$ such that
 ```math
 x(i, j, g) = \begin{cases}
-  1 & \text{nếu thiên hà } g \text{ chứa ô } (i, j) \\
-  0 & \text{ngược lại}
+  1 & \text{if galaxy } g \text{ contains cell } (i, j) \\
+  0 & \text{otherwise}
 \end{cases}
 ```
 
-### 2.2. Các ràng buộc
+### 2.2. Constraints
 
-- Lưới được phủ kín bởi các thiên hà, các thiên hà không chồng chéo lên nhau. Hai điều kiện này tương đương
-với điều kiện sau, mỗi ô trên lưới phải và chỉ thuộc một thiên hà
+- The grid is completely covered by galaxies, and the galaxies do not overlap.
+These two constraints are equivalent to the following constraint: each cell in the
+grid must belong to, and only belong to, one galaxy.
 ```math
 \sum_{g = 0}^{n_G - 1}{x(i, j, g)} = 1,  \\ \forall 0 \leq i < n_C, 0 \leq j < n_R
 ```
 
-- Mỗi thiên hà phải chứa tâm của nó
+- Each galaxy contains its core
 ```math
 x(i, j, g) = 1, \\ \forall 0 \leq g < n_G, (i, j) \in C_g
 ```
 
-- Mỗi thiên hà phải đối xứng tâm qua tâm của nó
+- Each galaxy must be centrally symmetric with respect to the star in the center
 ```math
 x(i, j, g) = x(u_{ijg}, v_{ijg}, g), \\ \forall 0 \leq g < n_G, (i, j) \in F_g
 ```
-  Trong đó $$(u_{ijg}, v_{ijg})$$ là ô đối xứng của ô $(i, j)$ qua tâm của thiên hà $g$
+  Where $$(u_{ijg}, v_{ijg})$$ is the cell symmetric to cell $(i, j)$ with respect to the center of galaxy $g$
 
-**Chú ý:** Các điều kiện trên đã đủ để giải một câu đố Galaxies cỡ nhỏ (7×7, 8×8, ...). Tuy nhiên
-khi giải một câu đố có cỡ lớn hơn (10×10 trở lên) ta sẽ gặp phải một vấn đề đó là thiên hà có thể bị chia thành
-nhiều mảnh nhỏ rời nhau.
+**Note:** The above conditions are sufficient to solve small Galaxies puzzles (7×7, 8×8, ...).
+However, when solving larger puzzles (10×10 or larger) we encounter a problem where the galaxy can be divided
+into many separate small pieces.
 
-- Các ô trong một thiên hà phải kết nối với nhau. Điều kiện này tương đương với điều kiện sau, giữa 2 ô bất
-kỳ thuộc cùng một thiên hà phải tồn tại ít nhất 1 đường đi giữa chúng mà tất cả ô trên đường đi này cũng thuộc
-thiên hà đó.
+- The cells within a galaxy must be connected. This condition is equivalent to the following: for any two
+cells belonging to the same galaxy, there must exist at least one path between them such that all cells on
+this path also belong to that galaxy.
 
-  Để tuyến tình hóa điều kiện này ta phải tạo thêm các biến trung gian $$t_{ijgp}$$ với mỗi thiên hà
-  $g$, ô $(i, j) \in F_g$ và mỗi đường đi $$p \in P_{ijg}$$ thỏa mãn
+  To linearize this condition, we introduce additional intermediate variables $$t_{ijgp}$$ for each galaxy
+  $g$, cell $(i, j) \in F_g$ and each path $$p \in P_{ijg}$$ satisfying
 
   ```math
   t_{ijgp} = \begin{cases}
@@ -91,9 +91,9 @@ thiên hà đó.
     0 & \text{otherwise }
   \end{cases}
   ```
-  Hay có thể hiểu biến $$t_{ijgp}$$ bằng 1 nếu ô $(i, j)$ kết nối với tâm của thiên hà $g$ qua đường đi $p$.
-  Bằng [phương pháp hình học](/blog/modeling-tips-trick#2-m%C3%B4-h%C3%ACnh-h%C3%B3a-r%C3%A0ng-bu%E1%BB%99c-phi-tuy%E1%BA%BFn-b%E1%BA%B1ng-h%C3%ACnh-h%E1%BB%8Dc)
-  ta biểu diễn các biến $t$ thông qua các biến $x$ bằng các điều kiện sau
+  In other words, the variable $$t_{ijgp}$$ equals 1 if cell $(i, j)$ is connected to the center of galaxy $g$
+  through path $p$. Using [geometric method](/en/blog/modeling-tips-trick#2-modeling-nonlinear-constraints-geometrically)
+  we can represent the variables $t$ through the variables $x$ by the following constraint:
 
   ```math
   \begin{cases}
@@ -103,30 +103,31 @@ thiên hà đó.
   \\ \forall 0 \leq g < n_G, (i, j) \in F_g, p \in P_{ijg}
   ```
 
-  Cuối cùng, điều kiện ban đầu sẽ được tuyến tính hóa như sau
+  Finally, the original condition can be linearized as follows:
   ```math
   x(i, j, g) \leq \sum\limits_{p \in P_{ijg}}{t_{ijgp}}, \\ \forall 0 \leq g < n_G, (i, j) \in F_g
   ```
-- Ngoài ra, để thu nhỏ không gian tìm kiếm của bài toán ta có thể thêm điều kiện, các ô không thuộc $F_g$ thì
-sẽ không thuộc thiên hà $g$
+- Additionally, to reduce the search space of the problem, we can add the condition that cells not
+ in $F_g$ will not belong to galaxy $g$
 ```math
 x(i, j, g) = 0, \\ \forall 0 \leq g < n_G, (i, j) \notin F_g
 ```
 
-### 2.3. Hàm mục tiêu
+### 2.3. Objective function
+This problem does not have an objective function, as we are not aiming to minimize
+or maximize any value. Our goal is simply to find a feasible solution. Technically,
+when programming, we can set the objective function to a constant (I often choose 0)
 
-Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
-cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
-mục tiêu là một hằng số (mình hay chọn số 0).
+## 3. Conclusion
 
-## 3. Kết luận
+The highlight of this puzzle is the last two conditions, each of which has
+a different effect but shares a common point: if not carefully considered, we can
+easily overlook them. To avoid this situation, we need to think carefully about the
+problem and try solving different many cases to detect any issues (if any)
 
-Điểm nhấn của câu đố này nằm ở 2 điều kiện cuối, mỗi điều kiện lại có một tác dụng khác nhau nhưng
-đều có một điểm chung là nếu không để ý kỹ ta rất có thể sẽ bỏ qua chúng. Để tránh trường hợp này
-ta cần suy nghĩ kỹ về bài toán đồng thời thử giải nhiều trường hợp khác nhau để phát hiện ra vấn đề (nếu có).
+For more Galaxies puzzles and variations, please refer to [Krazydad/galaxies](https://krazydad.com/galaxies/).
 
-Tham khảo thêm các câu đố Galaxies và biến thể tại [Krazydad/galaxies](https://krazydad.com/galaxies/).
-
-*Code mô hình hóa Galaxies bằng python có tại [LogicPuzzlesSolver/galaxies](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/galaxies.py).*
+*The Python code for Galaxies modeling is available at
+[Tung-hehe/LogicPuzzlesSolver/galaxies](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/galaxies.py).*
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

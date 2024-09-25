@@ -1,6 +1,6 @@
 ---
 title: Modeling Binox puzzle
-date: 2024-08-30
+date: 2024-10-02
 series:
   order: 5
   title: Modeling logic puzzles
@@ -12,41 +12,36 @@ authors: [default]
 
 import { Twemoji } from '@/components/common/Twemoji.tsx'
 
+## 1. Introduction
+Binox is a logic puzzle described as follows: given a grid of squares with some cells already filled with $X$ or $O$.
+Player needs to complete the grid by filling in the empty cells with $X$ or $O$, satisfying the following conditions:
+- The grid is completely covered by $X$ and $O$
+- In each row/column, there is no sequence of more than 2 consecutive cells filled with the same symbol
+- In each row/column, the number of $X$ is equal to the number of $O$
+- Each row/column is unique (No two rows are the same, and no two columns are the same)
 
-## 1. Giới thiệu
-
-Binox là một câu đố logic được mô tả như sau, cho một lưới các ô vuông với một số ô đã được điền sẵn $X$ hoặc $O$.
-Người chơi cần hoàn thiện lưới bằng cách điền vào những ô trống $X$ hoặc $O$ thỏa mãn:
-- Lưới được phủ kín bởi $X$ và $O$
-- Trên mỗi hàng/cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
-- Trên mỗi hàng/cột số lượng $X$ bằng số lượng $O$
-- Mỗi hàng/cột là duy nhất (Không có 2 hàng nào giống nhau, không có 2 cột nào giống nhau)
-
-Dưới đây là ví dụ cho một câu đố Binox cỡ 6×6 và lời giải
+Below is an example of a 6×6 Binox puzzle and its solution.
 
 ![binox-example](/posts/Binox.png)
 
-## 2. Mô hình hóa câu đố
+## 2. Modeling the puzzle
+- $n_R$ is the number of rows in the grid ($n_R$ is an even number)
+- $n_C$ is the number of columns in the grid ($n_C$ is an even number)
+- $F_X$ is the set of all cells $(i, j)$ already filled with $X$
+- $F_O$ is the set of all cells $(i, j)$ already filled with $O$
 
-- $n_R$ là số hàng của lưới ($n_R$ là một số chẵn)
-- $n_C$ là số cột của lưới ($n_C$ là một số chẵn)
-- $F_X$ là tập hợp những ô $(i, j)$ đã được điền $X$
-- $F_O$ là tập hợp những ô $(i, j)$ đã được điền $O$
-
-### 2.1. Biến quyết định
-
-Với mỗi $(i, j)$ trong lưới xây dựng biến $x(i, j)$ thỏa mãn
-
+### 2.1. Decision variables
+For each cell $(i, j)$ in the grid, we define a variable $x(i, j)$ such that
 ```math
 x(i, j) = \begin{cases}
-  1 & \text{nếu ô } (i, j) \text{ được điền X } \\
-  0 & \text{nếu ô } (i, j) \text{ được điền O }
+  1 & \text{if cell } (i, j) \text{ filled with X } \\
+  0 & \text{if cell } (i, j) \text{ filled with O }
 \end{cases}
 ```
 
-### 2.2. Các ràng buộc
+### 2.2. Constraints
 
-- Các ô đã được điền từ đầu
+- Cells already filled
 ```math
 \begin{cases}
     x(i, j) = 1, \forall (i, j) \in F_X\\
@@ -54,7 +49,7 @@ x(i, j) = \begin{cases}
 \end{cases}
 ```
 
-- Trên mỗi hàng không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- In each row, there is no sequence of more than 2 consecutive cells filled with the same symbol
 ```math
 \begin{cases}
     x(i, j) + x(i, j + 1) + x(i, j + 2) \leq 2 \\
@@ -63,7 +58,7 @@ x(i, j) = \begin{cases}
 \\ \forall 0 \leq i < n_R, 0 \leq j < n_C - 2
 ```
 
-- Trên mỗi cột không tồn tại chuỗi lớn hơn 2 ô liên tiếp được điền giống nhau
+- In each column, there is no sequence of more than 2 consecutive cells filled with the same symbol
 ```math
 \begin{cases}
     x(i, j) + x(i + 1, j) + x(i + 2, j) \leq 2 \\
@@ -72,28 +67,29 @@ x(i, j) = \begin{cases}
 \\ \forall 0 \leq i < n_R - 2, 0 \leq j < n_C
 ```
 
-- Trên mỗi hàng số lượng $X$ và $O$ bằng nhau
+- In each row, the number of $X$ is equal to the number of $O$
 ```math
 \sum\limits_{j = 0}^{n_C - 1}{x(i, j)} = {n_C \over 2}, \\ \forall 0 \leq i < n_R
 ```
 
-- Trên mỗi cột số lượng $X$ và $O$ bằng nhau
+- In each column, the number of $X$ is equal to the number of $O$
 ```math
 \sum\limits_{i = 0}^{n_R - 1}{x(i, j)} = {n_R \over 2}, \\ \forall 0 \leq j < n_C
 ```
 
-- Mỗi hàng là duy nhất. Để tuyến tính ràng buộc này ta diễn đạt lại như sau, với 2 hàng $i, j$ bất
-kỳ, tồn tại ít nhất một vị trí $k$ sao cho $x(i, k) \ne x(j, k)$ .
 
-  Với 2 hàng $i \ne j$ bất kỳ, và mỗi cột $k$, xây dựng biến trung gian $y(i, j, k)$ thỏa mãn
+- Each row is unique. To linearize this constraint, we can rephrase it as follows:
+for any two rows $i$ and $j$, there exists at least one position $k$ such that $x(i, k) \ne x(j, k)$.
+
+  For any two distinct rows $i \ne j$, and for each column k, we define an intermediate variable y(i, j, k) such that
   ```math
   y(i, j, k) = \begin{cases}
-    1 & \text{nếu } x(i, k) = x(j, k) \\
-    0 & \text{ngược lại}
+    1 & \text{if } x(i, k) = x(j, k) \\
+    0 & \text{otherwise}
   \end{cases}
   ```
-  Sử dụng [phương pháp hình học](/blog/modeling-tips-trick#2-m%C3%B4-h%C3%ACnh-h%C3%B3a-r%C3%A0ng-bu%E1%BB%99c-phi-tuy%E1%BA%BFn-b%E1%BA%B1ng-h%C3%ACnh-h%E1%BB%8Dc)
-  ta có thể biểu diễn được mối quan hệ giữa biến $y$ và các biến $x$ như sau
+  Using [geometric method](/en/blog/modeling-tips-trick#2-modeling-nonlinear-constraints-geometrically)
+  we can represent the variables $y$ through the variables $x$ by the following constraints:
   ```math
   \begin{cases}
     y(i, j, k) + x(i, k) + x(j, k) \geq 1 \\
@@ -102,19 +98,20 @@ kỳ, tồn tại ít nhất một vị trí $k$ sao cho $x(i, k) \ne x(j, k)$ .
     x(i, k) + x(j, k) \leq y(i, j, k) + 1
   \end{cases} \\ \forall 0 \leq i, j < n_R, i \ne j, 0 \leq k < n_C
   ```
-  Sử dụng các biến $y$ ta tuyến tính hóa điều kiện ban đầu như sau
+  We linearize the original constraint using the variables $y$ as follows
   ```math
   \sum\limits_{k = 0}^{n_C - 1}{y(i, j, k)} \leq n_C - 1, \\ \forall 0 \leq i, j < n_R, i \ne j
   ```
-- Mỗi cột là duy nhất. Tương tự với điều kiện trên, với 2 cột $i \ne j$ bất kỳ, và mỗi hangd $k$,
-xây dựng biến trung gian $z(i, j, k)$ thỏa mãn
+
+- Each column is unique. Similarly to the above condition, for any two distinct columns $i$ and $j$,
+and for each row $k$, we construct an intermediate variable $z(i, j, k)$ such that
   ```math
   z(i, j, k) = \begin{cases}
-    1 & \text{nếu } x(k, i) = x(k, j) \\
-    0 & \text{ngược lại}
+    1 & \text{if } x(k, i) = x(k, j) \\
+    0 & \text{otherwise}
   \end{cases}
   ```
-  Biểu diễn $z$ qua các $x$ bằng hệ điều kiện
+  Represent the variables $z$ through the variables $x$ by the following constraints:
   ```math
   \begin{cases}
     z(i, j, k) + x(k, i) + x(k, j) \geq 1 \\
@@ -124,26 +121,26 @@ xây dựng biến trung gian $z(i, j, k)$ thỏa mãn
   \end{cases}
   \\ \forall 0 \leq k < n_R, 0 \leq i, j < n_C, i \ne j
   ```
-  Tuyến tính hóa điều kiện ban đầu như sau
+  Linearize the original constraint as follows
   ```math
   \sum\limits_{k = 0}^{n_R - 1}{z(i, j, k)} \leq n_R - 1, \\ \forall 0 \leq i, j < n_C, i \ne j
   ```
 
-### 2.3. Hàm mục tiêu
+### 2.3. Objective function
+This problem does not have an objective function, as we are not aiming to minimize
+or maximize any value. Our goal is simply to find a feasible solution. Technically,
+when programming, we can set the objective function to a constant (I often choose 0)
 
-Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
-cần làm chỉ làm tìm ra một nghiệm chất nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
-mục tiêu là một hằng số (mình hay chọn số 0).
+## 3. Conclusion
 
-## 3. Kết luận
+The highlight of this puzzle is the unique row/column constraint. In reality,
+such constraints are often very difficult to model efficiently. Imagine if we
+had thousands of rows or columns; the number of constraints would be enormous.
+In such cases, we must find alternative ways to solve the problem effectively
 
-Điểm nhấn của câu đố này nằm ở điều kiện hàng/cột duy nhất, trên thực tế những điều kiện dạng này
-thường rất khó mô hình hóa một cách hiệu quả. Thử tưởng tượng chúng ta có số lượng
-hàng/cột lên đến 1000 khi đó số điều kiện sẽ là một con số rất lớn, trong trường hợp đó ta phải
-tìm ra những cách khác để giải quyết bài toán một cách hiệu quả.
+For more Binox puzzles and variations, please refer to [Krazydad/binox](https://krazydad.com/binox/).
 
-Tham khảo thêm các câu đố Binox và biến thể tại [Krazydad/binox](https://krazydad.com/binox/).
-
-*Code mô hình hóa Binox bằng python có tại [LogicPuzzlesSolver/binox](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/binox.py)*
+*The Python code for Binox modeling is available at
+[Tung-hehe/LogicPuzzlesSolver/binox](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/binox.py)*
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />
