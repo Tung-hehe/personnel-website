@@ -56,15 +56,15 @@ export const homeConfig: {
   bios: [
     {text: {vi: 'Sinh năm 2001 tại Nam Định.', en: 'Born in the year 2001 in Nam Dinh.'}, emoji: null},
     {text: {vi: 'Tốt nghiệp HUS - VNU.', en: 'Graduated from HUS - VNU.'}, emoji: 'graduation-cap'},
-    {text: {vi: 'Sinh sống và làm việc tại Hà Nội.', en: 'Living and working in Hano.i'}, emoji: null},
+    {text: {vi: 'Sinh sống và làm việc tại Hà Nội.', en: 'Living and working in Hanoi.'}, emoji: null},
     {text: {vi: 'Đang độc thân.', en: 'Currently single.'}, emoji: 'blue-heart'},
     {text: {vi: 'Thích Toán học và Lập trình.', en: 'Passionate about math and programming.'}, emoji: 'computer'},
-    {text: {vi: 'Ham học hỏi.', en: 'Passionate learner,'}, emoji: 'face-with-monocle'},
+    {text: {vi: 'Ham học hỏi.', en: 'Passionate learner.'}, emoji: 'face-with-monocle'},
     {text: {vi: 'Thích đọc sách.', en: 'Love to read.'}, emoji: 'books'},
     {text: {vi: 'Tác giả yêu thích: Jeffery Deaver.', en: 'Favorite author: Jeffery Deaver.'}, emoji: 'ledger'},
     {text: {vi: 'Tác giả yêu thích: Higashino Keigo.', en: 'Favorite author: Higashino Keigo.'}, emoji: 'ledger'},
-    {text: {vi: 'Thích mèo.', en: 'Love cats'}, emoji: 'cat-face'},
-    {text: {vi: 'Thích chơi game.', en: 'Love playing video game'}, emoji: 'video-game'},
+    {text: {vi: 'Thích mèo.', en: 'Love cats.'}, emoji: 'cat-face'},
+    {text: {vi: 'Thích chơi game.', en: 'Love playing video game.'}, emoji: 'video-game'},
     {text: {vi: 'Game yêu thích: League of legend.', en: 'Favorite video game: League of legend.'}, emoji: 'video-game'}
   ],
   navigation: [
