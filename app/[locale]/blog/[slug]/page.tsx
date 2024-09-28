@@ -18,17 +18,17 @@ const mdxComponents: MDXComponents = {
   pre: ({ children }) => <Pre>{children}</Pre>,
 }
 
-export const generateStaticParams = async () => allPosts.map((post) => ({ slug: post.slug }))
-
 export const generateMetadata = ({ params }: { params: { slug: string, locale: LocaleType } }) => {
   const post = allPosts.find((post) => post.slug === params.slug && post.locale === params.locale)
-  if (!post) throw new Error(`Post not found for slug: ${params.slug}`)
+  if (!post) return
   return generatePageSeo({ title: post.title, image: post.image, description: post.summary })
 }
 
 export default function Page({ params }: { params: { slug: string, locale: LocaleType } }) {
   const post = allPosts.find((post) => post.slug === params.slug && post.locale === params.locale)
-  if (!post) notFound()
+  if (!post) {
+    return notFound()
+  }
   const postsInSeries = allPosts.filter(
     p => post.series ? p.series?.title === post.series.title && p.locale === params.locale : false
   ).map(

@@ -1,0 +1,52 @@
+---
+title: Cách cài đặt Gurobi
+date: 2024-09-28
+tags: [gurobi, programming]
+summary: Hướng dẫn cài đặt và xin license Gurobi
+image:
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+Dành cho người mới tiếp xúc với solver [Gurobi](https://www.gurobi.com/) và
+sinh viên học môn **Tối ưu hóa** khoa Toán - Cơ - Tin học trường Đại học Khoa
+học Tự nhiên.
+
+**Bước 1:** Tải xuống Gurobi tại đường [link](https://www.gurobi.com/downloads/gurobi-software/) và cài đặt.
+
+**Bước 2:** Đăng ký một tài khoản Gurobi
+
+**Bước 3:** Xin license Gurobi.
+  - Đăng nhập vào [Gurobi](https://www.gurobi.com/)
+  - Chọn `My account`
+  ![binox-example](/posts/Gurobi/Gurobi1.png)
+
+  - Chọn `Review your current licenses` trong mục `Licences`
+  ![binox-example](/posts/Gurobi/Gurobi2.png)
+  - Vào mục `Request` và chọn license bạn mong muốn. Nếu bạn là người mới bắt đầu hãy chọn `Named-User Academic`
+  ![binox-example](/posts/Gurobi/Gurobi3.png)
+  - Vào mục `Licences` bạn sẽ nhìn thấy danh sách các license của mình
+
+**Bước 4:** Kích hoạt licence trên máy tính cá nhân
+  - Tại mục `Licences` ở bước trên, chọn license mong muốn và nhần vào icon như dưới đây
+  ![binox-example](/posts/Gurobi/Gurobi4.png)
+  - Copy dòng có dạng `grbgetkey [key]`
+  ![binox-example](/posts/Gurobi/Gurobi5.png)
+  - Mở `Terminal` (`PowerShell` hoặc `Command Prompt` trên `Windows`) và chạy dòng trên, nếu nhận được
+  kết quả dưới đây là đã cài đặt thành công
+  ![binox-example](/posts/Gurobi/Gurobi6.png)
+
+**Bước 5:** Cài đặt `gurobipy`
+  Mở `Terminal` (`PowerShell` hoặc `Command Prompt` trên `Windows`) và chạy lệnh sau
+  ```terminal
+  pip install gurobipy
+  ```
+
+Trên đây là các bước để cài đặt Gurobi và kích hoạt một licence miễn phí, licence chỉ giải
+được những bài toán cỡ nhỏ (đã đủ với mục đích học môn **Tối ưu hóa** khoa Toán - Cơ - Tin
+học trường Đại học Khoa học Tự nhiên), với những bài toán lớn hơn ta cần mua licence trả
+phí hoặc xin acdemic license (tham khảo cách xin acdemic license tại
+[quanhoang-pm](https://quanhoang-pm.github.io/programming/requesting-gurobi-academic-license/)).
+
+Chúc bạn cài đặt thành công!  <Twemoji emoji="clinking-beer-mugs" />
