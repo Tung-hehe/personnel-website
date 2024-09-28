@@ -20,15 +20,13 @@ const mdxComponents: MDXComponents = {
 
 export const generateMetadata = ({ params }: { params: { slug: string, locale: LocaleType } }) => {
   const post = allPosts.find((post) => post.slug === params.slug && post.locale === params.locale)
-  if (!post) return
+  if (!post) return null
   return generatePageSeo({ title: post.title, image: post.image, description: post.summary })
 }
 
 export default function Page({ params }: { params: { slug: string, locale: LocaleType } }) {
   const post = allPosts.find((post) => post.slug === params.slug && post.locale === params.locale)
-  if (!post) {
-    return notFound()
-  }
+  if (!post) notFound()
   const postsInSeries = allPosts.filter(
     p => post.series ? p.series?.title === post.series.title && p.locale === params.locale : false
   ).map(
