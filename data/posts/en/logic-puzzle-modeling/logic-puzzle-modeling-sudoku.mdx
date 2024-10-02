@@ -35,8 +35,8 @@ Some symbols used in this problem
 For each cell $(i, j)$ in the grid and a number $k$, we define a variable $x(i,j,k)$ such that
 ```math
 x(i, j, k) = \begin{cases}
-  1 & \text{ nếu ô } (i, j)\text{ được điền giá trị } {k} \\
-  0 & \text{ ngược lại }
+  1 & \text{ if cell } (i, j)\text{ contains } {k} \\
+  0 & \text{ otherwise }
 \end{cases}
 ```
 
@@ -44,7 +44,7 @@ x(i, j, k) = \begin{cases}
 
 - Each cell contains only one number.
 ```math
-\sum\limits_{k = 1}^{n}{x(i, j, k)} \leq 1, \\ \forall 0 \leq i, j < n
+\sum\limits_{k = 1}^{n}{x(i, j, k)} = 1, \\ \forall 0 \leq i, j < n
 ```
 
 - Each row contains all numbers from 1 to $n$
