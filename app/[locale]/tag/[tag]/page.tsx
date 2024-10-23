@@ -16,7 +16,7 @@ export default function Page({ params }: { params: { tag: string, locale: Locale
   const posts = allPosts.filter(
     post => {
       const tags = post.tags.map(tag => kebabCase(tag))
-      return tags.includes(kebabCase(params.tag))
+      return tags.includes(kebabCase(params.tag)) && post.locale ===  params.locale
     }
   ).sort((a, b) => dateSortDesc(a.date, b.date))
   return <BlogsLayout
