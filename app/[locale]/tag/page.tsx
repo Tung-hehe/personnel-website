@@ -13,7 +13,7 @@ export const generateMetadata = () => {
 }
 
 export default function Page({ params }: { params: { locale: LocaleType } }) {
-  const tags = getTagsCount(allPosts)
+  const tags = getTagsCount(allPosts, params.locale)
   const sortTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
   return (
     <div
