@@ -8,6 +8,7 @@ import { allPosts } from 'contentlayer/generated'
 import type { MDXComponents } from 'mdx/types'
 
 import { BlogInformation } from '@/components/blog/BlogInfomation'
+import { Comments } from '@/components/blog/Comments'
 import { Pre } from '@/components/blog/Pre'
 import { Tag } from '@/components/blog/Tag'
 
@@ -81,6 +82,7 @@ export default function Page({ params }: { params: { slug: string, locale: Local
         }
         <div className="prose max-w-none pb-8 pt-6 text-justify space-y-6">
           <MDXContent components={mdxComponents}/>
+          <Comments/>
         </div>
       </div>
     </article>

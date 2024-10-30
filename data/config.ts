@@ -1,3 +1,4 @@
+export const repositoryName = 'Tung-hehe/personnel-website'
 export const locales = ['vi', 'en']
 export const defaultLocale = 'vi'
 export type LocaleType = (typeof locales)[number]
