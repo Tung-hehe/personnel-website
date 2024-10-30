@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { repositoryName } from "@/data/config"
 import { siteMetadata } from "@/data/siteMetadata"
 
 export function Footer() {
@@ -8,6 +10,8 @@ export function Footer() {
           <div>{`Copyright © ${new Date().getFullYear()}`}</div>
           <span>{` • `}</span>
           <span>{siteMetadata.siteName}</span>
+          <span>{` • `}</span>
+          <Link href={`https://github.com/${repositoryName}`} className='underline hover:text-sky-400'>Github Repository</Link>
         </div>
       </div>
     </footer>
