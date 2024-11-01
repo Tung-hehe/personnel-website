@@ -3,7 +3,7 @@ import '@/styles/twemoji.css';
 
 import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/react"
-import { Roboto } from "next/font/google"
+import { Nunito } from "next/font/google"
 
 import { Header } from "@/components/common/Header"
 import { Footer } from "@/components/common/Footer"
@@ -13,7 +13,7 @@ import { commonConfig } from '@/data/config'
 import { ScrollTopButton } from "@/components/common/ScrollTopButton"
 import { LocaleType } from "@/data/config";
 
-const font = Roboto({weight: "500", subsets: ['vietnamese']});
+const font = Nunito({weight: "700", subsets: ['vietnamese']});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
