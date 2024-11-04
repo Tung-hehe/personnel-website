@@ -28,7 +28,7 @@ export function ProjectCard({ project, locale }: ProjectCard) {
             <h2 className="mb-3 text-2xl font-bold tracking-tight">
               <Link href={project.href}>{project.title[locale]}</Link>
             </h2>
-            <p className="prose mb-2 text-gray-400 text-justify">{project.description[locale]}</p>
+            <p className="prose mb-2 text-gray-400">{project.description[locale]}</p>
             <div className="flex flex-wrap space-x-1.5 mb-3">
               <span className="font-semibold text-gray-300">
                 {project.builtWith.join(', ')}

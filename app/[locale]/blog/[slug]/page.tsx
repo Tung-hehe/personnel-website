@@ -58,7 +58,7 @@ export default function Page({ params }: { params: { slug: string, locale: Local
         </header>
         {
           post.series &&
-          <div className="prose max-w-none pb-6 pt-6 text-justify leading-6">
+          <div className="prose max-w-none pb-6 pt-6 leading-6">
             <h1 className="text-xl text-gray-100">
               Series: {post.series.title}
             </h1>
@@ -80,10 +80,10 @@ export default function Page({ params }: { params: { slug: string, locale: Local
             </ul>
           </div>
         }
-        <div className="prose max-w-none pb-8 pt-6 text-justify space-y-6">
+        <div className="prose max-w-none pb-8 pt-6 space-y-6">
           <MDXContent components={mdxComponents}/>
         </div>
-        <div className="prose max-w-none pb-8 pt-6 text-justify space-y-6">
+        <div className="prose max-w-none pb-8 pt-6 space-y-6">
           <Comments/>
         </div>
       </div>

@@ -27,7 +27,7 @@ const projectsData: Project[] = [
     },
     imgSrc: '/projects/LogicPuzzle.jpg',
     builtWith: ['Python', 'MILP'],
-    href: 'https://github.com/Tung-hehe/LogicPuzzlesSolver',
+    href: 'https://github.com/.',
   },
   {
     title: {vi: 'MIM Python', en: 'MIM Python'},

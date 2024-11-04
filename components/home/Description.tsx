@@ -6,7 +6,7 @@ export function Description({ locale }: { locale: LocaleType }) {
       <div className="hidden sm:block">
         {homeConfig.description[locale].map((text, i) => <p key={i}>{text}</p>)}
       </div>
-      <div className="sm:hidden text-justify">
+      <div className="sm:hidden">
         <p>{homeConfig.description[locale].join(' ')}</p>
       </div>
     </div>

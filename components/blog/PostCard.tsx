@@ -25,7 +25,7 @@ export function PostCard({ post, locale }: { post: Post, locale: LocaleType }) {
             ))}
           </div>
         </div>
-        <div className="prose max-w-none text-gray-400 text-justify">{post.summary}</div>
+        <div className="prose max-w-none text-gray-400">{post.summary}</div>
       </div>
     </article>
   )

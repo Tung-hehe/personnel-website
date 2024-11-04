@@ -17,7 +17,7 @@ export default function Page({ params }: { params: { locale: LocaleType } }) {
   return (
     <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0 pt-12">
       <AuthorInfo author={author}/>
-      <div className="prose max-w-none pb-8 xl:col-span-2 pt-6 text-justify">
+      <div className="prose max-w-none pb-8 xl:col-span-2 pt-6">
         <h2>
           {aboutConfig.greating[params.locale]}
           <Twemoji className="mx-2" emoji="waving-hand"/>
