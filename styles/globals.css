@@ -24,6 +24,10 @@ html {
 }
 .prose {
   font-size: 18px;
+  word-break: break-word;
+  hyphens: auto;
+  text-align: justify;
+  /* letter-spacing: -0.025em; */
 }
 
 .prose h2 {
