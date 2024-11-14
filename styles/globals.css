@@ -27,7 +27,7 @@ html {
   word-break: break-word;
   hyphens: auto;
   text-align: justify;
-  /* letter-spacing: -0.025em; */
+  letter-spacing: -0.02em;
 }
 
 .prose h2 {

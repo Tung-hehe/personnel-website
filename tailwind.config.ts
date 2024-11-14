@@ -12,9 +12,9 @@ const config: Config = {
       colors: {
         sky: colors.sky,
         gray: colors.slate,
-        primary: '#7aa2f7',
-        dark: '#1A2130',
-        'primary-dark': '#262c3b'
+        primary: '#7AA2F7',
+        background: '#1A2130',
+        'primary-dark': '#262C3B'
       },
       typography: (theme: Function) => ({
         DEFAULT: {

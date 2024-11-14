@@ -47,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={locale}>
-      <body className={`${font.className} bg-dark text-white mx-auto max-w-5xl px-3 sm:px-6 xl:max-w-5xl xl:px-0`}>
+      <body className={`${font.className} bg-background text-white mx-auto max-w-5xl px-3 sm:px-6 xl:max-w-5xl xl:px-0`}>
         <Header locale={locale}/>
         <div className="flex flex-col">
           <ScrollTopButton/>
