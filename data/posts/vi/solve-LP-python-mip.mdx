@@ -52,13 +52,13 @@ z = m.add_var(lb=0, ub=5) # 0 ≤ z ≤ 5
 ## 4. Thêm ràng buộc
 Thêm ràng buộc bằng phương thức [add_constr()](https://docs.python-mip.com/en/latest/classes.html)
 ```python
-# add constraint ex + y ≤ 11
+# add constraint 4x + y ≤ 11
 model.add_constr(4*x + y <= 11)
 
-# add constraint ex + y = 11
+# add constraint 4x + y = 11
 model.add_constr(4*x + y == 11)
 
-# add constraint ex + y ≥ 11
+# add constraint 4x + y ≥ 11
 model.add_constr(4*x + y == 11)
 ```
 
