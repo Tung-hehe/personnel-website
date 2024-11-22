@@ -46,11 +46,10 @@ const config: Config = {
               color: theme('colors.gray.100'),
             },
             pre: {
-              backgroundColor: '#24283b',
+              backgroundColor: '#17191E',
             },
             code: {
-              color: '#bb9af7',
-              backgroundColor: '#24283b',
+              color: '#00DAEF',
             },
             'code::before': {
               content: 'none',

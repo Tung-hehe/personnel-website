@@ -125,7 +125,7 @@ export default makeSource({
     rehypePlugins: [
       rehypeSlug,
       // @ts-ignore
-      [rehypePrettyCode, {theme: "dracula"}],
+      [rehypePrettyCode, {theme: "houston"}],
       // @ts-ignore
       rehypeKatex,
       [
