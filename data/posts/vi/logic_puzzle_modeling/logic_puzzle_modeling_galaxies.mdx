@@ -6,7 +6,7 @@ series:
   title: Mô hình hóa các câu đố logic
 tags: [modeling, math, MILP, programing, python]
 summary: Mô hình hóa và giải câu đố Galaxies bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
-image: /posts/Galaxies.png
+image: /posts/logic_puzzle_modeling/galaxies.png
 authors: [default]
 ---
 
@@ -26,7 +26,7 @@ khu vực gọi là các thiên hà thỏa mãn các điều kiện sau:
 
 Dưới đây là ví dụ cho một câu đố Galaxies cỡ 10×18 và lời giải
 
-![galaxies-example](/posts/Galaxies.png)
+![galaxies_example](/posts/logic_puzzle_modeling/galaxies.png)
 
 ## 2. Mô hình hóa câu đố
 
@@ -39,7 +39,9 @@ Dưới đây là ví dụ cho một câu đố Galaxies cỡ 10×18 và lời g
 
 Ví dụ, trong hình dưới đây, với $g$ là thiên hà chứa ngôi sao màu đen, khi đó $C_g$ là các
 ô nằm trong hình chữ nhật có viền màu xanh dương, $F_g$ là tập hợp các ô nằm trong vùng có viền màu đỏ
-và đường màu xanh lá là một đường đi từ ô màu cam đến tâm. ![galaxies-objects](/posts/GalaxiesObjects.png)
+và đường màu xanh lá là một đường đi từ ô màu cam đến tâm.
+
+![galaxies_objects](/posts/logic_puzzle_modeling/galaxies_objects.png)
 
 - $V_p$ là tập hợp tất cả các ô thuộc đường đi $p$
 - $n_p = |V_p|$ là số lượng ô thuộc đường đi $p$
@@ -125,6 +127,6 @@ mục tiêu là một hằng số (mình hay chọn số 0).
 ta cần suy nghĩ kỹ về bài toán đồng thời thử giải nhiều trường hợp khác nhau để phát hiện ra vấn đề (nếu có).
 
 *Tham khảo thêm các câu đố Galaxies và biến thể tại [Krazydad](https://krazydad.com/galaxies/).
-Code mô hình hóa Galaxies bằng python có tại [Tung-hehe](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/galaxies.py).*
+Code mô hình hóa Galaxies bằng python có tại [Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/galaxies.py).*
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

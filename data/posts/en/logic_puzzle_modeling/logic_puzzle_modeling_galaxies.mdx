@@ -6,7 +6,7 @@ series:
   title: Modeling logic puzzles
 tags: [modeling, math, MILP, programing, python]
 summary: Modeling and solving Galaxies puzzle using mixed-integer linear programming.
-image: /posts/Galaxies.png
+image: /posts/logic_puzzle_modeling/galaxies.png
 authors: [default]
 ---
 
@@ -25,7 +25,7 @@ player needs to divide the grid into regions called galaxies, satisfying the fol
 
 Below is an example of a 10×18 Galaxies puzzle and its solution
 
-![galaxies-example](/posts/Galaxies.png)
+![galaxies_example](/posts/logic_puzzle_modeling/galaxies.png)
 
 ## 2. Modeling the puzzle
 
@@ -39,7 +39,8 @@ Below is an example of a 10×18 Galaxies puzzle and its solution
 For example, in the figure below, with $g$ being the galaxy containing the black star,
 $C_g$ contains all cells in blue border rectangle, $F_g$ contains all cells in red border region
 and green line is a path from orange cell to the center of galaxy $g$.
-![galaxies-objects](/posts/GalaxiesObjects.png)
+
+![galaxies_objects](/posts/logic_puzzle_modeling/galaxies_objects.png)
 
 - $V_p$ is the set of cells that belong to path $p$
 - $n_p = |V_p|$ is the number of cells in path $p$
@@ -127,6 +128,6 @@ problem and try solving different many cases to detect any issues (if any)
 
 *For more Galaxies puzzles and variations, please refer to [Krazydad](https://krazydad.com/galaxies/).
 The Python code for Galaxies modeling is available at
-[Tung-hehe](https://github.com/Tung-hehe/LogicPuzzlesSolver/blob/main/src/puzzles/galaxies.py).*
+[Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/galaxies.py).*
 
 Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

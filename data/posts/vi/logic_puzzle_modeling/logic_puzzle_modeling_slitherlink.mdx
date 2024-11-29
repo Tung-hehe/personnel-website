@@ -1,0 +1,121 @@
+---
+title: Mô hình hóa câu đố Slitherlink
+date: 2024-11-29
+series:
+  order: 6
+  title: Mô hình hóa các câu đố logic
+tags: [modeling, math, MILP, programing, python]
+summary: Mô hình hóa và giải câu đố Slitherlink bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
+image: /posts/logic_puzzle_modeling/slitherlink.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Giới thiệu
+
+Slitherlink là một câu đố logic với luật chơi như sau:
+- Nối các điểm trên một lưới theo phương ngang hoặc dọc để tạo thành một chu trình khép kín, không chồng chéo, rẽ nhánh
+- Một số ô được tạo thành từ 4 điểm trong lưới được điền sẵn một số nhỏ hơn 4 thể hiện số đường cần bao quanh ô đó (các ô trống có thể có số đường bao quanh tùy ý)
+
+*Chú ý: một đường được định nghĩa là một kết nối giữa 2 điểm kề nhau*
+
+Dưới đây là ví dụ cho một câu đố Slitherlink cỡ 7×7 và lời giải
+
+![galaxies_example](/posts/logic_puzzle_modeling/slitherlink.png)
+
+
+## 2. Mô hình hóa câu đố
+
+- $n_R$ là số hàng của lưới
+- $n_C$ là số cột của lưới
+- $F$: Tập hợp các ô có số bên trong
+- $L(i, j)$: Số được điền bên trong ô $(i, j)$
+- $N_H(i, j)$: Các đường ngang nối với điểm $(i, j)$
+- $N_V(i, j)$: Các đường dọc nối với điểm $(i, j)$
+
+### 2.1. Biến quyết định
+
+Để giải quyết bài toán này ta cần đặt biến cho mỗi đường trên lới và mỗi điểm trên lưới. Cụ thể như sau
+- Với mỗi đường nằm ngang $(i, j)$ trong lưới ($0 \leq i < n_R + 1, 0 \leq j < n_C$), xây dụng biến $h(i, j)$ thỏa mãn
+```math
+h(i, j) = \begin{cases}
+  1 & \text{nếu đường } (i, j) \text{ được kết nối} \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+- Với mỗi đường nằm dọc $(i, j)$ trong lưới ($0 \leq i < n_R, 0 \leq j < n_C + 1$), xây dụng biến $v(i, j)$ thỏa mãn
+```math
+v(i, j) = \begin{cases}
+  1 & \text{nếu đường } (i, j) \text{ được kết nối} \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+- Với mỗi điểm $(i, j)$ trong lưới ($0 \leq i < n_R + 1, 0 \leq j < n_C + 1$), xây dựng biến $p(i, j)$ thỏa mãn
+```math
+p(i, j) = \begin{cases}
+  1 & \text{nếu điểm } (i, j) \text{ được kết nối} \\
+  0 & \text{được kết nối }
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Số đường bao quanh một ô bằng số được điền trong ô đó (ngoại trừ các ô để trống)
+```math
+h(i, j) + h(i + 1, j) + v(i, j) + v(i, j + 1) = L(i, j), \\ \forall (i, j) \in F
+```
+
+- Các điểm phải nối với nhau thành một chu trình khép kín, không chồng chéo, rẽ nhánh.
+
+  Để mô hình hóa điều kiện này một các trực tiếp là một điều không hề dễ dàng, vì vậy
+ở đây ta sẽ mô hình hóa một phần của điều kiện và sử dụng một thuật toán được nêu ở mục [2.4](/blog/logic_puzzle_modeling_slitherlink#24-triển-khai-bài-toán)
+để giải quyết bài toán. Cụ thể, ta mô hình hóa điều kiện: "Các điểm phải nối với nhau thành
+một số chu trình tách rời, khép kín, không chồng chéo, rẽ nhánh".
+
+```math
+\sum\limits_{(s, t) \in N_H(i, j)}{h(s, t)} + \sum\limits_{(s, t) \in N_V(i, j)}{v(s, t)} = 2 \cdot p(i, j), \\ \forall 0 \leq i < n_R + 1, 0 \leq j < n_C + 1
+```
+
+### 2.3. Hàm mục tiêu
+
+Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
+cần làm chỉ làm tìm ra một nghiệm chấp nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+mục tiêu là một hằng số (mình hay chọn số 0).
+
+### 2.4. Triển khai bài toán
+
+Khi giải mô hình trên, ta thu được một lời giải đã thảo mãn hầu hết các điều kiện của bài toán
+trừ việc thay vì ta muốn có một chu trình duy nhất thì ta có thể có thêm nhiều chu trình tách rời khác.
+Để giải quyết vấn đề này ta sử dụng thuật toán sau:
+```python
+BEGIN Slitherlink
+    khởi tạo mô hình M;
+    giải M;
+    S := nghiệm của M;
+    WHILE (S còn chứa nhiều hơn 1 chu trình)
+        thêm các điều kiện để cắt tất cả chu trình trong S;
+        giải M;
+        S := nghiệm của M;
+    END
+    Return S;
+END
+```
+Với điều kiện dùng để cắt chu trình được mô hình hóa như sau
+```math
+\sum\limits_{(i, j) \in H_c} h(i, j) + \sum\limits_{(i, j) \in V_c} v(i, j) \leq 1, \\ \forall c \in C
+```
+Trong đó, $C$ là tập hợp tất cả các chu trình thu được sau một lần giải, $H_c$ là tập hợp tất
+cả các đường ngang trong chu trình $c$, $V_c$ là tập hợp tất cả các đường dọc trong chu trình $c$.
+
+## 3. Kết luận
+
+Điểm nhấn của câu đố này nằm ở thuật toán dùng để cắt chu trình, đây là một ý tưởng rất thú vị khi gặp các
+bài toán khó mô hình, ta có thể giải nhiều mô hình xấp xỉ cho đến khi tìm được lời giải đúng
+
+*Tham khảo thêm các câu đố Slitherlink và biến thể tại [Krazydad](https://krazydad.com/slitherlink//).
+Code mô hình hóa Slitherlink bằng python có tại [Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/slitherlink.py).*
+
+Happly modeling! <Twemoji emoji="clinking-beer-mugs" />
