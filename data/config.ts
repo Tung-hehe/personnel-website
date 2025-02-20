@@ -70,8 +70,8 @@ export const homeConfig: {
   ],
   navigation: [
     {label: 'Posts', href: '/blog', emoji: 'memo'},
-    {label: 'Projects', href: '/projects', emoji: 'hammer-and-wrench'},
-    {label: 'Tags', href: '/tags', emoji: 'dna'},
+    {label: 'Projects', href: '/project', emoji: 'hammer-and-wrench'},
+    {label: 'Tags', href: '/tag', emoji: 'dna'},
     {label: 'About', href: '/about', emoji: 'face-with-monocle'},
   ],
   mobileNavigation: [
