@@ -8,7 +8,6 @@ export function Navigation({ locale }: { locale: LocaleType }) {
       <div className="flex flex-row divide-gray-500 divide-x hidden sm:block">
         {
           homeConfig.navigation.map(({label, href, emoji}, i) => (
-
             <Link key={i} href={`/${locale}${href}`} className={i !== 0 ? 'pl-3 ml-3': ''}>
               <Twemoji emoji={emoji}/>
               <span className="ml-2 hover:underline">
