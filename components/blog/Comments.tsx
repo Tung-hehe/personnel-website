@@ -3,7 +3,7 @@
 import { repositoryName } from "@/data/config";
 import Giscus from "@giscus/react";
 
-export function Comments() {
+export function Comments({slug}: {slug: string}) {
   return (
     <Giscus
       id="comments"
@@ -12,7 +12,8 @@ export function Comments() {
       repoId={process.env.REPO_ID}
       category="Announcements"
       categoryId={process.env.CATEGORY_ID}
-      mapping="pathname"
+      mapping="specific"
+      term={slug}
       strict="0"
       reactionsEnabled="1"
       emitMetadata="0"

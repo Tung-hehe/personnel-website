@@ -84,7 +84,7 @@ export default function Page({ params }: { params: { slug: string, locale: Local
           <MDXContent components={mdxComponents}/>
         </div>
         <div className="prose max-w-none pb-8 pt-6 space-y-6">
-          <Comments/>
+          <Comments slug={post.slug}/>
         </div>
       </div>
     </article>
