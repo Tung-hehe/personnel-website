@@ -58,7 +58,6 @@ export const homeConfig: {
     {text: {vi: 'Sinh năm 2001 tại Nam Định.', en: 'Born in the year 2001 in Nam Dinh.'}, emoji: null},
     {text: {vi: 'Tốt nghiệp HUS - VNU.', en: 'Graduated from HUS - VNU.'}, emoji: 'graduation-cap'},
     {text: {vi: 'Sinh sống và làm việc tại Hà Nội.', en: 'Living and working in Hanoi.'}, emoji: null},
-    {text: {vi: 'Đang độc thân.', en: 'Currently single.'}, emoji: 'blue-heart'},
     {text: {vi: 'Thích Toán học và Lập trình.', en: 'Passionate about math and programming.'}, emoji: 'computer'},
     {text: {vi: 'Ham học hỏi.', en: 'Passionate learner.'}, emoji: 'face-with-monocle'},
     {text: {vi: 'Thích đọc sách.', en: 'Love to read.'}, emoji: 'books'},

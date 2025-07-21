@@ -28,10 +28,10 @@ export function Pagination({ totalPages, currentPage, setCurrentPage }: Paginati
           {renderNumber.map(n => {
             return (
               n != currentPage
-              ? <button className="hover:text-sky-300 ml-3" onClick={() => {setCurrentPage(n)}}>
+              ? <button key={n} className="hover:text-sky-300 ml-3" onClick={() => {setCurrentPage(n)}}>
                 { n }
               </button>
-              : <span className="text-sky-300 ml-3">
+              : <span key={n} className="text-sky-300 ml-3">
                 { n }
               </span>
             )
