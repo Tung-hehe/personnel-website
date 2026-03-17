@@ -64,8 +64,8 @@ export const homeConfig: {
     {text: {vi: 'Tác giả yêu thích: Jeffery Deaver.', en: 'Favorite author: Jeffery Deaver.'}, emoji: 'ledger'},
     {text: {vi: 'Tác giả yêu thích: Higashino Keigo.', en: 'Favorite author: Higashino Keigo.'}, emoji: 'ledger'},
     {text: {vi: 'Thích mèo.', en: 'Love cats.'}, emoji: 'cat-face'},
+    {text: {vi: 'Thích chơi piano.', en: 'Love playing piano.'}, emoji: 'musical-keyboard'},
     {text: {vi: 'Thích chơi game.', en: 'Love playing video game.'}, emoji: 'video-game'},
-    {text: {vi: 'Game yêu thích: League of legend.', en: 'Favorite video game: League of legend.'}, emoji: 'video-game'}
   ],
   navigation: [
     {label: 'Posts', href: '/blog', emoji: 'memo'},
