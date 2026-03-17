@@ -1,0 +1,78 @@
+---
+title: Mô hình hóa bài toán điền số trong đề thi THPTQG 2025
+date: 2026-03-12
+tags: [modeling, math, LP]
+summary: Mô hình hóa bài toán điền số trong đề thi THPTQG 2025.
+image:
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Giới thiệu
+
+Trong đề thi THPTQG năm 2025 môn Toán có một bài toán điền số khá mới lạ đã gây bất ngờ cho nhiều bạn học sinh. Và bài
+toán này cũng ẩn chứa nhiều sự thú vị, trong bài viết này chúng ta sẽ cùng nhau mô hình hóa bài toán này để xem sự thú vị nằm ở đâu nhé.
+
+![math-THPTQG-2025](/posts/math-THPTQG-2025.png)
+
+Bài toán này yêu cầu chúng ta tính xác suất để 1 lần chọn ngẫu nhiên sẽ thỏa mãn yêu cầu về cấp số cộng, tuy nhiên trong bài viết này
+chúng ta chỉ quan tâm đến việc tìm ra tất cả các cách xếp thỏa mãn.
+
+Như vậy, bài toán sẽ được viết lại dưới dạng tổng quát như sau: Chọn $2n$ trong $n^2$ số $\{1, 2, 3, ..., n^2\}$ và sắp xếp thành 1 dãy số với
+các vị trí $\{0, 1, ..., n - 1\}$ sao cho từng bộ ba số ở vị trí $(2k, 2k + 1, 2k + 2)$ với $\forall k \in \{0, 1, ..., n - 2\}$ tạo thành cấp số cộng
+và bộ ba số ở vị trí $(2n - 2, 2n - 1, 0)$ cũng tạo thành cấp số cộng.
+
+## 2. Mô hình hóa bài toán
+
+### 2.1. Biến quyết định
+
+Với mỗi vị trí $i \in \{0, 1, ..., n - 1\}$ và mỗi giá trị $j \in \{1, 2, 3, ..., n^2\}$, xây dựng biến $x_(i, j)$ thỏa mãn
+```math
+x(i, j) = \begin{cases}
+    1 & \text{nếu vị trí } i \text{ được điền số } j \\
+    0 & \text{ngược lại}
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Mỗi vị trí phải điền một số
+```math
+\sum\limits_{j = 1}^{n^2}{x(i, j)} = 1, \\ \forall i \in \{0, 1, ..., n - 1\}
+```
+
+- Mỗi số chỉ được điền nhiều nhất 1 lần
+```math
+\sum\limits_{i = 0}^{n - 1}{x(i, j)} \leq 1, \\ \forall j \in \{1, 2, 3, ..., n^2\}
+```
+
+- Mỗi bộ ba số ở vị trí yêu cầu tạo thành 1 cấp số cộng
+```math
+\sum\limits_{j = 1}^{n^2}{x(p, j)} - \sum\limits_{j = 1}^{n^2}{x(q, j)} = \sum\limits_{j = 1}^{n^2}{x(q, j)} - \sum\limits_{j = 1}^{n^2}{x(t, j)},
+\\ \forall (p, q, t) \in \{(2k, 2k + 1, 2k + 2) | \forall k \in \{0, 1, ..., n - 2\}\} \cup \{(2n - 2, 2n - 1, 0)\}
+```
+
+### 2.3. Tìm tất cả nghiệm
+
+Mô hình đã xây dựng bên trên chỉ giúp ta tìm được một một nghiệm, để tìm được tất cả các nghiệm còn lại ta sử dụng một logic đơn giản sau
+```python
+BEGIN THPTQG2025
+    khởi tạo mô hình M;
+    giải M;
+    S := nghiệm của M;
+    WHILE (M không vô nghiệm)
+        thêm điều kiện để nghiệm S không còn thỏa mãn mô hình;
+        giải M;
+        S := nghiệm của M;
+    END
+    Return S;
+END
+```
+
+Với điều kiện dùng để loại bỏ nghiệm như sau
+```math
+\sum\limits_{(i, j) \in S} x(i, j) \leq 2n - 1
+```
+
+Với $S$ là một nghiệm của mô hình và có dạng $\{(i, j)|i \in \{0, 1, ..., n - 1\}; j \in \{1, 2, 3, ..., n^2\}; \text{vị trí } i \text{được điền số } j \}$
