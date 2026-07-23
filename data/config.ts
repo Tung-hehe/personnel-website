@@ -61,10 +61,6 @@ export const homeConfig: {
     {text: {vi: 'Thích Toán học và Lập trình.', en: 'Passionate about math and programming.'}, emoji: 'computer'},
     {text: {vi: 'Ham học hỏi.', en: 'Passionate learner.'}, emoji: 'face-with-monocle'},
     {text: {vi: 'Thích đọc sách.', en: 'Love to read.'}, emoji: 'books'},
-    {text: {vi: 'Tác giả yêu thích: Jeffery Deaver.', en: 'Favorite author: Jeffery Deaver.'}, emoji: 'ledger'},
-    {text: {vi: 'Tác giả yêu thích: Higashino Keigo.', en: 'Favorite author: Higashino Keigo.'}, emoji: 'ledger'},
-    {text: {vi: 'Thích mèo.', en: 'Love cats.'}, emoji: 'cat-face'},
-    {text: {vi: 'Thích chơi piano.', en: 'Love playing piano.'}, emoji: 'musical-keyboard'},
     {text: {vi: 'Thích chơi game.', en: 'Love playing video game.'}, emoji: 'video-game'},
   ],
   navigation: [
