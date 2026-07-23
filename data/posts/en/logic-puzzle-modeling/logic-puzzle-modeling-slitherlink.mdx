@@ -1,0 +1,127 @@
+---
+title: Modeling Slitherlink puzzle
+date: 2024-11-29
+series:
+  order: 6
+  title: Modeling logic puzzles
+tags: [modeling, math, MILP, programing, python]
+summary: Modeling and solving the Slitherlink puzzle using mixed-integer linear programming.
+image: /posts/logic_puzzle_modeling/slitherlink.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Introduction
+
+Slitherlink is a logic puzzle with the following rules:
+- Connect the dots on a grid, horizontally or vertically, to form a single closed loop, without crossings or branches
+- Some cells, each formed by 4 dots on the grid, are pre-filled with a number smaller than 4, indicating how many of that cell's edges must be part of the loop (empty cells may have any number of surrounding edges)
+
+*Note: an edge is defined as a connection between 2 adjacent dots*
+
+Below is an example of a 7×7 Slitherlink puzzle and its solution
+
+![slitherlink_example](/posts/logic_puzzle_modeling/slitherlink.png)
+
+
+## 2. Modeling puzzle
+
+- $n_R$ is the number of rows in the grid
+- $n_C$ is the number of columns in the grid
+- $F$: the set of cells that have a number inside
+- $L(i, j)$: the number filled inside cell $(i, j)$
+- $N_H(i, j)$: the horizontal edges connected to point $(i, j)$
+- $N_V(i, j)$: the vertical edges connected to point $(i, j)$
+
+### 2.1. Decision variables
+
+To solve this problem we need to define a variable for each edge on the grid
+and each point on the grid, as follows
+- For each horizontal edge $(i, j)$ on the grid ($0 \leq i < n_R + 1, 0 \leq j < n_C$), define variable $h(i, j)$ such that
+```math
+h(i, j) = \begin{cases}
+  1 & \text{if edge } (i, j) \text{ is part of the loop} \\
+  0 & \text{otherwise}
+\end{cases}
+```
+
+- For each vertical edge $(i, j)$ on the grid ($0 \leq i < n_R, 0 \leq j < n_C + 1$), define variable $v(i, j)$ such that
+```math
+v(i, j) = \begin{cases}
+  1 & \text{if edge } (i, j) \text{ is part of the loop} \\
+  0 & \text{otherwise}
+\end{cases}
+```
+
+- For each point $(i, j)$ on the grid ($0 \leq i < n_R + 1, 0 \leq j < n_C + 1$), define variable $p(i, j)$ such that
+```math
+p(i, j) = \begin{cases}
+  1 & \text{if point } (i, j) \text{ is part of the loop} \\
+  0 & \text{otherwise}
+\end{cases}
+```
+
+### 2.2. Constraints
+
+- The number of edges surrounding a cell equals the number filled in that cell (except for empty cells)
+```math
+h(i, j) + h(i + 1, j) + v(i, j) + v(i, j + 1) = L(i, j), \\ \forall (i, j) \in F
+```
+
+- The points must connect into a single closed loop, without crossings or branches.
+
+  Modeling this condition directly is far from easy, so here we model part of
+the condition and use an algorithm described in section [2.4](/en/blog/logic-puzzle-modeling-slitherlink#24-solving-the-problem)
+to solve the rest. Specifically, we model the condition: "the points must
+connect into some number of disjoint, closed, non-crossing, non-branching
+loops".
+
+```math
+\sum\limits_{(s, t) \in N_H(i, j)}{h(s, t)} + \sum\limits_{(s, t) \in N_V(i, j)}{v(s, t)} = 2 \cdot p(i, j), \\ \forall 0 \leq i < n_R + 1, 0 \leq j < n_C + 1
+```
+
+### 2.3. Objective function
+
+This problem does not have an objective function, as we are not aiming to
+minimize or maximize any value. Our goal is simply to find a feasible
+solution. Technically, when programming, we can set the objective function to
+a constant (I often choose 0).
+
+### 2.4. Solving the problem
+
+Solving the model above gives us a solution that satisfies almost every
+condition of the problem, except that instead of a single loop, we may end up
+with several disjoint loops. To fix this, we use the following algorithm:
+```python
+BEGIN Slitherlink
+    initialize model M;
+    solve M;
+    S := solution of M;
+    WHILE (S still contains more than 1 loop)
+        add constraints to cut every loop in S;
+        solve M;
+        S := solution of M;
+    END
+    Return S;
+END
+```
+The constraint used to cut a loop is modeled as follows
+```math
+\sum\limits_{(i, j) \in H_c} h(i, j) + \sum\limits_{(i, j) \in V_c} v(i, j) \leq 1, \\ \forall c \in C
+```
+Where $C$ is the set of all loops obtained after one solve, $H_c$ is the set of
+all horizontal edges in loop $c$, and $V_c$ is the set of all vertical edges in
+loop $c$.
+
+## 3. Conclusion
+
+The highlight of this puzzle is the loop-cutting algorithm - a fun idea for
+dealing with problems that are hard to model directly: solve several
+approximate models one after another until you land on the correct solution.
+
+*For more Slitherlink puzzles and variations, please refer to [Krazydad](https://krazydad.com/slitherlink//).
+The Python code for Slitherlink modeling is available at
+[Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/slitherlink.py).*
+
+Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

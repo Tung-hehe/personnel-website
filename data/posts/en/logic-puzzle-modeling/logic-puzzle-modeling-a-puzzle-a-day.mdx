@@ -1,0 +1,99 @@
+---
+title: Modeling A puzzle a day puzzle
+date: 2026-07-23
+series:
+  order: 7
+  title: Modeling logic puzzles
+tags: [modeling, math, MILP, programing, python]
+summary: Modeling and solving the A puzzle a day puzzle using mixed-integer linear programming.
+image: /posts/logic_puzzle_modeling/a_puzzle_a_day.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Introduction
+
+A puzzle a day is a packing puzzle described as follows: given a calendar-shaped
+board of size $7 \times 7$ cells, where the 43 valid cells are split into 12
+cells holding month abbreviations (the top 2 rows), 31 cells holding the day
+numbers (the remaining 5 rows), and 6 remaining cells in the top-right and
+bottom-right corners that don't belong to the board. The player has 8 polyomino
+pieces (each made of 5 or 6 unit squares) and must place all of them on the
+board, rotating and flipping each piece as needed, satisfying:
+- Each piece is used exactly once
+- No two pieces overlap
+- Every valid cell on the board is covered, **except exactly 2 cells** - the
+cell for the month and the cell for the day to be displayed
+
+The two cells left uncovered are exactly "today's date" that the puzzle
+displays - which is also why this puzzle is called A puzzle a day, since
+almost every day of the year has a (or several) different arrangement to
+discover.
+
+Below is an example solution for July 23rd
+
+![a_puzzle_a_day_example](/posts/logic_puzzle_modeling/a_puzzle_a_day.png)
+
+## 2. Modeling puzzle
+
+- $\Omega$ is the set of coordinates of the valid cells on the board (43 cells, after removing the 6 cells that don't belong to the calendar)
+- $c_m \in \Omega$ is the cell corresponding to the month to display
+- $c_d \in \Omega$ is the cell corresponding to the day to display
+- $\mathcal{P} = \{O, P, L, C, V, S, J, F\}$ is the set of names of the 8 pieces
+used to cover the board, each piece having a fixed shape made of 5 or 6
+adjacent unit squares
+- For each piece $p \in \mathcal{P}$, generate every rotated ($0°, 90°, 180°,
+270°$) and mirrored variant of the piece, then for each variant, scan every
+translated position on the board and keep only the positions where the whole
+piece fits inside $\Omega$. Let $K_p$ be the set of all valid configurations
+(placements) obtained for piece $p$, where each configuration $k \in K_p$
+corresponds to a set of cells $S(p, k) \subset \Omega$ occupied by piece $p$
+when placed according to that configuration
+
+### 2.1. Decision variables
+
+For each piece $p \in \mathcal{P}$ and each configuration $k \in K_p$, define variable $x(p, k)$ such that
+```math
+x(p, k) = \begin{cases}
+  1 & \text{if piece } p \text{ is placed according to configuration } k \\
+  0 & \text{otherwise}
+\end{cases}
+```
+
+### 2.2. Constraints
+
+- Each piece is placed according to exactly one configuration
+```math
+\sum\limits_{k \in K_p}{x(p, k)} = 1, \forall p \in \mathcal{P}
+```
+
+- Each valid cell is covered the required number of times: ordinary cells must
+be covered by exactly one piece, while the month cell $c_m$ and the day cell
+$c_d$ must not be covered by any piece
+```math
+\sum\limits_{p \in \mathcal{P}}{\sum\limits_{k \in K_p : c \in S(p, k)}{x(p, k)}} = \begin{cases}
+  0 & \text{if } c \in \{c_m, c_d\} \\
+  1 & \text{otherwise}
+\end{cases}
+\\ \forall c \in \Omega
+```
+
+### 2.3. Objective function
+
+Just like [Troix](/en/blog/logic-puzzle-modeling-troix), this is a feasibility
+problem: we only need to find one way to place the 8 pieces that satisfies all
+the constraints, without minimizing or maximizing anything. So the objective
+function is simply set to a constant (I chose 0).
+
+## 3. Conclusion
+
+This is a model of the well-known calendar packing puzzle called A puzzle a
+day. With this model, you can plug in any date and immediately get a valid
+arrangement of the 8 pieces for that day, instead of having to figure it out by
+hand.
+
+*The Python code for A puzzle a day modeling is available at
+[Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/a_puzzle_a_day.py)*
+
+Happly modeling! <Twemoji emoji="clinking-beer-mugs" />

@@ -1,0 +1,76 @@
+---
+title: Love Letter - a personalized love letter generator
+date: 2026-07-23
+tags: [project, python]
+summary: Introducing Love Letter - a tool for generating beautiful, personalized love letters that look great on both mobile and desktop.
+image: /posts/love_letter_project/love_letter_project.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+Unlike the math modeling posts you usually see on this blog, this one is a
+small gift: a tool that turns a few lines of your feelings into a
+beautiful-looking letter.
+
+![love_letter_preview](/posts/love_letter_project/love_letter_project.png)
+
+## Why I made this
+
+Something that happened recently affected me quite deeply - it was the first
+time I went through such a strong emotional experience. It made someone as
+dry and rational as me realize that feelings had been neglected for far too
+long. I spent quite a while thinking about it, and realized I wasn't lacking
+in feelings at all, nor in love for the people I care about. What I lacked was
+simply a way to express it, so I started looking for one.
+
+My feelings usually aren't easy to say out loud, but writing them down, with
+some preparation, is a different story. Still, a plain text message felt too
+ordinary, so I chose to write a letter instead. The problem was, after years
+of studying and working while just typing code, my handwriting has gotten
+really bad - and bad handwriting pretty much cuts a letter's value in half 😂.
+
+So I built this project to fix that: just prepare the content, and the
+project outputs **a single `.html` file** - send it through any chat app, and
+the recipient just needs to tap it to view it right away. It can also be
+customized by theme, to make the "letter" feel even more special.
+
+## 8 "moods" to choose from
+
+The project ships with 8 templates, each with its own color palette and mood:
+Warm, Passionate, Longing, Sweet, Peaceful, Sorry, Pouty, and Confession. The
+letter's content stays the same - just switch templates to get a completely
+different vibe.
+
+## A few small details I'm quite proud of
+
+- **Envelope-opening effect**: the letter first appears as a sealed envelope;
+tapping/clicking it opens the flap, then the letter slides up.
+- **Automatic pagination for long letters**: letters longer than 3 paragraphs
+are automatically split into multiple "pages" like a book - swipe left/right
+on mobile or click the arrows on desktop to turn pages, instead of scrolling
+through one long letter.
+- **No external fonts**: every template uses fonts already available on the
+system (San Francisco, Roboto...) instead of loading fonts from Google Fonts.
+The reason is that the built-in web viewers inside some messaging apps (like
+Messenger) can ignore custom fonts and render text with their own font
+instead - complex Vietnamese diacritics (ư, ơ...) are especially prone to
+breaking in that situation, so relying directly on the operating system's
+fonts is the only way to guarantee correct rendering everywhere.
+
+## How to use it
+
+Get Python ready, install the `jinja2` and `pyyaml` libraries, write your
+letter's content into a YAML file, then run
+
+```bash
+python generate.py
+```
+
+The script will ask you to pick a content file and a template, then output a
+single `.html` file in `output/` - send that file to the recipient and you're
+done.
+
+*Code available at [Tung-hehe/love-letter](https://github.com/Tung-hehe/love-letter)*
+
+Happy coding, and may your feelings be fully received through every letter! <Twemoji emoji="love-letter" />
