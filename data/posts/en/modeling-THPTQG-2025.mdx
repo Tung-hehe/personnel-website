@@ -1,0 +1,85 @@
+---
+title: Modeling the number-filling problem in the 2025 THPTQG exam
+date: 2026-03-12
+tags: [modeling, math, LP]
+summary: Modeling the number-filling problem from the 2025 THPTQG exam.
+image:
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Introduction
+
+In the 2025 THPTQG exam (Vietnam's national high school graduation exam), the
+Math paper included a rather novel number-filling problem that surprised many
+students. This problem also hides quite a bit of interesting structure - in
+this post, we'll model it together to see exactly where that interest lies.
+
+![math-THPTQG-2025](/posts/math-THPTQG-2025.png)
+
+The original problem asks for the probability that a random arrangement
+satisfies an arithmetic-progression requirement. In this post, however, we
+only care about finding every arrangement that satisfies the requirement.
+
+So the problem can be restated in general form as follows: choose $2n$ numbers
+out of the $n^2$ numbers $\{1, 2, 3, ..., n^2\}$ and arrange them into a
+sequence at positions $\{0, 1, ..., n - 1\}$ such that every triple of numbers
+at positions $(2k, 2k + 1, 2k + 2)$ for $\forall k \in \{0, 1, ..., n - 2\}$
+forms an arithmetic progression, and the triple at positions $(2n - 2, 2n - 1,
+0)$ also forms an arithmetic progression.
+
+## 2. Modeling the problem
+
+### 2.1. Decision variables
+
+For each position $i \in \{0, 1, ..., n - 1\}$ and each value $j \in \{1, 2, 3, ..., n^2\}$, define variable $x(i, j)$ such that
+```math
+x(i, j) = \begin{cases}
+    1 & \text{if position } i \text{ is filled with number } j \\
+    0 & \text{otherwise}
+\end{cases}
+```
+
+### 2.2. Constraints
+
+- Each position must be filled with a number
+```math
+\sum\limits_{j = 1}^{n^2}{x(i, j)} = 1, \\ \forall i \in \{0, 1, ..., n - 1\}
+```
+
+- Each number can be used at most once
+```math
+\sum\limits_{i = 0}^{n - 1}{x(i, j)} \leq 1, \\ \forall j \in \{1, 2, 3, ..., n^2\}
+```
+
+- Each required triple of positions forms an arithmetic progression
+```math
+\sum\limits_{j = 1}^{n^2}{x(p, j)} - \sum\limits_{j = 1}^{n^2}{x(q, j)} = \sum\limits_{j = 1}^{n^2}{x(q, j)} - \sum\limits_{j = 1}^{n^2}{x(t, j)},
+\\ \forall (p, q, t) \in \{(2k, 2k + 1, 2k + 2) | \forall k \in \{0, 1, ..., n - 2\}\} \cup \{(2n - 2, 2n - 1, 0)\}
+```
+
+### 2.3. Finding all solutions
+
+The model built above only gives us one solution. To find all remaining
+solutions, we use the following simple logic
+```python
+BEGIN THPTQG2025
+    initialize model M;
+    solve M;
+    S := solution of M;
+    WHILE (M is not infeasible)
+        add a constraint so that solution S no longer satisfies the model;
+        solve M;
+        S := solution of M;
+    END
+    Return S;
+END
+```
+
+Where the constraint used to exclude a solution is as follows
+```math
+\sum\limits_{(i, j) \in S} x(i, j) \leq 2n - 1
+```
+
+Where $S$ is a solution of the model, of the form $\{(i, j)|i \in \{0, 1, ..., n - 1\}; j \in \{1, 2, 3, ..., n^2\}; \text{position } i \text{ is filled with number } j \}$

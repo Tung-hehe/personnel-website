@@ -1,0 +1,55 @@
+---
+title: How to install Gurobi
+date: 2024-09-28
+tags: [gurobi, programming]
+summary: A guide to installing Gurobi and requesting a license
+image:
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+For anyone new to the [Gurobi](https://www.gurobi.com/) solver, and for students
+taking the **Optimization** course at the Faculty of Mathematics, Mechanics and
+Informatics, VNU University of Science.
+
+**Step 1:** Download Gurobi from this [link](https://www.gurobi.com/downloads/gurobi-software/)
+(scroll down to find the download files) and install it.
+![gurobi_install](/posts/how_to_install_gurobi/gurobi_0.png)
+
+**Step 2:** Register a Gurobi account
+
+**Step 3:** Request a Gurobi license.
+  - Log in to [Gurobi](https://www.gurobi.com/)
+  - Select `My account`
+  ![gurobi_install](/posts/how_to_install_gurobi/gurobi_1.png)
+
+  - Select `Review your current licenses` under `licenses`
+  ![gurobi_install](/posts/how_to_install_gurobi/gurobi_2.png)
+  - Go to `Request` and pick the license you want. If you're just starting out, choose `Gurobi Limited license`
+  ![gurobi_install](/posts/how_to_install_gurobi/gurobi_3.png)
+  - Under `licenses`, you'll see the list of your licenses
+
+**Step 4:** Activate the license on your computer
+  - In the `licenses` section from the step above, pick the license you want and click the icon shown below
+  ![gurobi_install](/posts/how_to_install_gurobi/gurobi_4.png)
+  - Copy the line that looks like `grbgetkey [key]`
+  ![gurobi_install](/posts/how_to_install_gurobi/gurobi_5.png)
+  - Open a `Terminal` (`PowerShell` or `Command Prompt` on `Windows`) and run that line. If you get the
+  result shown below, the installation was successful
+  ![gurobi_install](/posts/how_to_install_gurobi/gurobi_6.png)
+
+**Step 5:** Install `gurobipy`
+  open a `Terminal` (`PowerShell` or `Command Prompt` on `Windows`) and run
+  ```terminal
+  pip install gurobipy
+  ```
+
+Above are the steps to install Gurobi and activate a free license. This license
+can only solve small-sized problems (which is enough for the **Optimization**
+course at the Faculty of Mathematics, Mechanics and Informatics, VNU University
+of Science). For larger problems, you'll need to purchase a paid license or
+request an academic license (see how to request an academic license at
+[quanhoang-pm](https://quanhoang-pm.github.io/programming/requesting-gurobi-academic-license/)).
+
+Happy installing! <Twemoji emoji="clinking-beer-mugs" />
