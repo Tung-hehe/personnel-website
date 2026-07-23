@@ -1,0 +1,89 @@
+---
+title: Mô hình hóa câu đố A puzzle a day
+date: 2026-07-23
+series:
+  order: 6
+  title: Mô hình hóa các câu đố logic
+tags: [modeling, math, MILP, programing, python]
+summary: Mô hình hóa và giải câu đố A puzzle a day bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
+image: /posts/logic_puzzle_modeling/a_puzzle_a_day.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Giới thiệu
+
+A puzzle a day là một câu đố xếp hình (packing puzzle) được mô tả như sau, cho một bảng lịch
+kích thước $7 \times 7$ ô, trong đó 43 ô hợp lệ được chia thành 12 ô ghi tên viết tắt các tháng (2 hàng
+đầu), 31 ô ghi số ngày trong tháng (5 hàng còn lại), 6 ô còn lại ở góc trên-phải và dưới-phải không
+thuộc bảng lịch. Người chơi có 8 mảnh ghép polyomino (mỗi mảnh gồm 5 hoặc 6 ô vuông) và cần xếp toàn bộ
+lên bảng lịch, được phép xoay và lật mỗi mảnh, thỏa mãn:
+- Mỗi mảnh ghép được sử dụng đúng một lần
+- Hai mảnh ghép bất kỳ không được chồng lên nhau
+- Toàn bộ ô hợp lệ của bảng lịch đều được phủ kín, **ngoại trừ đúng 2 ô** — ô ứng với tháng và ô ứng với
+ngày muốn hiển thị
+
+Hai ô còn trống lộ ra chính là "ngày hôm nay" mà câu đố hiển thị — cũng là lý do câu đố này mang tên
+A puzzle a day, vì hầu như mỗi ngày trong năm đều có một (hoặc nhiều) cách xếp hình khác nhau để khám phá.
+
+Dưới đây là lời giải ví dụ cho ngày 23 tháng 7
+
+![a_puzzle_a_day_example](/posts/logic_puzzle_modeling/a_puzzle_a_day.png)
+
+## 2. Mô hình hóa câu đố
+
+- $\Omega$ là tập hợp toạ độ những ô hợp lệ trên bảng lịch (43 ô, sau khi loại bỏ 6 ô không thuộc lịch)
+- $c_m \in \Omega$ là ô ứng với tháng cần hiển thị
+- $c_d \in \Omega$ là ô ứng với ngày cần hiển thị
+- $\mathcal{P} = \{O, P, L, C, V, S, J, F\}$ là tập tên của 8 mảnh ghép dùng để phủ bảng lịch, mỗi mảnh
+có hình dạng cố định gồm 5 hoặc 6 ô vuông liền kề
+- Với mỗi mảnh $p \in \mathcal{P}$, sinh ra toàn bộ các biến thể xoay ($0°, 90°, 180°, 270°$) và lật
+gương của mảnh, sau đó với mỗi biến thể duyệt qua mọi vị trí tịnh tiến trên bảng lịch, chỉ giữ lại những
+vị trí mà toàn bộ mảnh nằm gọn trong $\Omega$. Gọi $K_p$ là tập hợp tất cả các cấu hình (cách đặt) hợp
+lệ thu được của mảnh $p$, mỗi cấu hình $k \in K_p$ ứng với một tập ô $S(p, k) \subset \Omega$ mà mảnh
+$p$ chiếm giữ khi đặt theo cấu hình đó
+
+### 2.1. Biến quyết định
+
+Với mỗi mảnh $p \in \mathcal{P}$ và mỗi cấu hình $k \in K_p$ xây dựng biến $x(p, k)$ thỏa mãn
+```math
+x(p, k) = \begin{cases}
+  1 & \text{nếu mảnh } p \text{ được đặt theo cấu hình } k \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Mỗi mảnh chỉ được đặt theo đúng một cấu hình
+```math
+\sum\limits_{k \in K_p}{x(p, k)} = 1, \forall p \in \mathcal{P}
+```
+
+- Mỗi ô hợp lệ được phủ đúng số lần yêu cầu: các ô bình thường phải được phủ bởi đúng một mảnh, riêng
+ô tháng $c_m$ và ô ngày $c_d$ không được mảnh nào phủ lên
+```math
+\sum\limits_{p \in \mathcal{P}}{\sum\limits_{k \in K_p : c \in S(p, k)}{x(p, k)}} = \begin{cases}
+  0 & \text{nếu } c \in \{c_m, c_d\} \\
+  1 & \text{ngược lại}
+\end{cases}
+\\ \forall c \in \Omega
+```
+
+### 2.3. Hàm mục tiêu
+
+Cũng giống như [Troix](/blog/logic-puzzle-modeling-troix), đây là bài toán chấp nhận được (feasibility
+problem): chỉ cần tìm ra một cách xếp 8 mảnh thỏa mãn toàn bộ ràng buộc, không cần tối thiểu hóa hay
+tối đa hóa gì cả. Vì vậy hàm mục tiêu được để là một hằng số (mình chọn số 0).
+
+## 3. Kết luận
+
+Đây là bản mô hình hóa của câu đố xếp hình lịch khá nổi tiếng mang tên A puzzle a day. Với mô hình
+này, chỉ cần đưa vào ngày tháng bất kỳ là có thể tìm ra ngay cách xếp 8 mảnh ghép cho ngày hôm đó, thay
+vì phải mò mẫm thủ công.
+
+*Code mô hình hóa A puzzle a day bằng python có tại
+[Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/a_puzzle_a_day.py)*
+
+Happy modeling! <Twemoji emoji="clinking-beer-mugs" />
