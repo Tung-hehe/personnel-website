@@ -1,0 +1,65 @@
+---
+title: Love Letter - tạo thư tình cá nhân hóa
+date: 2026-07-23
+tags: [project, python]
+summary: Giới thiệu Love Letter - công cụ tạo thư tình cá nhân hóa đẹp mắt, xem mượt trên di động lẫn desktop.
+image: /posts/love_letter_project/love_letter_project.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+Khác với những bài mô hình hóa toán học thường thấy trên blog này, đây là một món quà nho nhỏ - một
+công cụ giúp biến vài dòng tâm sự thành một bức thư có giao diện đẹp.
+
+![love_letter_preview](/posts/love_letter_project/love_letter_project.png)
+
+## Vì sao mình làm thứ này
+
+Khoảng thời gian gần đây có vài chuyện đã ảnh hưởng khá lớn đến mình - lần đầu tiên mình có một trải
+nghiệm cảm xúc mạnh đến vậy. Điều đó khiến một đứa khô khan, lúc nào cũng đề cao lý trí như mình nhận
+ra rằng cảm xúc đã bị bỏ quên quá lâu. Mình dành khá nhiều thời gian suy nghĩ về điều đó, và nhận ra
+mình không hề thiếu cảm xúc, cũng không thiếu tình cảm dành cho những người mình yêu thương. Cái mình
+thiếu chỉ là cách thể hiện, nên mình bắt đầu tìm cách bộc lộ nó.
+
+Cảm xúc của mình thường không dễ nói thành lời, nhưng nếu được viết ra và có sự chuẩn bị thì lại
+khác. Nhưng nếu chỉ là một tin nhắn thì lại bình thường quá, nên mình chọn cách viết thư. Vấn đề là,
+sau bao nhiêu năm học tập và làm việc chỉ ngồi gõ code, giờ chữ viết tay của mình rất xấu - mà chữ
+xấu thì coi như bức thư đã mất đi một nửa giá trị 😂.
+
+Vậy nên mình tạo ra project này để khắc phục điều đó: chỉ cần chuẩn bị sẵn nội dung, project sẽ xuất
+ra **một file `.html`** - gửi qua bất kỳ kênh chat nào, người nhận chỉ cần bấm vào là xem
+được ngay, lại có thể tùy biến theo từng chủ đề để "bức thư" trở nên ấn tượng hơn.
+
+## 8 "cung bậc cảm xúc" để chọn
+
+Project có sẵn 8 mẫu giao diện, mỗi mẫu mang một tông màu và một tâm trạng riêng: Ấm áp, Nồng nàn,
+Nhớ nhung, Ngọt ngào, Bình yên, Xin lỗi, Giận dỗi, và Tỏ tình. Nội dung thư giữ nguyên, chỉ cần đổi
+mẫu là ra một lá thư với không khí hoàn toàn khác.
+
+## Vài chi tiết nhỏ mình khá tâm đắc
+
+- **Hiệu ứng mở phong bì**: thư hiện ra dưới dạng phong bì đóng kín, bấm/chạm vào là nắp thư mở ra rồi
+lá thư trượt lên.
+- **Tự chia trang khi thư dài**: thư dài hơn 3 đoạn sẽ tự tách thành nhiều "trang" như đọc sách - vuốt
+trái/phải trên điện thoại hoặc bấm mũi tên trên desktop để chuyển trang, thay vì phải cuộn một mạch dài.
+- **Không phụ thuộc font ngoài**: toàn bộ template dùng font hệ thống có sẵn (San Francisco, Roboto...)
+thay vì tải font qua Google Fonts. Lý do là các trình xem web tích hợp sẵn trong app nhắn tin (như
+Messenger) có thể bỏ qua font tùy chỉnh và tự vẽ chữ bằng font riêng của nó - dấu tiếng Việt phức tạp
+(ư, ơ...) rất dễ vỡ chữ trong tình huống đó, nên dùng thẳng font hệ điều hành là cách duy nhất đảm bảo
+hiển thị đúng ở mọi nơi.
+
+## Cách dùng
+
+Chuẩn bị Python, cài 2 thư viện `jinja2` và `pyyaml`, viết nội dung thư vào một file YAML rồi chạy
+
+```bash
+python generate.py
+```
+
+Script sẽ hỏi bạn chọn file nội dung và mẫu giao diện, sau đó xuất ra một file `.html` duy nhất trong
+`output/` - gửi file đó cho người nhận là xong.
+
+*Code có tại [Tung-hehe/love-letter](https://github.com/Tung-hehe/love-letter)*
+
+Happy coding, và chúc những cảm xúc của bạn sẽ được đón nhận trọn vẹn qua từng bức thư! <Twemoji emoji="love-letter" />

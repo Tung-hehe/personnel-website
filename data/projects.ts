@@ -49,6 +49,16 @@ const projectsData: Project[] = [
     builtWith: ['Python', 'Pygame'],
     href: 'https://github.com/Tung-hehe/Pixel-Adventure-Pygame',
   },
+  {
+    title: {vi: 'Love Letter Project', en: 'Love Letter Project'},
+    description: {
+      vi: 'Công cụ tạo thư tình cá nhân hóa với nhiều mẫu giao diện đẹp.',
+      en: 'A tool for generating personalized love letters with beautiful templates.'
+    },
+    imgSrc: '/projects/love_letter_project.png',
+    builtWith: ['Python', 'Jinja2', 'HTML/CSS'],
+    href: 'https://github.com/Tung-hehe/love-letter',
+  },
 ]
 
 export default projectsData
