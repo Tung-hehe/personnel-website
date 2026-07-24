@@ -50,11 +50,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={locale}>
-      {process.env.NEXT_PUBLIC_FB_APP_ID && (
-        <head>
+      <head>
+        <meta name="facebook-domain-verification" content="kuxniljmgfi6hn6w7nrdi21739s1nt" />
+        {process.env.NEXT_PUBLIC_FB_APP_ID && (
           <meta property="fb:app_id" content={process.env.NEXT_PUBLIC_FB_APP_ID} />
-        </head>
-      )}
+        )}
+      </head>
       <body className={`${font.className} bg-background text-white mx-auto max-w-5xl px-3 sm:px-6 xl:max-w-5xl xl:px-0`}>
         <Header locale={locale}/>
         <div className="flex flex-col">
