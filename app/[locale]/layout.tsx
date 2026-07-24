@@ -61,7 +61,7 @@ export default function RootLayout({
             <div id="fb-root"></div>
             <Script
               id="facebook-jssdk"
-              strategy="lazyOnload"
+              strategy="afterInteractive"
               src={`https://connect.facebook.net/${locale === 'vi' ? 'vi_VN' : 'en_US'}/sdk.js#xfbml=1&version=v19.0&appId=${process.env.NEXT_PUBLIC_FB_APP_ID}`}
               crossOrigin="anonymous"
             />
