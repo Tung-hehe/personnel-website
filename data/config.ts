@@ -116,6 +116,12 @@ export const aboutConfig: {
   greating: {vi: 'Chào bạn!', en: 'Hello!'}
 }
 
+export const privacyPolicyConfig: {
+  title: LocaleDictType
+} = {
+  title: {vi: 'Chính sách quyền riêng tư', en: 'Privacy Policy'}
+}
+
 export const notFoundConfig: {
   text1: LocaleDictType,
   text2: LocaleDictType,

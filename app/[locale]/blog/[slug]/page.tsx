@@ -9,11 +9,13 @@ import type { MDXComponents } from 'mdx/types'
 
 import { BlogInformation } from '@/components/blog/BlogInfomation'
 import { Comments } from '@/components/blog/Comments'
+import { FacebookComments } from '@/components/blog/FacebookComments'
 import { Pre } from '@/components/blog/Pre'
 import { Tag } from '@/components/blog/Tag'
 
 import { generatePageSeo } from '@/utils/seo'
-import { LocaleType } from '@/data/config'
+import { siteMetadata } from '@/data/siteMetadata'
+import { LocaleType, defaultLocale } from '@/data/config'
 
 const mdxComponents: MDXComponents = {
   pre: ({ children }) => <Pre>{children}</Pre>,
@@ -36,6 +38,10 @@ export default function Page({ params }: { params: { slug: string, locale: Local
     (a, b) => a.order - b.order
   )
   const MDXContent = useMDXComponent(post.body.code)
+  const canonicalPath = params.locale === defaultLocale
+    ? `/blog/${post.slug}`
+    : `/${params.locale}/blog/${post.slug}`
+  const canonicalUrl = `${siteMetadata.siteUrl.replace(/\/$/, '')}${canonicalPath}`
 
   return (
     <article>
@@ -84,6 +90,7 @@ export default function Page({ params }: { params: { slug: string, locale: Local
           <MDXContent components={mdxComponents}/>
         </div>
         <div className="prose max-w-none pb-8 pt-6 space-y-6">
+          <FacebookComments url={canonicalUrl}/>
           <Comments slug={post.slug}/>
         </div>
       </div>

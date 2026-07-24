@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { repositoryName } from "@/data/config"
+import { repositoryName, privacyPolicyConfig, LocaleType } from "@/data/config"
 import { siteMetadata } from "@/data/siteMetadata"
 
-export function Footer() {
+export function Footer({ locale }: { locale: LocaleType }) {
   return (
     <footer>
       <div className="mb-8 mt-16 items-center justify-end space-y-4 md:mb-10 md:flex md:space-y-0">
@@ -12,6 +12,8 @@ export function Footer() {
           <span>{siteMetadata.siteName}</span>
           <span>{` • `}</span>
           <Link href={`https://github.com/${repositoryName}`} className='underline hover:text-sky-400'>Github Repository</Link>
+          <span>{` • `}</span>
+          <Link href={`/${locale}/privacy-policy`} className='underline hover:text-sky-400'>{privacyPolicyConfig.title[locale]}</Link>
         </div>
       </div>
     </footer>

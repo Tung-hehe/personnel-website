@@ -4,6 +4,7 @@ import '@/styles/twemoji.css';
 import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/react"
 import { Nunito } from "next/font/google"
+import Script from "next/script"
 
 import { Header } from "@/components/common/Header"
 import { Footer } from "@/components/common/Footer"
@@ -53,8 +54,19 @@ export default function RootLayout({
           <ScrollTopButton/>
           <main style={{ minHeight: commonConfig.mainContentMinHeight }}>{children}</main>
         </div>
-        <Footer />
+        <Footer locale={locale}/>
         <Analytics />
+        {process.env.NEXT_PUBLIC_FB_APP_ID && (
+          <>
+            <div id="fb-root"></div>
+            <Script
+              id="facebook-jssdk"
+              strategy="lazyOnload"
+              src={`https://connect.facebook.net/${locale === 'vi' ? 'vi_VN' : 'en_US'}/sdk.js#xfbml=1&version=v19.0&appId=${process.env.NEXT_PUBLIC_FB_APP_ID}`}
+              crossOrigin="anonymous"
+            />
+          </>
+        )}
       </body>
     </html>
   );
