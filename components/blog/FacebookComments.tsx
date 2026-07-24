@@ -23,7 +23,7 @@ export function FacebookComments({ url }: { url: string }) {
 
   return (
     <div ref={ref}>
-      <div className="fb-comments" data-href={url} data-width="100%" data-numposts="5" />
+      <div className="fb-comments" data-href={url} data-width="550" data-numposts="5" />
     </div>
   )
 }
