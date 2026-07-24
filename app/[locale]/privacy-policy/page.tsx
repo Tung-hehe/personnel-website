@@ -107,7 +107,7 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
             Facebook Comments Plugin. If you use it, Facebook may set cookies and process related
             data under{' '}
             <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noreferrer">
-              Meta/Facebook's privacy policy
+              Meta/Facebook&apos;s privacy policy
             </a>. This site does not store any comment content - it is entirely managed by
             Facebook.
           </li>
@@ -123,7 +123,7 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
         <h2>4. Your choices</h2>
         <p>
           You can block third-party cookies (Facebook, GitHub) through your browser settings, or
-          simply avoid using the comment section if you'd rather not have those services process
+          simply avoid using the comment section if you&apos;d rather not have those services process
           your data. Reading posts on this blog does not require any personal information.
         </p>
 
