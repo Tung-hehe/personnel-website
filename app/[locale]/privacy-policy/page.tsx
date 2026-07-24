@@ -32,12 +32,11 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
             nào được quan tâm. Không gắn với danh tính cá nhân của bạn.
           </li>
           <li>
-            <strong>Bình luận (Cusdis)</strong>: phần bình luận dưới mỗi bài viết dùng Cusdis, một
-            dịch vụ bình luận nhẹ và tôn trọng quyền riêng tư. Nếu bạn để lại bình luận, bạn cần
-            cung cấp tên và email - email chỉ dùng để hiển thị (qua Gravatar) và không hiển thị
-            công khai, dữ liệu bình luận do Cusdis xử lý theo{' '}
-            <a href="https://cusdis.com/privacy-policy" target="_blank" rel="noreferrer">
-              chính sách riêng tư của Cusdis
+            <strong>Bình luận qua GitHub (giscus)</strong>: phần bình luận dưới mỗi bài viết sử
+            dụng GitHub Discussions. Nếu bạn muốn bình luận bằng cách này, bạn cần đăng nhập bằng
+            tài khoản GitHub và dữ liệu đó do GitHub quản lý theo{' '}
+            <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noreferrer">
+              chính sách riêng tư của GitHub
             </a>.
           </li>
         </ul>
@@ -51,8 +50,9 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
 
         <h2>4. Quyền của bạn</h2>
         <p>
-          Bạn có thể đơn giản là không sử dụng phần bình luận nếu không muốn cung cấp tên/email
-          cho Cusdis xử lý. Việc đọc bài viết trên blog không yêu cầu bất kỳ thông tin cá nhân nào.
+          Bạn có thể chặn cookie của bên thứ ba (GitHub) bằng cài đặt trình duyệt, hoặc đơn giản là
+          không sử dụng phần bình luận nếu không muốn dịch vụ đó xử lý dữ liệu của bạn. Việc đọc
+          bài viết trên blog không yêu cầu bất kỳ thông tin cá nhân nào.
         </p>
 
         <h2>5. Liên hệ</h2>
@@ -87,12 +87,11 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
             are of interest. Not tied to your personal identity.
           </li>
           <li>
-            <strong>Comments (Cusdis)</strong>: the comment section under each post uses Cusdis, a
-            lightweight, privacy-respecting comment service. Leaving a comment requires a name and
-            an email - the email is only used for display (via Gravatar) and is never shown
-            publicly. Comment data is handled by Cusdis under its{' '}
-            <a href="https://cusdis.com/privacy-policy" target="_blank" rel="noreferrer">
-              privacy policy
+            <strong>GitHub-based comments (giscus)</strong>: the comment section under each post
+            uses GitHub Discussions. To comment this way, you need to sign in with a GitHub
+            account, and that data is handled by GitHub under its{' '}
+            <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noreferrer">
+              privacy statement
             </a>.
           </li>
         </ul>
@@ -106,9 +105,9 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
 
         <h2>4. Your choices</h2>
         <p>
-          You can simply avoid using the comment section if you&apos;d rather not have Cusdis
-          process your name/email. Reading posts on this blog does not require any personal
-          information.
+          You can block third-party cookies (GitHub) through your browser settings, or simply
+          avoid using the comment section if you&apos;d rather not have that service process your
+          data. Reading posts on this blog does not require any personal information.
         </p>
 
         <h2>5. Contact</h2>

@@ -8,7 +8,7 @@ import { allPosts } from 'contentlayer/generated'
 import type { MDXComponents } from 'mdx/types'
 
 import { BlogInformation } from '@/components/blog/BlogInfomation'
-import { Cusdis } from '@/components/blog/Cusdis'
+import { Comments } from '@/components/blog/Comments'
 import { Pre } from '@/components/blog/Pre'
 import { Tag } from '@/components/blog/Tag'
 
@@ -41,10 +41,6 @@ export default function Page({ params }: { params: { slug: string, locale: Local
     (a, b) => a.order - b.order
   )
   const MDXContent = useMDXComponent(post.body.code)
-  const canonicalPath = params.locale === defaultLocale
-    ? `/blog/${post.slug}`
-    : `/${params.locale}/blog/${post.slug}`
-  const canonicalUrl = `${siteMetadata.siteUrl.replace(/\/$/, '')}${canonicalPath}`
 
   return (
     <article>
@@ -93,7 +89,7 @@ export default function Page({ params }: { params: { slug: string, locale: Local
           <MDXContent components={mdxComponents}/>
         </div>
         <div className="prose max-w-none pb-8 pt-6 space-y-6">
-          <Cusdis pageId={post.slug} pageUrl={canonicalUrl} pageTitle={post.title}/>
+          <Comments slug={post.slug}/>
         </div>
       </div>
     </article>
