@@ -39,14 +39,6 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
               chính sách riêng tư của GitHub
             </a>.
           </li>
-          <li>
-            <strong>Bình luận qua Facebook (Facebook Comments Plugin)</strong>: một lựa chọn bình
-            luận khác dùng Facebook Comments Plugin. Nếu bạn dùng cách này, Facebook có thể đặt
-            cookie và xử lý dữ liệu liên quan theo{' '}
-            <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noreferrer">
-              chính sách riêng tư của Meta/Facebook
-            </a>. Trang này không lưu trữ nội dung bình luận, toàn bộ do Facebook quản lý.
-          </li>
         </ul>
 
         <h2>3. Mục đích sử dụng</h2>
@@ -58,26 +50,12 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
 
         <h2>4. Quyền của bạn</h2>
         <p>
-          Bạn có thể chặn cookie của bên thứ ba (Facebook, GitHub) bằng cài đặt trình duyệt, hoặc
-          đơn giản là không sử dụng phần bình luận nếu không muốn các dịch vụ đó xử lý dữ liệu của
-          bạn. Việc đọc bài viết trên blog không yêu cầu bất kỳ thông tin cá nhân nào.
+          Bạn có thể chặn cookie của bên thứ ba (GitHub) bằng cài đặt trình duyệt, hoặc đơn giản là
+          không sử dụng phần bình luận nếu không muốn dịch vụ đó xử lý dữ liệu của bạn. Việc đọc
+          bài viết trên blog không yêu cầu bất kỳ thông tin cá nhân nào.
         </p>
 
-        <h2 id="xoa-du-lieu">5. Yêu cầu xóa dữ liệu</h2>
-        <p>
-          Nếu bạn từng bình luận bằng Facebook Comments Plugin trên blog và muốn xóa bình luận đó,
-          bạn có thể tự xóa trực tiếp: di chuột vào bình luận của mình, bấm dấu <strong>...</strong>{' '}
-          ở góc bình luận và chọn <strong>Xóa</strong>. Toàn bộ dữ liệu bình luận do Facebook lưu
-          trữ, blog này không giữ bản sao nào.
-        </p>
-        <p>
-          Nếu bạn muốn yêu cầu xóa bất kỳ dữ liệu nào khác liên quan đến bạn mà blog này có thể có
-          (ví dụ qua email liên hệ), vui lòng gửi yêu cầu tới{' '}
-          <a href="mailto:tunglol1024@gmail.com">tunglol1024@gmail.com</a>, mình sẽ xử lý trong
-          thời gian sớm nhất.
-        </p>
-
-        <h2>6. Liên hệ</h2>
+        <h2>5. Liên hệ</h2>
         <p>
           Nếu bạn có câu hỏi về chính sách này, vui lòng liên hệ qua email{' '}
           <a href="mailto:tunglol1024@gmail.com">tunglol1024@gmail.com</a>.
@@ -116,15 +94,6 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
               privacy statement
             </a>.
           </li>
-          <li>
-            <strong>Facebook Comments Plugin</strong>: an alternative way to comment using the
-            Facebook Comments Plugin. If you use it, Facebook may set cookies and process related
-            data under{' '}
-            <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noreferrer">
-              Meta/Facebook&apos;s privacy policy
-            </a>. This site does not store any comment content - it is entirely managed by
-            Facebook.
-          </li>
         </ul>
 
         <h2>3. How the data is used</h2>
@@ -136,26 +105,12 @@ const content: { [locale in LocaleType]: { updated: string; body: React.ReactNod
 
         <h2>4. Your choices</h2>
         <p>
-          You can block third-party cookies (Facebook, GitHub) through your browser settings, or
-          simply avoid using the comment section if you&apos;d rather not have those services process
-          your data. Reading posts on this blog does not require any personal information.
+          You can block third-party cookies (GitHub) through your browser settings, or simply
+          avoid using the comment section if you&apos;d rather not have that service process your
+          data. Reading posts on this blog does not require any personal information.
         </p>
 
-        <h2 id="data-deletion">5. Data deletion request</h2>
-        <p>
-          If you have left a comment using the Facebook Comments Plugin on this blog and want to
-          delete it, you can do so yourself: hover over your comment, click the{' '}
-          <strong>...</strong> icon in the corner, and select <strong>Delete</strong>. All comment
-          data is stored by Facebook - this blog does not keep a copy of it.
-        </p>
-        <p>
-          If you&apos;d like to request the deletion of any other data related to you that this
-          blog might have (for example through a contact email), please send a request to{' '}
-          <a href="mailto:tunglol1024@gmail.com">tunglol1024@gmail.com</a> and it will be handled
-          as soon as possible.
-        </p>
-
-        <h2>6. Contact</h2>
+        <h2>5. Contact</h2>
         <p>
           If you have any questions about this policy, feel free to reach out at{' '}
           <a href="mailto:tunglol1024@gmail.com">tunglol1024@gmail.com</a>.

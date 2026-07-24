@@ -4,7 +4,6 @@ import '@/styles/twemoji.css';
 import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/react"
 import { Nunito } from "next/font/google"
-import Script from "next/script"
 
 import { Header } from "@/components/common/Header"
 import { Footer } from "@/components/common/Footer"
@@ -50,12 +49,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={locale}>
-      <head>
-        <meta name="facebook-domain-verification" content="kuxniljmgfi6hn6w7nrdi21739s1nt" />
-        {process.env.NEXT_PUBLIC_FB_APP_ID && (
-          <meta property="fb:app_id" content={process.env.NEXT_PUBLIC_FB_APP_ID} />
-        )}
-      </head>
       <body className={`${font.className} bg-background text-white mx-auto max-w-5xl px-3 sm:px-6 xl:max-w-5xl xl:px-0`}>
         <Header locale={locale}/>
         <div className="flex flex-col">
@@ -64,17 +57,6 @@ export default function RootLayout({
         </div>
         <Footer locale={locale}/>
         <Analytics />
-        {process.env.NEXT_PUBLIC_FB_APP_ID && (
-          <>
-            <div id="fb-root"></div>
-            <Script
-              id="facebook-jssdk"
-              strategy="afterInteractive"
-              src={`https://connect.facebook.net/${locale === 'vi' ? 'vi_VN' : 'en_US'}/sdk.js#xfbml=1&version=v19.0&appId=${process.env.NEXT_PUBLIC_FB_APP_ID}`}
-              crossOrigin="anonymous"
-            />
-          </>
-        )}
       </body>
     </html>
   );
