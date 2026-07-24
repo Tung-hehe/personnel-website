@@ -8,10 +8,9 @@ export function Comments({slug}: {slug: string}) {
     <Giscus
       id="comments"
       repo={repositoryName}
-      // @ts-ignore
-      repoId={process.env.REPO_ID}
+      repoId={process.env.NEXT_PUBLIC_REPO_ID || ''}
       category="Announcements"
-      categoryId={process.env.CATEGORY_ID}
+      categoryId={process.env.NEXT_PUBLIC_CATEGORY_ID || ''}
       mapping="specific"
       term={slug}
       strict="0"
