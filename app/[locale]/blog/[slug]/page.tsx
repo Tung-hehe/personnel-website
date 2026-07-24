@@ -24,7 +24,11 @@ const mdxComponents: MDXComponents = {
 export const generateMetadata = ({ params }: { params: { slug: string, locale: LocaleType } }) => {
   const post = allPosts.find((post) => post.slug === params.slug && post.locale === params.locale)
   if (!post) return null
-  return generatePageSeo({ title: post.title, image: post.image, description: post.summary })
+  const canonicalPath = params.locale === defaultLocale
+    ? `/blog/${post.slug}`
+    : `/${params.locale}/blog/${post.slug}`
+  const canonicalUrl = `${siteMetadata.siteUrl.replace(/\/$/, '')}${canonicalPath}`
+  return generatePageSeo({ title: post.title, image: post.image, description: post.summary, url: canonicalUrl })
 }
 
 export default function Page({ params }: { params: { slug: string, locale: LocaleType } }) {
