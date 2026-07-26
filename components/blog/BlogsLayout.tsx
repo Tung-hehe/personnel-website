@@ -7,18 +7,19 @@ import { Search } from '@/components/common/Search'
 
 import { blogConfig, LocaleType } from '@/data/config'
 import { toLatin } from '@/utils/string';
+import { usePageParam } from '@/hooks/usePageParam'
 import { Pagination } from '../common/Pagination';
 import { ListPosts } from './ListPosts';
 
 
 export function BlogsLayout({posts, title, locale}: {posts: Post[], title: string, locale: LocaleType}) {
   let [searchValue, setSearchValue] = useState('')
-  let [currentPage, setCurrentPage] = useState(1)
   let filteredPosts = posts.filter((post) => {
     let searchContent = toLatin(post.title + post.summary + post.tags.join(' ')).toLowerCase()
     return searchContent.includes(searchValue)
   })
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / blogConfig.postsPerPage))
+  const [currentPage, setCurrentPage] = usePageParam(totalPages)
   let renderedPosts = filteredPosts.slice(
     (currentPage - 1) * blogConfig.postsPerPage,
     currentPage * blogConfig.postsPerPage

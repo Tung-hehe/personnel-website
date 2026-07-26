@@ -8,7 +8,7 @@ import { blogConfig, LocaleType } from '@/data/config'
 
 export function ListPosts({ posts, locale }: { posts: Post[], locale: LocaleType}) {
   return (
-    <ul className="space-y-14 py-12 min-h-[35rem]">
+    <ul className="space-y-6 py-12 min-h-[35rem]">
       {
         !posts.length
         ? blogConfig.noPost[locale]

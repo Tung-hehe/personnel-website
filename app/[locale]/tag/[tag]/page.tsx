@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { allPosts } from 'contentlayer/generated'
 import { dateSortDesc } from '@/utils/date'
 import { BlogsLayout } from '@/components/blog/BlogsLayout'
@@ -19,9 +21,13 @@ export default function Page({ params }: { params: { tag: string, locale: Locale
       return tags.includes(kebabCase(params.tag)) && post.locale ===  params.locale
     }
   ).sort((a, b) => dateSortDesc(a.date, b.date))
-  return <BlogsLayout
-    posts={posts}
-    title={`${tagsConfig.tagSelect}: ${kebabCase(params.tag)?.toUpperCase()}`}
-    locale={params.locale}
-  />
+  return (
+    <Suspense>
+      <BlogsLayout
+        posts={posts}
+        title={`${tagsConfig.tagSelect}: ${kebabCase(params.tag)?.toUpperCase()}`}
+        locale={params.locale}
+      />
+    </Suspense>
+  )
 }

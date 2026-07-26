@@ -1,0 +1,14 @@
+<svg width="544" height="306" viewBox="0 0 544 306" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow-game" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="#1E2536"/>
+      <stop offset="100%" stop-color="#141926"/>
+    </radialGradient>
+    <radialGradient id="orb-game" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7AA2F7" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#7AA2F7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="544" height="306" fill="url(#glow-game)"/>
+  <circle cx="272" cy="128.51999999999998" r="170" fill="url(#orb-game)"/>
+  <circle cx="258" cy="142" r="80" fill="none" stroke="#7AA2F7" stroke-width="5" opacity="0.9"/><line x1="228" y1="106" x2="318" y2="178" stroke="#7AA2F7" stroke-width="6" stroke-linecap="round" opacity="0.9"/><line x1="318" y1="178" x2="346" y2="202" stroke="#7AA2F7" stroke-width="6" stroke-linecap="round" opacity="0.9"/><circle cx="228" cy="106" r="25" fill="#141926" stroke="#7AA2F7" stroke-width="5"/><ellipse cx="228" cy="106" rx="39" ry="9" fill="none" stroke="#F59E0B" stroke-width="4" opacity="0.85" transform="rotate(-20 228 106)"/><circle cx="318" cy="178" r="16" fill="#141926" stroke="#34D399" stroke-width="4.5"/><circle cx="346" cy="202" r="11" fill="#141926" stroke="#34D399" stroke-width="4"/><path d="M 108 222 L 110.8 229.2 L 118 232 L 110.8 234.8 L 108 242 L 105.2 234.8 L 98 232 L 105.2 229.2 Z" fill="#FB7185" opacity="0.8"/><path d="M 433 38 L 435.52 44.48 L 442 47 L 435.52 49.52 L 433 56 L 430.48 49.52 L 424 47 L 430.48 44.48 Z" fill="#F59E0B" opacity="0.75"/></svg>

@@ -8,6 +8,7 @@ export const headerNavLinks = [
   {label: 'Home', href: '/'},
   {label: 'Blog', href: '/blog'},
   {label: 'Projects', href: '/project'},
+  {label: 'Games', href: '/game'},
   {label: 'Tags', href: '/tag'},
   {label: 'About', href: '/about'},
 ]
@@ -66,12 +67,14 @@ export const homeConfig: {
   navigation: [
     {label: 'Posts', href: '/blog', emoji: 'memo'},
     {label: 'Projects', href: '/project', emoji: 'hammer-and-wrench'},
+    {label: 'Games', href: '/game', emoji: 'joystick'},
     {label: 'Tags', href: '/tag', emoji: 'dna'},
     {label: 'About', href: '/about', emoji: 'face-with-monocle'},
   ],
   mobileNavigation: [
     {label: {vi: 'Các dự án mình đã làm', en: 'What have I built?'}, href: '/project', emoji: 'hammer-and-wrench'},
     {label: {vi: 'Các bài viết của mình', en: 'My writtings'}, href: '/blog', emoji: 'memo'},
+    {label: {vi: 'Chơi những game mình đã làm', en: 'Play games I built'}, href: '/game', emoji: 'joystick'},
     {label: {vi: 'Các chủ đề bài viết', en: 'All Post topics'}, href: '/tag', emoji: 'dna'},
     {label: {vi: 'Nhiều hơn về mình', en: 'More about me'}, href: '/about', emoji: 'face-with-monocle'},
   ],
@@ -85,13 +88,15 @@ export const blogConfig: {
   postsPerPage: number
   words: LocaleDictType
   paginationUrl: string
+  readMore: LocaleDictType
 } = {
   title: {vi: 'Tất cả bài viết', en: 'All posts'},
   noPost: {vi: 'Không tìm thấy bài viết nào', en: 'No posts were found'},
   readingTime: {vi: 'phút đọc', en: 'minutes'},
   postsPerPage: 10,
   words: {vi: 'từ', en: 'words'},
-  paginationUrl: '/blog'
+  paginationUrl: '/blog',
+  readMore: {vi: 'Đọc tiếp', en: 'Read more'},
 }
 
 export const tagsConfig = {title: 'Tags', tagSelect: 'Tag'}
@@ -106,6 +111,98 @@ export const projectsConfig : {
   noProject: {vi: 'Không tìm thấy dự án nào', en: 'No projects were found'},
   projectsPerPage: 10,
   detail: {vi: 'Chi tiết', en: 'Learn more'}
+}
+
+export const gamesConfig: {
+  title: LocaleDictType,
+  subtitle: LocaleDictType,
+  noGame: LocaleDictType,
+  play: LocaleDictType,
+} = {
+  title: {vi: 'Games', en: 'Games'},
+  subtitle: {
+    vi: 'Những trò chơi mình đã mô hình hóa và lập trình, chơi trực tiếp ngay trên trình duyệt.',
+    en: 'Games I modeled and programmed myself, playable right in your browser.',
+  },
+  noGame: {vi: 'Không tìm thấy game nào', en: 'No games were found'},
+  play: {vi: 'Chơi ngay', en: 'Play now'},
+}
+
+export type PuzzleGameConfig = {
+  title: LocaleDictType,
+  rules: LocaleDictType,
+  chooseLevel: LocaleDictType,
+  backToLevels: LocaleDictType,
+  level: LocaleDictType,
+  difficulty: {[key in 'easy' | 'medium' | 'hard' | 'expert']: LocaleDictType},
+  clues: LocaleDictType,
+  completed: LocaleDictType,
+  reset: LocaleDictType,
+  check: LocaleDictType,
+  solve: LocaleDictType,
+  erase: LocaleDictType,
+  time: LocaleDictType,
+  noConflictsFound: LocaleDictType,
+  congrats: LocaleDictType,
+  solved: LocaleDictType,
+}
+
+const commonPuzzleGameConfig = {
+  chooseLevel: {vi: 'Chọn một màn chơi', en: 'Choose a level'},
+  backToLevels: {vi: 'Danh sách màn chơi', en: 'Back to levels'},
+  level: {vi: 'Màn', en: 'Level'},
+  difficulty: {
+    easy: {vi: 'Dễ', en: 'Easy'},
+    medium: {vi: 'Trung bình', en: 'Medium'},
+    hard: {vi: 'Khó', en: 'Hard'},
+    expert: {vi: 'Rất khó', en: 'Expert'},
+  },
+  clues: {vi: 'ô gợi ý', en: 'clues'},
+  completed: {vi: 'Đã hoàn thành', en: 'Completed'},
+  reset: {vi: 'Chơi lại', en: 'Reset'},
+  check: {vi: 'Kiểm tra', en: 'Check'},
+  solve: {vi: 'Xem lời giải', en: 'Solve'},
+  erase: {vi: 'Xoá', en: 'Erase'},
+  time: {vi: 'Thời gian', en: 'Time'},
+  noConflictsFound: {vi: 'Không có lỗi nào!', en: 'No conflicts found!'},
+  congrats: {vi: 'Chúc mừng bạn đã hoàn thành!', en: 'Congratulations, you solved it!'},
+  solved: {vi: 'Đây là lời giải của màn chơi này.', en: 'Here is the solution for this level.'},
+}
+
+export const sudokuConfig: PuzzleGameConfig = {
+  ...commonPuzzleGameConfig,
+  title: {vi: 'Sudoku', en: 'Sudoku'},
+  rules: {
+    vi: 'Điền số 1-9 vào mỗi hàng, cột và khối 3x3 sao cho không có số nào lặp lại.',
+    en: 'Fill 1-9 into every row, column and 3x3 box so that no number repeats.',
+  },
+}
+
+export const binoxConfig: PuzzleGameConfig = {
+  ...commonPuzzleGameConfig,
+  title: {vi: 'Binox', en: 'Binox'},
+  rules: {
+    vi: 'Điền X và O sao cho không có quá 2 ô liền kề cùng ký hiệu, mỗi hàng/cột có số X bằng số O, và không có hai hàng hay hai cột nào giống hệt nhau.',
+    en: 'Fill X and O so that no more than 2 identical symbols touch in a row, each row/column has an equal count of X and O, and no two rows or columns are identical.',
+  },
+}
+
+export const troixConfig: PuzzleGameConfig = {
+  ...commonPuzzleGameConfig,
+  title: {vi: 'Troix', en: 'Troix'},
+  rules: {
+    vi: 'Điền X, O và I sao cho không có quá 2 ô liền kề cùng ký hiệu, và mỗi hàng/cột có số lượng X, O, I bằng nhau.',
+    en: 'Fill X, O and I so that no more than 2 identical symbols touch in a row, and each row/column has an equal count of X, O and I.',
+  },
+}
+
+export const starBattleConfig: PuzzleGameConfig = {
+  ...commonPuzzleGameConfig,
+  title: {vi: 'Star Battle', en: 'Star Battle'},
+  rules: {
+    vi: 'Đặt đúng số sao vào mỗi hàng, cột và vùng màu (tùy độ khó), sao cho không có 2 ngôi sao nào chạm nhau kể cả theo đường chéo.',
+    en: 'Place the right number of stars in every row, column and colored region (depending on difficulty), with no two stars touching, even diagonally.',
+  },
 }
 
 export const aboutConfig: {

@@ -34,14 +34,14 @@ export default function Page({ params }: { params: { locale: LocaleType } }) {
             {tagsConfig.title}
           </h2>
         </div>
-        <div className="flex max-w-lg flex-wrap">
+        <div className="flex max-w-lg flex-wrap items-center">
           {sortTags.map((tag) => {
             return (
-              <div key={tag} className="mb-2 mr-5 mt-2">
+              <div key={tag} className="mb-2 mr-3 mt-2 inline-flex items-center gap-1.5">
                 <Tag text={tag} locale={params.locale}/>
                 <Link
-                  href={`/${params.locale}/${kebabCase(tag)}`}
-                  className="-ml-2 text-sm uppercase text-gray-300"
+                  href={`/${params.locale}/tag/${kebabCase(tag)}`}
+                  className="text-sm font-medium text-gray-500 hover:text-gray-300"
                 >
                   ({tags[tag]})
                 </Link>

@@ -1,0 +1,19 @@
+<svg width="544" height="306" viewBox="0 0 544 306" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow-default" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="#1E2536"/>
+      <stop offset="100%" stop-color="#141926"/>
+    </radialGradient>
+    <radialGradient id="orb-default" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7AA2F7" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#7AA2F7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="544" height="306" fill="url(#glow-default)"/>
+  <circle cx="272" cy="128.51999999999998" r="170" fill="url(#orb-default)"/>
+  <path d="M 197 115 Q 197 105 211 105 L 272 105 L 272 213 L 211 213 Q 197 213 197 203 Z" fill="rgba(122,162,247,0.12)" stroke="#7AA2F7" stroke-width="2.5"/><path d="M 347 115 Q 347 105 333 105 L 272 105 L 272 213 L 333 213 Q 347 213 347 203 Z" fill="rgba(122,162,247,0.12)" stroke="#7AA2F7" stroke-width="2.5"/><line x1="272" y1="105" x2="272" y2="213" stroke="#7AA2F7" stroke-width="2"/><line x1="217" y1="131" x2="257" y2="131" stroke="rgba(122,162,247,0.55)" stroke-width="4" stroke-linecap="round"/><line x1="286" y1="131" x2="326" y2="131" stroke="rgba(122,162,247,0.4)" stroke-width="4" stroke-linecap="round"/><line x1="217" y1="151" x2="267" y2="151" stroke="rgba(122,162,247,0.55)" stroke-width="4" stroke-linecap="round"/><line x1="286" y1="151" x2="336" y2="151" stroke="rgba(122,162,247,0.4)" stroke-width="4" stroke-linecap="round"/><line x1="217" y1="171" x2="251" y2="171" stroke="rgba(122,162,247,0.55)" stroke-width="4" stroke-linecap="round"/><line x1="286" y1="171" x2="320" y2="171" stroke="rgba(122,162,247,0.4)" stroke-width="4" stroke-linecap="round"/><g transform="rotate(45 353 209)">
+    <rect x="346" y="155" width="14" height="48" rx="3" fill="#F59E0B"/>
+    <polygon points="346,203 360,203 353,219" fill="#F1D9A8"/>
+    <polygon points="350.5,210 355.5,210 353,219" fill="#3F3F46"/>
+    <rect x="346" y="155" width="14" height="10" rx="3" fill="#FB7185"/>
+  </g><path d="M 87 64 L 90.08 71.92 L 98 75 L 90.08 78.08 L 87 86 L 83.92 78.08 L 76 75 L 83.92 71.92 Z" fill="#34D399" opacity="0.8"/><path d="M 467 226 L 469.52 232.48 L 476 235 L 469.52 237.52 L 467 244 L 464.48 237.52 L 458 235 L 464.48 232.48 Z" fill="#7AA2F7" opacity="0.75"/><circle cx="67" cy="213" r="4" fill="#F59E0B" opacity="0.8"/><circle cx="447" cy="63" r="4" fill="#FB7185" opacity="0.8"/></svg>

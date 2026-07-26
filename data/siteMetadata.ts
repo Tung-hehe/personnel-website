@@ -5,4 +5,5 @@ export const siteMetadata = {
   description: 'T.T.Tung website',
   siteUrl: 'https://www.tungtt.dev/', // Your site url
   socialBanner: '/profile.jpg',
+  defaultPostImage: '/posts/default/thumbnail.svg',
 }

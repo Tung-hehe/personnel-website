@@ -6,9 +6,13 @@ export function Tag({ text, locale }: { text: string, locale: LocaleType }) {
   return (
     <Link
       href={`/${locale}/tag/${kebabCase(text)}`}
-      className="mr-3 text-md uppercase text-primary hover:text-sky-400"
+      className="
+        mb-1.5 mr-1.5 inline-block rounded-full border border-gray-700 bg-primary-dark/40
+        px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-primary
+        transition-colors hover:border-primary hover:bg-primary-dark hover:text-sky-400
+      "
     >
-      <span>{kebabCase(text)}</span>
+      {kebabCase(text)}
     </Link>
   )
 }

@@ -1,0 +1,14 @@
+<svg width="544" height="306" viewBox="0 0 544 306" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow-firstblog" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="#1E2536"/>
+      <stop offset="100%" stop-color="#141926"/>
+    </radialGradient>
+    <radialGradient id="orb-firstblog" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7AA2F7" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#7AA2F7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="544" height="306" fill="url(#glow-firstblog)"/>
+  <circle cx="272" cy="128.51999999999998" r="170" fill="url(#orb-firstblog)"/>
+  <text x="272" y="147" text-anchor="middle" dominant-baseline="central" font-family="Nunito, sans-serif" font-weight="800" font-size="34" fill="#F1F5F9" opacity="1">Hello, World!</text><rect x="420" y="131" width="4" height="32" fill="#7AA2F7"/><text x="272" y="187" text-anchor="middle" dominant-baseline="central" font-family="Consolas, Menlo, monospace" font-weight="600" font-size="14" fill="rgba(148,163,184,0.8)" opacity="1">// blog đầu tiên</text><path d="M 82 73 L 85.92 83.08 L 96 87 L 85.92 90.92 L 82 101 L 78.08 90.92 L 68 87 L 78.08 83.08 Z" fill="#F59E0B" opacity="0.9"/><path d="M 477 97 L 479.8 104.2 L 487 107 L 479.8 109.8 L 477 117 L 474.2 109.8 L 467 107 L 474.2 104.2 Z" fill="#34D399" opacity="0.85"/><path d="M 447 195 L 450.36 203.64 L 459 207 L 450.36 210.36 L 447 219 L 443.64 210.36 L 435 207 L 443.64 203.64 Z" fill="#FB7185" opacity="0.85"/><path d="M 107 203 L 109.52 209.48 L 116 212 L 109.52 214.52 L 107 221 L 104.48 214.52 L 98 212 L 104.48 209.48 Z" fill="#7AA2F7" opacity="0.9"/></svg>

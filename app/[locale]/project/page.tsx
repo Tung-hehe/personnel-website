@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import projectsData from "@/data/projects";
 
 import { generatePageSeo } from '@/utils/seo'
@@ -9,5 +11,9 @@ export const generateMetadata = ({ params }: { params: { locale: LocaleType } })
 }
 
 export default function Projects({ params }: { params: { locale: LocaleType } }) {
-  return <ProjectsLayout projects={projectsData} locale={params.locale}/>
+  return (
+    <Suspense>
+      <ProjectsLayout projects={projectsData} locale={params.locale}/>
+    </Suspense>
+  )
 }

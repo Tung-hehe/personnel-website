@@ -5,6 +5,7 @@ import { Search } from '@/components/common/Search'
 
 import { projectsConfig, LocaleType } from '@/data/config'
 import { toLatin } from '@/utils/string';
+import { usePageParam } from '@/hooks/usePageParam'
 import { Pagination } from '../common/Pagination';
 import { ProjectCard } from './ProjectCard';
 
@@ -13,12 +14,12 @@ import type { Project } from '@/data/projects'
 
 export function ProjectsLayout({ projects, locale }: {projects: Project[], locale: LocaleType}) {
   let [searchValue, setSearchValue] = useState('')
-  let [currentPage, setCurrentPage] = useState(1)
   let filteredProjects = projects.filter((project) => {
     let searchContent = toLatin(project.title[locale] + project.description[locale]).toLowerCase()
     return searchContent.includes(searchValue)
   })
   const totalPages = Math.max(1, Math.ceil(filteredProjects.length / projectsConfig.projectsPerPage))
+  const [currentPage, setCurrentPage] = usePageParam(totalPages)
   let renderedProjects = filteredProjects.slice(
     (currentPage - 1) * projectsConfig.projectsPerPage,
     currentPage * projectsConfig.projectsPerPage
