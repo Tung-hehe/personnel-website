@@ -205,6 +205,15 @@ export const starBattleConfig: PuzzleGameConfig = {
   },
 }
 
+export const galaxiesConfig: PuzzleGameConfig = {
+  ...commonPuzzleGameConfig,
+  title: {vi: 'Galaxies', en: 'Galaxies'},
+  rules: {
+    vi: 'Vẽ đường chia bảng thành các vùng (thiên hà), mỗi vùng chứa đúng một tâm và đối xứng qua tâm đó khi xoay 180 độ.',
+    en: 'Draw borders to split the grid into regions (galaxies), each containing exactly one center dot and symmetric under a 180-degree rotation about it.',
+  },
+}
+
 export const aboutConfig: {
   title: LocaleDictType
   greating: LocaleDictType

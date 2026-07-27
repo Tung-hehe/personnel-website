@@ -49,6 +49,16 @@ const gamesData: Game[] = [
     imgSrc: '/games/star-battle.svg',
     href: '/game/star-battle',
   },
+  {
+    id: 'galaxies',
+    title: {vi: 'Galaxies', en: 'Galaxies'},
+    description: {
+      vi: '20 màn chơi Galaxies: vẽ đường chia bảng thành các thiên hà đối xứng qua tâm, mỗi thiên hà chứa đúng một tâm.',
+      en: '20 Galaxies puzzles: draw borders to split the grid into regions symmetric about their center dot.',
+    },
+    imgSrc: '/games/galaxies.svg',
+    href: '/game/galaxies',
+  },
 ]
 
 export default gamesData
