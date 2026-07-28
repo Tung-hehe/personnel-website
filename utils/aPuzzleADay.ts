@@ -66,17 +66,18 @@ export type Piece = {
   cells: [number, number][]
 }
 
-// Verified (by exhaustive exact-cover search over every 1-Jan..31-Dec date,
-// including a Feb 29th leap day) to always have at least one valid arrangement.
+// Same 8 pieces (name and shape) as PIECES in
+// https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/a_puzzle_a_day.py,
+// the reference implementation this game and its companion blog post are based on.
 export const PIECES: Piece[] = [
-  { id: 'L', color: '#F87171', cells: [[0, 0], [1, 0], [2, 0], [3, 0], [3, 1]] },
-  { id: 'P', color: '#FACC15', cells: [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0]] },
-  { id: 'T', color: '#4ADE80', cells: [[0, 0], [0, 1], [0, 2], [1, 1], [2, 1]] },
-  { id: 'U', color: '#2DD4BF', cells: [[0, 0], [0, 2], [1, 0], [1, 1], [1, 2]] },
+  { id: 'O', color: '#F87171', cells: [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0], [2, 1]] },
+  { id: 'P', color: '#FB923C', cells: [[0, 0], [1, 0], [1, 1], [2, 0], [2, 1]] },
+  { id: 'L', color: '#FACC15', cells: [[0, 0], [1, 0], [2, 0], [3, 0], [3, 1]] },
+  { id: 'C', color: '#4ADE80', cells: [[0, 0], [0, 1], [1, 0], [2, 0], [2, 1]] },
   { id: 'V', color: '#60A5FA', cells: [[0, 0], [1, 0], [2, 0], [2, 1], [2, 2]] },
-  { id: 'W', color: '#C084FC', cells: [[0, 0], [1, 0], [1, 1], [2, 1], [2, 2]] },
-  { id: 'Y', color: '#F472B6', cells: [[0, 1], [1, 0], [1, 1], [2, 1], [3, 1]] },
-  { id: 'H', color: '#FB923C', cells: [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2]] },
+  { id: 'S', color: '#C084FC', cells: [[0, 0], [0, 1], [1, 1], [2, 1], [2, 2]] },
+  { id: 'J', color: '#F472B6', cells: [[0, 0], [1, 0], [1, 1], [2, 1], [3, 1]] },
+  { id: 'F', color: '#2DD4BF', cells: [[0, 0], [1, 0], [1, 1], [2, 0], [3, 0]] },
 ]
 
 function normalize(cells: [number, number][]): [number, number][] {
