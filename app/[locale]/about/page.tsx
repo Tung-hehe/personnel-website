@@ -19,7 +19,7 @@ export default function Page({ params }: { params: { locale: LocaleType } }) {
       <AuthorInfo author={author}/>
       <div className="prose max-w-none pb-8 xl:col-span-2 pt-6">
         <h2>
-          {aboutConfig.greating[params.locale]}
+          {aboutConfig.greeting[params.locale]}
           <Twemoji className="mx-2" emoji="waving-hand"/>
         </h2>
         <MDXContent/>

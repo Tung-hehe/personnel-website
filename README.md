@@ -18,6 +18,3 @@ and illustrations are from [Storyset](https://storyset.com/).
 
 Thanks for the free resources 🙏
 
----
-
-Copyright (c) 2024 Tran Thanh Tung - Alrights reserved.

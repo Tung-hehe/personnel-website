@@ -22,7 +22,7 @@ export default function Page({ params: { locale } }: HomeProps) {
                 text-4xl font-extrabold tracking-tight text-transparent
               "
             >
-              <span>{homeConfig.greating[locale]}</span>
+              <span>{homeConfig.greeting[locale]}</span>
               <Twemoji emoji="waving-hand" size="" className="ml-2"/>
             </div>
             <h1 className="text-neutral-200 pb-2">

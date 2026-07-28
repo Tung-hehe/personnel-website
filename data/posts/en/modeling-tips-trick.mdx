@@ -12,7 +12,7 @@ import { Twemoji } from '@/components/common/Twemoji.tsx'
 ## 1. Binary variables
 
 This method is used when we can precisely determine the possible values of a variable.
-CFor instance, given an integer variable $x \in \mathbb{Z}$ with the condition $0 \leq x \leq 9$,
+For instance, given an integer variable $x \in \mathbb{Z}$ with the condition $0 \leq x \leq 9$,
 we can decompose the variable $x$ into 9 binary variables $x_i$ ($0 \leq i \leq 9$) to satisfy
 ```math
 x_i = \begin{cases}
@@ -24,7 +24,7 @@ Why do we need to decompose a variable into multiple variables? What is the bene
 The answer is, suppose we have not only one variable $x$ as above but also another
 variable $y \in \mathbb{Z}$ with the condition $0 \leq y \leq 9$. Then, it would be
 very difficult to linearize the condition $x \neq y$ if we use these two variables.
-On the other hand, if we decompose both $x$ and $y$ tinto binary variables, this condition
+On the other hand, if we decompose both $x$ and $y$ into binary variables, this condition
 can be easily modeled as follows:  $x_i + y_i \leq 1, \forall 0 \leq i \leq 9$.
 
 ## 2. Modeling nonlinear constraints geometrically
@@ -50,8 +50,8 @@ original condition, specifically, the following conditions
 ```
 
 **A few notes:**
-- Use this method when we can determine all points satisfy original contraint
-- There must exist a convex set that contains all and only the points satisfying the contraint
+- Use this method when we can determine all points satisfying the original constraint
+- There must exist a convex set that contains all and only the points satisfying the constraint
 - The above convex set should be easily representable by other linear constraints
 - From this point forward, I will use the term **geometric method** to describe this technique.
 (This name is entirely my own creation, and I haven't consulted any references. It might not be
@@ -86,12 +86,12 @@ following constraint with  $x, y \geq 0$
 \end{cases}
 
 ```
-Create binary variable $y$ satisfy
+Create binary variable $z$ satisfying
 
 ```math
 z = \begin{cases}
-  1 & \text{nếu } 2x + y \geq 5 \\
-  0 & \text{nếu } x + 2y \geq 5 \\
+  1 & \text{if } 2x + y \geq 5 \\
+  0 & \text{if } x + 2y \geq 5 \\
 \end{cases}
 ```
 
@@ -112,4 +112,4 @@ an appropriate linearization.*
 We have discussed 3 common modeling techniques. Additional methods can be found in
 [MOSEK Modeling Cookbook](https://docs.mosek.com/modeling-cookbook/index.html).
 
-Happly modeling! <Twemoji emoji="clinking-beer-mugs" />
+Happy modeling! <Twemoji emoji="clinking-beer-mugs" />

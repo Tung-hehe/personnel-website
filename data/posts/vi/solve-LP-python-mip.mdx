@@ -29,7 +29,7 @@ import mip
 ```python
 model = mip.Model()
 ```
-Mô hình với cầu hình mặc định có hàm mục tiêu là *Minimize* và solver sử dụng là
+Mô hình với cấu hình mặc định có hàm mục tiêu là *Minimize* và solver sử dụng là
 [*CBC*](https://www.coin-or.org/). Để thay đổi các cài đặt này, hãy sử dụng đoạn code sau
 ```python
 # use GRB for Gurobi
@@ -59,7 +59,7 @@ model.add_constr(4*x + y <= 11)
 model.add_constr(4*x + y == 11)
 
 # add constraint 4x + y ≥ 11
-model.add_constr(4*x + y == 11)
+model.add_constr(4*x + y >= 11)
 ```
 
 ## 5. Hàm mục tiêu và giải mô hình
@@ -111,7 +111,7 @@ print(f'x: {x.x}')
 print(f'y: {y.x}')
 ```
 
-Dưới đây là kết quả khi chạy đoạn code trên với nguyện tối ưu là $x = 0$, $y = 5$,
+Dưới đây là kết quả khi chạy đoạn code trên với nghiệm tối ưu là $x = 0$, $y = 5$,
 giá trị tối ưu là 5 và thời gian giải là 0.04s
 ```terminal
 Welcome to the CBC MILP Solver

@@ -1,10 +1,10 @@
 ---
-title:  Modeling Galaxies puzzle
+title: Modeling Galaxies puzzle
 date: 2024-09-25 21:30:00
 series:
   order: 3
   title: Modeling logic puzzles
-tags: [modeling, math, MILP, programing, python]
+tags: [modeling, math, MILP, programming, python]
 summary: Modeling and solving Galaxies puzzle using mixed-integer linear programming.
 image: /posts/logic_puzzle_modeling/galaxies.png
 authors: [default]
@@ -21,7 +21,7 @@ player needs to divide the grid into regions called galaxies, satisfying the fol
 - Each galaxy must and only contains one star in the center as its core.
 - Each galaxy must be centrally symmetric with respect to the star in the center.
 
-*Reference [wikipedia](https://en.wikipedia.org/wiki/Tentai_Show)*
+*Reference: [Wikipedia](https://en.wikipedia.org/wiki/Tentai_Show)*
 
 Below is an example of a 10×18 Galaxies puzzle and its solution
 
@@ -31,7 +31,7 @@ Below is an example of a 10×18 Galaxies puzzle and its solution
 
 - $n_R$ is the number of rows in the grid
 - $n_C$ is the number of columns in the grid
-- $n_G$ is the number of galaxies (equal the number of stars in the grd)
+- $n_G$ is the number of galaxies (equal to the number of stars in the grid)
 - $C_g$ is the set of cells with coordinates $(i, j)$ containing the centers of galaxy $g$
 - $F_g$ is the set of cells that can possibly belong to galaxy $g$
 - $$P_{ijg}$$ is the set of all paths from $(i, j)$ to the center of galaxy $g$
@@ -61,7 +61,7 @@ x(i, j, g) = \begin{cases}
 These two constraints are equivalent to the following constraint: each cell in the
 grid must belong to, and only belong to, one galaxy.
 ```math
-\sum_{g = 0}^{n_G - 1}{x(i, j, g)} = 1,  \\ \forall 0 \leq i < n_C, 0 \leq j < n_R
+\sum_{g = 0}^{n_G - 1}{x(i, j, g)} = 1,  \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
 ```
 
 - Each galaxy contains its core
@@ -130,4 +130,4 @@ problem and try solving different many cases to detect any issues (if any)
 The Python code for Galaxies modeling is available at
 [Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/galaxies.py).*
 
-Happly modeling! <Twemoji emoji="clinking-beer-mugs" />
+Happy modeling! <Twemoji emoji="clinking-beer-mugs" />

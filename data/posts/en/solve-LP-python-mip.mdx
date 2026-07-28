@@ -42,7 +42,7 @@ Add a variable to model using method [add_var()](https://docs.python-mip.com/en/
 ```python
 x = m.add_var()
 ```
-The varible with default config belongs to set $\mathbb{R}^+$. Change variable type, upper bound, lower bound
+The variable with default config belongs to set $\mathbb{R}^+$. Change variable type, upper bound, lower bound
 using parameters `var_type`, `ub`, `lb`
 ```python
 x = m.add_var(var_type=mip.BINARY) # x in {0; 1}
@@ -60,7 +60,7 @@ model.add_constr(4*x + y <= 11)
 model.add_constr(4*x + y == 11)
 
 # add constraint 4x + y ≥ 11
-model.add_constr(4*x + y == 11)
+model.add_constr(4*x + y >= 11)
 ```
 
 ## 5. Objective function and optimize model

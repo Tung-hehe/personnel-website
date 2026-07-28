@@ -22,8 +22,8 @@ const projectsData: Project[] = [
   {
     title: {vi: 'Logic Puzzles Solver', en: 'Logic Puzzles Solver'},
     description: {
-      vi: 'Mô hình hóa và giải các câu đố logic như Sudoku, Binox, Triox, Slitherlink, ...',
-      en: 'Modeling and solving logic puzzles such as Sudoku, Binox, Triox, Slitherlink, ...'
+      vi: 'Mô hình hóa và giải các câu đố logic như Sudoku, Binox, Troix, Slitherlink, ...',
+      en: 'Modeling and solving logic puzzles such as Sudoku, Binox, Troix, Slitherlink, ...'
     },
     imgSrc: '/projects/logic_puzzle_solver.jpg',
     builtWith: ['Python', 'MILP'],
@@ -42,7 +42,7 @@ const projectsData: Project[] = [
   {
     title: {vi: 'Pixel Adventure Python', en: 'Pixel Adventure Python'},
     description: {
-      vi: 'Game 2D plartform lập trình bằng python và pygame, đang trong quá trình phát triển.',
+      vi: 'Game 2D platform lập trình bằng python và pygame, đang trong quá trình phát triển.',
       en: 'A 2D platform game programmed in Python and Pygame, currently under development.',
     },
     imgSrc: '/projects/pixel_adventure_pygame.png',

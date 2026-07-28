@@ -32,7 +32,7 @@ export const commonConfig: {
 
 export const homeConfig: {
   featuredPosts: number
-  greating: LocaleDictType
+  greeting: LocaleDictType
   heading: LocaleDictType
   description: {[locale: LocaleType]: string[]}
   bios: {text: LocaleDictType, emoji: null | string}[]
@@ -41,7 +41,7 @@ export const homeConfig: {
   happyReading: LocaleDictType
 } = {
   featuredPosts: 5,
-  greating: {vi: "Chào bạn, cảm ơn đã ghé thăm!", en: 'Hello! Thank you for visiting'},
+  greeting: {vi: "Chào bạn, cảm ơn đã ghé thăm!", en: 'Hello! Thank you for visiting'},
   heading: {vi: "Mình là Tùng - một người hay cười", en: "I'm Tung - a smiley guy"},
   description: {
     vi: [
@@ -73,7 +73,7 @@ export const homeConfig: {
   ],
   mobileNavigation: [
     {label: {vi: 'Các dự án mình đã làm', en: 'What have I built?'}, href: '/project', emoji: 'hammer-and-wrench'},
-    {label: {vi: 'Các bài viết của mình', en: 'My writtings'}, href: '/blog', emoji: 'memo'},
+    {label: {vi: 'Các bài viết của mình', en: 'My writings'}, href: '/blog', emoji: 'memo'},
     {label: {vi: 'Chơi những game mình đã làm', en: 'Play games I built'}, href: '/game', emoji: 'joystick'},
     {label: {vi: 'Các chủ đề bài viết', en: 'All Post topics'}, href: '/tag', emoji: 'dna'},
     {label: {vi: 'Nhiều hơn về mình', en: 'More about me'}, href: '/about', emoji: 'face-with-monocle'},
@@ -216,10 +216,10 @@ export const galaxiesConfig: PuzzleGameConfig = {
 
 export const aboutConfig: {
   title: LocaleDictType
-  greating: LocaleDictType
+  greeting: LocaleDictType
 } = {
   title: {vi: 'Về Trần Thanh Tùng', en: 'About Tran Thanh Tung'},
-  greating: {vi: 'Chào bạn!', en: 'Hello!'}
+  greeting: {vi: 'Chào bạn!', en: 'Hello!'}
 }
 
 export const privacyPolicyConfig: {

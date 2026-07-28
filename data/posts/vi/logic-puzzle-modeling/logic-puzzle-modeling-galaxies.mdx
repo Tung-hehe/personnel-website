@@ -4,7 +4,7 @@ date: 2024-08-28
 series:
   order: 3
   title: Mô hình hóa các câu đố logic
-tags: [modeling, math, MILP, programing, python]
+tags: [modeling, math, MILP, programming, python]
 summary: Mô hình hóa và giải câu đố Galaxies bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
 image: /posts/logic_puzzle_modeling/galaxies.png
 authors: [default]
@@ -22,7 +22,7 @@ khu vực gọi là các thiên hà thỏa mãn các điều kiện sau:
 - Mỗi thiên hà phải và chỉ chứa một ngôi sao ở giữa làm tâm
 - Mỗi thiên hà phải đối xứng tâm qua ngôi sao ở giữa
 
-*Tham khảo [wikipedia](https://en.wikipedia.org/wiki/Tentai_Show)*
+*Tham khảo: [Wikipedia](https://en.wikipedia.org/wiki/Tentai_Show)*
 
 Dưới đây là ví dụ cho một câu đố Galaxies cỡ 10×18 và lời giải
 
@@ -48,7 +48,7 @@ và đường màu xanh lá là một đường đi từ ô màu cam đến tâm
 
 ### 2.1. Biến quyết định
 
-Với mỗi ô $(i, j)$ trên lưới và một thiên hà $g$ ($0 \leq g < n_G$), xây dựng biên $x(i, j, g)$ thỏa mãn
+Với mỗi ô $(i, j)$ trên lưới và một thiên hà $g$ ($0 \leq g < n_G$), xây dựng biến $x(i, j, g)$ thỏa mãn
 ```math
 x(i, j, g) = \begin{cases}
   1 & \text{nếu thiên hà } g \text{ chứa ô } (i, j) \\
@@ -61,7 +61,7 @@ x(i, j, g) = \begin{cases}
 - Lưới được phủ kín bởi các thiên hà, các thiên hà không chồng chéo lên nhau. Hai điều kiện này tương đương
 với điều kiện sau, mỗi ô trên lưới phải và chỉ thuộc một thiên hà
 ```math
-\sum_{g = 0}^{n_G - 1}{x(i, j, g)} = 1,  \\ \forall 0 \leq i < n_C, 0 \leq j < n_R
+\sum_{g = 0}^{n_G - 1}{x(i, j, g)} = 1,  \\ \forall 0 \leq i < n_R, 0 \leq j < n_C
 ```
 
 - Mỗi thiên hà phải chứa tâm của nó
@@ -83,7 +83,7 @@ nhiều mảnh nhỏ rời nhau.
 kỳ thuộc cùng một thiên hà phải tồn tại ít nhất 1 đường đi giữa chúng mà tất cả ô trên đường đi này cũng thuộc
 thiên hà đó.
 
-  Để tuyến tình hóa điều kiện này ta phải tạo thêm các biến trung gian $$t_{ijgp}$$ với mỗi thiên hà
+  Để tuyến tính hóa điều kiện này ta phải tạo thêm các biến trung gian $$t_{ijgp}$$ với mỗi thiên hà
   $g$, ô $(i, j) \in F_g$ và mỗi đường đi $$p \in P_{ijg}$$ thỏa mãn
 
   ```math
@@ -117,7 +117,7 @@ x(i, j, g) = 0, \\ \forall 0 \leq g < n_G, (i, j) \notin F_g
 ### 2.3. Hàm mục tiêu
 
 Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
-cần làm chỉ làm tìm ra một nghiệm chấp nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+cần làm chỉ là tìm ra một nghiệm chấp nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
 mục tiêu là một hằng số (mình hay chọn số 0).
 
 ## 3. Kết luận
@@ -129,4 +129,4 @@ ta cần suy nghĩ kỹ về bài toán đồng thời thử giải nhiều trư
 *Tham khảo thêm các câu đố Galaxies và biến thể tại [Krazydad](https://krazydad.com/galaxies/).
 Code mô hình hóa Galaxies bằng python có tại [Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/galaxies.py).*
 
-Happly modeling! <Twemoji emoji="clinking-beer-mugs" />
+Happy modeling! <Twemoji emoji="clinking-beer-mugs" />

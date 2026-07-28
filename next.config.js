@@ -65,5 +65,14 @@ module.exports = () => {
         },
       ]
     },
+    async redirects() {
+      return [
+        {
+          source: '/:locale/blog/introdution-of-LP-modeling',
+          destination: '/:locale/blog/introduction-of-LP-modeling',
+          permanent: true,
+        },
+      ]
+    },
   })
 };

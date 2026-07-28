@@ -4,7 +4,7 @@ date: 2024-11-29
 series:
   order: 6
   title: Mô hình hóa các câu đố logic
-tags: [modeling, math, MILP, programing, python]
+tags: [modeling, math, MILP, programming, python]
 summary: Mô hình hóa và giải câu đố Slitherlink bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
 image: /posts/logic_puzzle_modeling/slitherlink.png
 authors: [default]
@@ -22,7 +22,7 @@ Slitherlink là một câu đố logic với luật chơi như sau:
 
 Dưới đây là ví dụ cho một câu đố Slitherlink cỡ 7×7 và lời giải
 
-![galaxies_example](/posts/logic_puzzle_modeling/slitherlink.png)
+![slitherlink_example](/posts/logic_puzzle_modeling/slitherlink.png)
 
 
 ## 2. Mô hình hóa câu đố
@@ -37,7 +37,7 @@ Dưới đây là ví dụ cho một câu đố Slitherlink cỡ 7×7 và lời 
 ### 2.1. Biến quyết định
 
 Để giải quyết bài toán này ta cần đặt biến cho mỗi đường trên lới và mỗi điểm trên lưới. Cụ thể như sau
-- Với mỗi đường nằm ngang $(i, j)$ trong lưới ($0 \leq i < n_R + 1, 0 \leq j < n_C$), xây dụng biến $h(i, j)$ thỏa mãn
+- Với mỗi đường nằm ngang $(i, j)$ trong lưới ($0 \leq i < n_R + 1, 0 \leq j < n_C$), xây dựng biến $h(i, j)$ thỏa mãn
 ```math
 h(i, j) = \begin{cases}
   1 & \text{nếu đường } (i, j) \text{ được kết nối} \\
@@ -45,7 +45,7 @@ h(i, j) = \begin{cases}
 \end{cases}
 ```
 
-- Với mỗi đường nằm dọc $(i, j)$ trong lưới ($0 \leq i < n_R, 0 \leq j < n_C + 1$), xây dụng biến $v(i, j)$ thỏa mãn
+- Với mỗi đường nằm dọc $(i, j)$ trong lưới ($0 \leq i < n_R, 0 \leq j < n_C + 1$), xây dựng biến $v(i, j)$ thỏa mãn
 ```math
 v(i, j) = \begin{cases}
   1 & \text{nếu đường } (i, j) \text{ được kết nối} \\
@@ -57,7 +57,7 @@ v(i, j) = \begin{cases}
 ```math
 p(i, j) = \begin{cases}
   1 & \text{nếu điểm } (i, j) \text{ được kết nối} \\
-  0 & \text{được kết nối }
+  0 & \text{ngược lại}
 \end{cases}
 ```
 
@@ -70,7 +70,7 @@ h(i, j) + h(i + 1, j) + v(i, j) + v(i, j + 1) = L(i, j), \\ \forall (i, j) \in F
 
 - Các điểm phải nối với nhau thành một chu trình khép kín, không chồng chéo, rẽ nhánh.
 
-  Để mô hình hóa điều kiện này một các trực tiếp là một điều không hề dễ dàng, vì vậy
+  Để mô hình hóa điều kiện này một cách trực tiếp là một điều không hề dễ dàng, vì vậy
 ở đây ta sẽ mô hình hóa một phần của điều kiện và sử dụng một thuật toán được nêu ở mục [2.4](/blog/logic-puzzle-modeling-slitherlink#24-triển-khai-bài-toán)
 để giải quyết bài toán. Cụ thể, ta mô hình hóa điều kiện: "Các điểm phải nối với nhau thành
 một số chu trình tách rời, khép kín, không chồng chéo, rẽ nhánh".
@@ -82,12 +82,12 @@ một số chu trình tách rời, khép kín, không chồng chéo, rẽ nhánh
 ### 2.3. Hàm mục tiêu
 
 Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
-cần làm chỉ làm tìm ra một nghiệm chấp nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+cần làm chỉ là tìm ra một nghiệm chấp nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
 mục tiêu là một hằng số (mình hay chọn số 0).
 
 ### 2.4. Triển khai bài toán
 
-Khi giải mô hình trên, ta thu được một lời giải đã thảo mãn hầu hết các điều kiện của bài toán
+Khi giải mô hình trên, ta thu được một lời giải đã thỏa mãn hầu hết các điều kiện của bài toán
 trừ việc thay vì ta muốn có một chu trình duy nhất thì ta có thể có thêm nhiều chu trình tách rời khác.
 Để giải quyết vấn đề này ta sử dụng thuật toán sau:
 ```python
@@ -118,4 +118,4 @@ bài toán khó mô hình, ta có thể giải nhiều mô hình xấp xỉ cho 
 *Tham khảo thêm các câu đố Slitherlink và biến thể tại [Krazydad](https://krazydad.com/slitherlink//).
 Code mô hình hóa Slitherlink bằng python có tại [Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/slitherlink.py).*
 
-Happly modeling! <Twemoji emoji="clinking-beer-mugs" />
+Happy modeling! <Twemoji emoji="clinking-beer-mugs" />
