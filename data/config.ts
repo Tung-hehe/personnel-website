@@ -121,8 +121,8 @@ export const gamesConfig: {
 } = {
   title: {vi: 'Games', en: 'Games'},
   subtitle: {
-    vi: 'Những trò chơi mình đã mô hình hóa và lập trình, chơi trực tiếp ngay trên trình duyệt.',
-    en: 'Games I modeled and programmed myself, playable right in your browser.',
+    vi: 'Những trò chơi mình đã mô hình hóa và lập trình.',
+    en: 'Games I modeled and programmed myself.',
   },
   noGame: {vi: 'Không tìm thấy game nào', en: 'No games were found'},
   play: {vi: 'Chơi ngay', en: 'Play now'},
@@ -212,6 +212,48 @@ export const galaxiesConfig: PuzzleGameConfig = {
     vi: 'Vẽ đường chia bảng thành các vùng (thiên hà), mỗi vùng chứa đúng một tâm và đối xứng qua tâm đó khi xoay 180 độ.',
     en: 'Draw borders to split the grid into regions (galaxies), each containing exactly one center dot and symmetric under a 180-degree rotation about it.',
   },
+}
+
+export const slitherlinkConfig: PuzzleGameConfig = {
+  ...commonPuzzleGameConfig,
+  title: {vi: 'Slitherlink', en: 'Slitherlink'},
+  rules: {
+    vi: 'Nối các chấm để tạo thành một vòng khép kín duy nhất, sao cho số cạnh bao quanh mỗi ô đúng bằng số ghi trong ô đó.',
+    en: 'Connect the dots to form a single closed loop, so that the number of edges around each numbered cell matches the number shown.',
+  },
+}
+
+export type APuzzleADayConfig = {
+  title: LocaleDictType,
+  rules: LocaleDictType,
+  pickDate: LocaleDictType,
+  today: LocaleDictType,
+  rotate: LocaleDictType,
+  flip: LocaleDictType,
+  reset: LocaleDictType,
+  solve: LocaleDictType,
+  piecesPlaced: LocaleDictType,
+  congrats: LocaleDictType,
+  solved: LocaleDictType,
+  invalidPlacement: LocaleDictType,
+}
+
+export const aPuzzleADayConfig: APuzzleADayConfig = {
+  title: {vi: 'A Puzzle A Day', en: 'A Puzzle A Day'},
+  rules: {
+    vi: 'Xếp cả 8 mảnh ghép vào bảng lịch sao cho phủ kín mọi ô, chỉ chừa lại đúng ô tháng và ô ngày bạn chọn.',
+    en: 'Place all 8 pieces on the calendar board to cover every cell except the month and day you pick.',
+  },
+  pickDate: {vi: 'Chọn ngày', en: 'Pick a date'},
+  today: {vi: 'Hôm nay', en: 'Today'},
+  rotate: {vi: 'Xoay', en: 'Rotate'},
+  flip: {vi: 'Lật', en: 'Flip'},
+  reset: {vi: 'Chơi lại', en: 'Reset'},
+  solve: {vi: 'Xem lời giải', en: 'Solve'},
+  piecesPlaced: {vi: 'mảnh đã đặt', en: 'pieces placed'},
+  congrats: {vi: 'Chúc mừng bạn đã hoàn thành!', en: 'Congratulations, you solved it!'},
+  solved: {vi: 'Đây là một lời giải cho ngày này.', en: 'Here is one solution for this date.'},
+  invalidPlacement: {vi: 'Không thể đặt mảnh ghép ở đây', en: "Can't place the piece there"},
 }
 
 export const aboutConfig: {
