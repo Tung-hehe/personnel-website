@@ -40,16 +40,6 @@ const projectsData: Project[] = [
     href: 'https://mimpython.github.io/',
   },
   {
-    title: {vi: 'Pixel Adventure Python', en: 'Pixel Adventure Python'},
-    description: {
-      vi: 'Game 2D platform lập trình bằng python và pygame, đang trong quá trình phát triển.',
-      en: 'A 2D platform game programmed in Python and Pygame, currently under development.',
-    },
-    imgSrc: '/projects/pixel_adventure_pygame.png',
-    builtWith: ['Python', 'Pygame'],
-    href: 'https://github.com/Tung-hehe/Pixel-Adventure-Pygame',
-  },
-  {
     title: {vi: 'Love Letter Project', en: 'Love Letter Project'},
     description: {
       vi: 'Công cụ tạo thư tình cá nhân hóa với nhiều mẫu giao diện đẹp.',
