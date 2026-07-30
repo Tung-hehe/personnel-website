@@ -1,0 +1,32 @@
+---
+title: Syncing fireworks to music in Python
+date: 2026-07-30
+tags: [project, python, pygame]
+summary: Upgrading the old firework simulation to fire on the beat.
+image: /posts/firework_music_sync_python/thumbnail.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+A few days after finishing the post about my [Firework simulation in Python](https://www.tungtt.dev/blog/firework-simulation-python),
+I suddenly felt like this project was a bit too simple. So the engineer in me kicked in, and I
+started improving it by syncing the fireworks to the beat of the music.
+
+<video src="/posts/firework_music_sync_python/demo.mp4" controls loop playsInline></video>
+
+The physics behind a single firework is still the same as before, I just added an audio
+analysis step before running the simulation:
+
+- Read the audio file and extract its volume envelope to find the beats (onsets) - moments
+  where the volume rises sharply - while also splitting the spectrum into frequency bands to
+  know which band is strongest at any given moment.
+- Build a firework launch schedule from those beats: each beat maps to one or a few fireworks,
+  launched from the position of whichever band is currently strongest, with the launch time
+  worked backward so the explosion lands right on the peak of the beat.
+- Add an equalizer strip running along the bottom of the screen, flickering along with each
+  frequency band, so the visuals and the music line up.
+
+The source code has been updated at [Tung-hehe/fireworks-simulator](https://github.com/Tung-hehe/fireworks-simulator).
+
+Happy coding! <Twemoji emoji="clinking-beer-mugs" />

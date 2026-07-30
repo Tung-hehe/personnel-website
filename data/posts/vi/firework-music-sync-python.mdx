@@ -1,0 +1,32 @@
+---
+title: Đồng bộ pháo hoa theo nhạc bằng Python
+date: 2026-07-30
+tags: [project, python, pygame]
+summary: Nâng cấp bản giả lập pháo hoa cũ để bắn đúng theo nhịp nhạc
+image: /posts/firework_music_sync_python/thumbnail.png
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+Vài ngày sau khi viết xong bài về [Giả lập pháo hoa bằng Python](https://www.tungtt.dev/blog/firework-simulation-python),
+bỗng nhiên mình cảm thấy sản phẩm này hơi đơn giản. Và thế là máu kỹ sư nổi lên, mình
+bắt đầu cải tiến nó bằng việc đồng bộ phóa hoa theo beat nhạc.
+
+<video src="/posts/firework_music_sync_python/demo.mp4" controls loop playsInline></video>
+
+Phần vật lý mô tả một quả pháo hoa vẫn giữ nguyên như bản cũ, chỉ thêm một bước phân tích âm
+thanh trước khi chạy mô phỏng:
+
+- Đọc file nhạc, tách ra đường bao âm lượng để tìm những điểm nhịp (onset) - nơi âm lượng tăng
+  đột ngột, đồng thời tách phổ tần số theo từng dải để biết dải tần nào đang nổi bật tại từng
+  thời điểm.
+- Dựng một lịch bắn pháo hoa từ các điểm nhịp đó: mỗi nhịp ứng với một hoặc vài quả pháo hoa,
+  bắn từ vị trí ứng với dải tần đang mạnh nhất, và tính lùi thời gian bắn sao cho pháo phát nổ
+  đúng lúc nhịp lên đỉnh.
+- Thêm một dải equalizer chạy phía dưới màn hình, nhấp nháy theo từng dải tần, để hình ảnh và
+  âm thanh khớp nhau.
+
+Mã nguồn đã được cập nhật tại [Tung-hehe/fireworks-simulator](https://github.com/Tung-hehe/fireworks-simulator).
+
+Happy coding! <Twemoji emoji="clinking-beer-mugs" />
