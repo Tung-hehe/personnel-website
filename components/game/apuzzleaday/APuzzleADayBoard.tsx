@@ -130,18 +130,6 @@ export function APuzzleADayBoard({ month, day, locale, config }: APuzzleADayBoar
     setTimeout(() => setInvalidFlash(false), 500)
   }
 
-  function tryPlace(row: number, col: number) {
-    if (isFinished || !activePiece) return
-    const shape = getOrientedShape(activePiece, orientation.rotation, orientation.flipped)
-    const cells = placementCells(shape, row, col)
-    if (!cells || !isPlacementValid(cells, excludedCells, occupied)) {
-      flashInvalid()
-      return
-    }
-    setPlaced((prev) => [...prev, { pieceId: activePiece.id, orientation, anchorRow: row, anchorCol: col, cells }])
-    setActivePieceId(null)
-  }
-
   function getCellFromClientPoint(x: number, y: number): number | null {
     const el = boardGridRef.current
     if (!el) return null
@@ -317,7 +305,6 @@ export function APuzzleADayBoard({ month, day, locale, config }: APuzzleADayBoar
           >
             {Array.from({ length: BOARD_ROWS * BOARD_COLS }, (_, index) => {
               const label = boardLabels[index]
-              const row = Math.floor(index / BOARD_COLS), col = index % BOARD_COLS
               if (label.type === 'invalid') return <div key={index} />
 
               const isExcluded = excludedCells.has(index)
@@ -342,7 +329,6 @@ export function APuzzleADayBoard({ month, day, locale, config }: APuzzleADayBoar
                   key={index}
                   type="button"
                   data-cell-index={index}
-                  onClick={() => (!piece ? tryPlace(row, col) : undefined)}
                   onPointerDown={(e) => handleBoardPointerDown(e, index)}
                   disabled={isFinished}
                   className={clsx(

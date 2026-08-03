@@ -1,12 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 import binoxPuzzles from '@/data/games/binoxPuzzles'
 import { LocaleType, binoxConfig } from '@/data/config'
-import { GridPuzzleBoard } from './GridPuzzleBoard'
+import { BoardLoading } from '@/components/game/BoardLoading'
 import { GridLevelSelect } from './GridLevelSelect'
 import { binoxDef } from './gridGameDefs'
+
+const GridPuzzleBoard = dynamic(
+  () => import('./GridPuzzleBoard').then((m) => m.GridPuzzleBoard),
+  { loading: () => <BoardLoading />, ssr: false },
+)
 
 const STORAGE_KEY = 'binox-completed-levels'
 
@@ -21,6 +27,12 @@ export function BinoxGame({ locale }: { locale: LocaleType }) {
     } catch {
       // localStorage unavailable, ignore
     }
+  }, [])
+
+  // Warm the Board chunk while the player is still browsing levels, so
+  // selecting one doesn't add a network round trip on top of rendering it.
+  useEffect(() => {
+    import('./GridPuzzleBoard')
   }, [])
 
   function markCompleted(id: string) {

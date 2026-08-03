@@ -1,11 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 import slitherlinkPuzzles from '@/data/games/slitherlinkPuzzles'
 import { LocaleType, slitherlinkConfig } from '@/data/config'
-import { SlitherlinkBoard } from './SlitherlinkBoard'
+import { BoardLoading } from '@/components/game/BoardLoading'
 import { SlitherlinkLevelSelect } from './SlitherlinkLevelSelect'
+
+const SlitherlinkBoard = dynamic(
+  () => import('./SlitherlinkBoard').then((m) => m.SlitherlinkBoard),
+  { loading: () => <BoardLoading />, ssr: false },
+)
 
 const STORAGE_KEY = 'slitherlink-completed-levels'
 
@@ -20,6 +26,12 @@ export function SlitherlinkGame({ locale }: { locale: LocaleType }) {
     } catch {
       // localStorage unavailable, ignore
     }
+  }, [])
+
+  // Warm the Board chunk while the player is still browsing levels, so
+  // selecting one doesn't add a network round trip on top of rendering it.
+  useEffect(() => {
+    import('./SlitherlinkBoard')
   }, [])
 
   function markCompleted(id: string) {

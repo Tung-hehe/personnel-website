@@ -223,6 +223,36 @@ export const slitherlinkConfig: PuzzleGameConfig = {
   },
 }
 
+export const skyscraperConfig: PuzzleGameConfig = {
+  ...commonPuzzleGameConfig,
+  title: {vi: 'Skyscraper', en: 'Skyscraper'},
+  rules: {
+    vi: 'Điền chiều cao 1-N vào mỗi ô sao cho mỗi hàng/cột có đủ các chiều cao, mỗi giá trị đúng một lần, và số tòa nhà nhìn thấy từ mỗi gợi ý ở cạnh lưới là chính xác.',
+    en: 'Fill each cell with a height from 1 to N so every row/column has each height exactly once, and the number of visible buildings matches every clue around the grid.',
+  },
+}
+
+export type HauntedMirrorMazeGameConfig = PuzzleGameConfig & {
+  showSightLine: LocaleDictType,
+  directView: LocaleDictType,
+  reflectedView: LocaleDictType,
+}
+
+export const hauntedMirrorMazeConfig: HauntedMirrorMazeGameConfig = {
+  ...commonPuzzleGameConfig,
+  title: {vi: 'Haunted Mirror Maze', en: 'Haunted Mirror Maze'},
+  rules: {
+    vi: 'Điền ma cà rồng (V), bóng ma (G) hoặc thây ma (Z) vào mỗi ô còn trống. Tia nhìn bị bẻ góc 90° khi qua gương: ma cà rồng chỉ thấy được khi nhìn trực diện, bóng ma chỉ thấy được qua phản chiếu, còn thây ma luôn thấy được. Số ở cạnh lưới cho biết số lượng quái vật nhìn thấy trên tia nhìn đó.',
+    en: 'Fill every empty cell with a vampire (V), ghost (G) or zombie (Z). Sight lines bend 90° through mirrors: vampires are only visible head-on, ghosts only after reflecting, zombies always. Each clue around the grid gives the number of monsters visible along that sight line.',
+  },
+  showSightLine: {
+    vi: 'Bấm để xem tia nhìn từ đây',
+    en: 'Click to trace the sight line from here',
+  },
+  directView: {vi: 'Nhìn trực diện', en: 'Direct view'},
+  reflectedView: {vi: 'Qua phản chiếu', en: 'Reflected view'},
+}
+
 export type APuzzleADayConfig = {
   title: LocaleDictType,
   rules: LocaleDictType,

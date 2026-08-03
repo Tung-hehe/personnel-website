@@ -3,20 +3,19 @@
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-import troixPuzzles from '@/data/games/troixPuzzles'
-import { LocaleType, troixConfig } from '@/data/config'
+import skyscraperPuzzles from '@/data/games/skyscraperPuzzles'
+import { LocaleType, skyscraperConfig } from '@/data/config'
 import { BoardLoading } from '@/components/game/BoardLoading'
-import { GridLevelSelect } from './GridLevelSelect'
-import { troixDef } from './gridGameDefs'
+import { SkyscraperLevelSelect } from './SkyscraperLevelSelect'
 
-const GridPuzzleBoard = dynamic(
-  () => import('./GridPuzzleBoard').then((m) => m.GridPuzzleBoard),
+const SkyscraperBoard = dynamic(
+  () => import('./SkyscraperBoard').then((m) => m.SkyscraperBoard),
   { loading: () => <BoardLoading />, ssr: false },
 )
 
-const STORAGE_KEY = 'troix-completed-levels'
+const STORAGE_KEY = 'skyscraper-completed-levels'
 
-export function TroixGame({ locale }: { locale: LocaleType }) {
+export function SkyscraperGame({ locale }: { locale: LocaleType }) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [completed, setCompleted] = useState<string[]>([])
 
@@ -32,7 +31,7 @@ export function TroixGame({ locale }: { locale: LocaleType }) {
   // Warm the Board chunk while the player is still browsing levels, so
   // selecting one doesn't add a network round trip on top of rendering it.
   useEffect(() => {
-    import('./GridPuzzleBoard')
+    import('./SkyscraperBoard')
   }, [])
 
   function markCompleted(id: string) {
@@ -48,28 +47,25 @@ export function TroixGame({ locale }: { locale: LocaleType }) {
     })
   }
 
-  const selectedPuzzle = troixPuzzles.find((p) => p.id === selectedId) ?? null
+  const selectedPuzzle = skyscraperPuzzles.find((p) => p.id === selectedId) ?? null
 
   return (
     <div className="pt-6">
       <h1 className="mb-6 text-4xl font-extrabold leading-9 tracking-tight text-gray-100 sm:text-4xl sm:leading-10">
-        {troixConfig.title[locale]}
+        {skyscraperConfig.title[locale]}
       </h1>
       {
         selectedPuzzle
-        ? <GridPuzzleBoard
+        ? <SkyscraperBoard
             key={selectedPuzzle.id}
             puzzle={selectedPuzzle}
-            def={troixDef}
-            config={troixConfig}
             locale={locale}
             onComplete={() => markCompleted(selectedPuzzle.id)}
             onBack={() => setSelectedId(null)}
           />
-        : <GridLevelSelect
-            puzzles={troixPuzzles}
+        : <SkyscraperLevelSelect
+            puzzles={skyscraperPuzzles}
             completed={completed}
-            config={troixConfig}
             locale={locale}
             onSelect={setSelectedId}
           />

@@ -1,11 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 import starBattlePuzzles from '@/data/games/starBattlePuzzles'
 import { LocaleType, starBattleConfig } from '@/data/config'
-import { StarBattleBoard } from './StarBattleBoard'
+import { BoardLoading } from '@/components/game/BoardLoading'
 import { StarBattleLevelSelect } from './StarBattleLevelSelect'
+
+const StarBattleBoard = dynamic(
+  () => import('./StarBattleBoard').then((m) => m.StarBattleBoard),
+  { loading: () => <BoardLoading />, ssr: false },
+)
 
 const STORAGE_KEY = 'star-battle-completed-levels'
 
@@ -20,6 +26,12 @@ export function StarBattleGame({ locale }: { locale: LocaleType }) {
     } catch {
       // localStorage unavailable, ignore
     }
+  }, [])
+
+  // Warm the Board chunk while the player is still browsing levels, so
+  // selecting one doesn't add a network round trip on top of rendering it.
+  useEffect(() => {
+    import('./StarBattleBoard')
   }, [])
 
   function markCompleted(id: string) {

@@ -1,0 +1,140 @@
+---
+title: Mô hình hóa câu đố Skyscraper
+date: 2026-08-03
+series:
+  order: 8
+  title: Mô hình hóa các câu đố logic
+tags: [modeling, math, MILP, programming, python]
+summary: Mô hình hóa và giải câu đố Skyscraper bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
+image: /posts/logic_puzzle_modeling/skyscraper.svg
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Giới thiệu
+
+Skyscraper là một câu đố logic được mô tả như sau, cho một lưới $n×n$ tượng trưng cho một khu
+phố nhìn từ trên cao, người chơi cần điền vào mỗi ô chiều cao của một tòa nhà, từ $1$ đến $n$,
+thỏa mãn các điều kiện sau:
+- Mỗi hàng và mỗi cột chứa đủ các chiều cao từ $1$ đến $n$, mỗi giá trị xuất hiện đúng một lần.
+- Các số đặt ở ngoài lưới cho biết số lượng tòa nhà có thể nhìn thấy khi nhìn vào lưới từ phía đó,
+trong đó một tòa nhà được coi là nhìn thấy nếu nó cao hơn tất cả các tòa nhà khác đứng giữa nó và
+người quan sát.
+
+*Nguồn: [Conceptis Puzzles](https://www.conceptispuzzles.com/index.aspx?uri=puzzle/skyscrapers/rules)*
+
+Để dễ hình dung, hãy nhìn vào ví dụ dưới đây.
+
+![skyscraper_visibility](/posts/logic_puzzle_modeling/skyscraper_visibility.svg)
+
+Nhìn từ bên trái, tòa nhà cao $3$ được nhìn thấy (không có gì đứng trước nó), tòa nhà cao $1$ bị che
+khuất phía sau, tòa nhà cao $5$ vượt lên và được nhìn thấy, còn hai tòa còn lại ($2$ và $4$) đều thấp
+hơn $5$ nên vẫn bị che khuất - vậy có đúng $2$ tòa nhà được nhìn thấy.
+
+
+Dưới đây là ví dụ cho một câu đố Skyscraper cỡ 5×5 và lời giải.
+
+![skyscraper_example](/posts/logic_puzzle_modeling/skyscraper_example.svg)
+
+## 2. Mô hình hóa câu đố
+
+Một số ký hiệu dùng trong bài toán
+- $n$ là cỡ của lưới
+- $F$ là tập hợp các cặp $(i, j)$ biểu diễn tọa độ của các ô đã điền sẵn trên lưới
+- $V(i, j)$ là chiều cao được điền trong ô $(i, j) \in F$
+- $\mathcal{L}$ là tập hợp các đường ngắm: đọc mỗi hàng theo hai chiều trái-sang-phải và
+phải-sang-trái, cùng mỗi cột theo hai chiều trên-xuống-dưới và dưới-lên-trên, ta thu được tổng
+cộng $4n$ đường ngắm. Với một đường ngắm $L \in \mathcal{L}$, $L_p = (r_p, c_p)$ ($0 \leq p < n$)
+là ô đứng ở vị trí thứ $p$ tính từ người quan sát, do đó $L_0$ là ô gần người quan sát nhất
+- $v(L)$ là số lượng tòa nhà nhìn thấy của đường ngắm $L$
+
+### 2.1. Biến quyết định
+
+Với mỗi ô $(i, j)$ trong lưới và một chiều cao $k$, xây dựng biến $x(i, j, k)$ thỏa mãn
+```math
+x(i, j, k) = \begin{cases}
+  1 & \text{nếu ô } (i, j) \text{ có chiều cao } k \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Mỗi ô có đúng một chiều cao
+```math
+\sum\limits_{k = 1}^{n}{x(i, j, k)} = 1, \\ \forall 0 \leq i, j < n
+```
+
+- Mỗi hàng chứa đủ các chiều cao từ $1$ đến $n$, mỗi giá trị đúng một lần
+```math
+\sum\limits_{j = 0}^{n - 1}{x(i, j, k)} = 1, \\ \forall 0 \leq i < n, 1 \leq k \leq n
+```
+
+- Mỗi cột chứa đủ các chiều cao từ $1$ đến $n$, mỗi giá trị đúng một lần
+```math
+\sum\limits_{i = 0}^{n - 1}{x(i, j, k)} = 1, \\ \forall 0 \leq j < n, 1 \leq k \leq n
+```
+
+- Các ô đã điền sẵn
+```math
+x(i, j, V(i, j)) = 1, \\ \forall (i, j) \in F
+```
+
+- Số lượng tòa nhà nhìn thấy trên mỗi đường ngắm phải đúng bằng yêu cầu.
+
+  Nhìn dọc theo một đường ngắm $L$ từ phía người quan sát, một tòa nhà được coi là nhìn thấy
+  nếu nó cao hơn mọi tòa nhà đứng giữa nó và người quan sát. Với mỗi đường ngắm $L \in \mathcal{L}$,
+  vị trí $0 \leq p < n$ và chiều cao $1 \leq k \leq n$, ta xây dựng thêm biến trung gian
+  $z_L(p, k)$ thỏa mãn
+```math
+z_L(p, k) = \begin{cases}
+  1 & \text{nếu tòa nhà tại } L_p \text{ có chiều cao } k \text{ và không có tòa nhà nào tại } L_0, \ldots, L_{p - 1} \text{ cao hơn } k \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+  Gọi
+```math
+T_L(p, k) = \sum\limits_{q = 0}^{p - 1}{\sum\limits_{k' = k + 1}^{n}{x(r_q, c_q, k')}}
+```
+  là số tòa nhà đứng giữa người quan sát và vị trí $p$ trên đường ngắm $L$ mà cao hơn $k$ (tổng
+  này đơn giản bằng $0$ khi $p = 0$, vì không có tòa nhà nào đứng trước tòa nhà đầu tiên). Bằng
+  [phương pháp hình học](/blog/modeling-tips-trick#2-m%C3%B4-h%C3%ACnh-h%C3%B3a-r%C3%A0ng-bu%E1%BB%99c-phi-tuy%E1%BA%BFn-b%E1%BA%B1ng-h%C3%ACnh-h%E1%BB%8Dc)
+  ta có thể biểu diễn biến $z_L(p, k)$ thông qua các biến $x$ và $T_L(p, k)$ bằng các điều kiện sau
+```math
+\begin{cases}
+  T_L(p, k) + p \cdot z_L(p, k) \leq p \\
+  x(r_p, c_p, k) - z_L(p, k) \geq 0 \\
+  x(r_p, c_p, k) - T_L(p, k) - z_L(p, k) \leq 0
+\end{cases}
+\\ \forall L \in \mathcal{L}, 0 \leq p < n, 1 \leq k \leq n
+```
+  Chú ý là ta không cần coi tòa nhà gần nhất hay tòa nhà cao nhất là hai trường hợp đặc biệt.
+  Khi $p = 0$, $T_L(0, k) = 0$ với mọi $k$, nên các điều kiện trên rút gọn thành
+  $z_L(0, k) = x(r_0, c_0, k)$: tòa nhà gần nhất luôn được nhìn thấy, bất kể chiều cao của nó
+  là bao nhiêu. Tương tự, khi $k = n$, $T_L(p, n) = 0$ với mọi $p$, vì không có tòa nhà nào cao
+  hơn $n$, nên $z_L(p, n) = x(r_p, c_p, n)$: tòa nhà cao nhất luôn được nhìn thấy, dù nó đứng ở
+  đâu. Cả hai trường hợp biên này tự động đúng theo công thức chung, ta không cần thêm gì cả.
+
+  Cuối cùng, yêu cầu về số tòa nhà cần được nhìn thấy của đường ngắm $L$ được thỏa mãn bằng điều kiện
+```math
+\sum\limits_{p = 0}^{n - 1}{\sum\limits_{k = 1}^{n}{z_L(p, k)}} = v(L), \\ \forall L \in \mathcal{L}
+```
+
+### 2.3. Hàm mục tiêu
+
+Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
+cần làm chỉ là tìm ra một nghiệm chấp nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+mục tiêu là một hằng số (mình hay chọn số 0).
+
+## 3. Kết luận
+
+Điểm nhấn của câu đố này nằm ở việc mô hình hóa điều kiện về số tòa nhà nhìn thấy trên 1 đường ngắm.
+Nhìn qua thì khá đơn giản nhưng lại rất phức tạp khi ta phải tạo thêm cả một hệ biến và điều kiện
+trung gian để giải quyết.
+
+*Tham khảo thêm các câu đố Skyscraper và biến thể tại [Krazydad](https://krazydad.com/skyscraper/).
+Code mô hình hóa Skyscraper bằng python có tại
+[Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/skyscraper.py).*
+
+Happy modeling! <Twemoji emoji="clinking-beer-mugs" />

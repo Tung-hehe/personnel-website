@@ -122,7 +122,9 @@ export function GalaxiesBoard({ puzzle, locale, config, onComplete, onBack }: Ga
     setShowNoConflicts(wrong.size === 0)
   }
 
-  const template = Array.from({ length: trackCount }, (_, i) => (i % 2 === 0 ? '1fr' : '18px')).join(' ')
+  const innerTemplate = Array.from({ length: trackCount }, (_, i) => (i % 2 === 0 ? '1fr' : '18px')).join(' ')
+  const template = `18px ${innerTemplate} 18px`
+  const outerTrackCount = trackCount + 2
 
   return (
     <div className="pb-10">
@@ -154,12 +156,42 @@ export function GalaxiesBoard({ puzzle, locale, config, onComplete, onBack }: Ga
 
       <div className="mx-auto w-full max-w-lg rounded-2xl border border-gray-700 bg-primary-dark/20 p-3 shadow-inner shadow-black/20 sm:p-4">
         <div
-          className="grid overflow-visible rounded-lg border-2 border-gray-500"
+          className="grid overflow-visible"
           style={{ gridTemplateColumns: template, gridTemplateRows: template }}
         >
-          {Array.from({ length: trackCount * trackCount }, (_, i) => {
-            const trackRow = Math.floor(i / trackCount)
-            const trackCol = i % trackCount
+          {Array.from({ length: outerTrackCount * outerTrackCount }, (_, i) => {
+            const outerRow = Math.floor(i / outerTrackCount)
+            const outerCol = i % outerTrackCount
+            const isTopEdge = outerRow === 0
+            const isBottomEdge = outerRow === outerTrackCount - 1
+            const isLeftEdge = outerCol === 0
+            const isRightEdge = outerCol === outerTrackCount - 1
+
+            if (isTopEdge || isBottomEdge || isLeftEdge || isRightEdge) {
+              if ((isTopEdge || isBottomEdge) && (isLeftEdge || isRightEdge)) {
+                return (
+                  <div key={i} className="relative flex h-full w-full items-center justify-center">
+                    <span className="absolute h-1 w-full rounded-full bg-gray-100" />
+                    <span className="absolute h-full w-1 rounded-full bg-gray-100" />
+                  </div>
+                )
+              }
+              if (isTopEdge || isBottomEdge) {
+                return (
+                  <div key={i} className="relative flex h-full w-full items-center justify-center">
+                    <span className="h-1 w-full rounded-full bg-gray-100" />
+                  </div>
+                )
+              }
+              return (
+                <div key={i} className="relative flex h-full w-full items-center justify-center">
+                  <span className="h-full w-1 rounded-full bg-gray-100" />
+                </div>
+              )
+            }
+
+            const trackRow = outerRow - 1
+            const trackCol = outerCol - 1
             const rowIsCell = trackRow % 2 === 0
             const colIsCell = trackCol % 2 === 0
             const hasCenter = centerAt.has(`${trackRow},${trackCol}`)

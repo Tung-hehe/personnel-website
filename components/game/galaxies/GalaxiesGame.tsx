@@ -1,11 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 import galaxiesPuzzles from '@/data/games/galaxiesPuzzles'
 import { LocaleType, galaxiesConfig } from '@/data/config'
-import { GalaxiesBoard } from './GalaxiesBoard'
+import { BoardLoading } from '@/components/game/BoardLoading'
 import { GalaxiesLevelSelect } from './GalaxiesLevelSelect'
+
+const GalaxiesBoard = dynamic(
+  () => import('./GalaxiesBoard').then((m) => m.GalaxiesBoard),
+  { loading: () => <BoardLoading />, ssr: false },
+)
 
 const STORAGE_KEY = 'galaxies-completed-levels'
 
@@ -20,6 +26,12 @@ export function GalaxiesGame({ locale }: { locale: LocaleType }) {
     } catch {
       // localStorage unavailable, ignore
     }
+  }, [])
+
+  // Warm the Board chunk while the player is still browsing levels, so
+  // selecting one doesn't add a network round trip on top of rendering it.
+  useEffect(() => {
+    import('./GalaxiesBoard')
   }, [])
 
   function markCompleted(id: string) {

@@ -1,0 +1,144 @@
+---
+title: Mô hình hóa câu đố Haunted Mirror Maze
+date: 2026-08-03
+series:
+  order: 9
+  title: Mô hình hóa các câu đố logic
+tags: [modeling, math, MILP, programming, python]
+summary: Mô hình hóa và giải câu đố Haunted Mirror Maze bằng phương pháp tối ưu tuyến tính hỗn hợp nguyên.
+image: /posts/logic_puzzle_modeling/haunted_mirror_maze.svg
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Giới thiệu
+
+Haunted Mirror Maze (còn được gọi là Undead) là một câu đố logic được mô tả như sau, cho một
+lưới cỡ $n_R×n_C$ trong đó một số ô đã có sẵn một tấm gương chéo, người chơi cần điền vào mỗi ô
+còn lại một trong ba loại quái vật: ma cà rồng ($V$), bóng ma ($G$), hoặc thây ma ($Z$), thỏa mãn
+các điều kiện sau:
+- Các con số ngoài lưới cho biết số lượng quái vật nhìn thấy được khi nhìn vào lưới từ điểm đó.
+Một tia nhìn đi thẳng và bị bẻ góc $90°$ mỗi khi đi qua một ô có gương, cho tới khi ra khỏi lưới.
+
+- Ma cà rồng chỉ nhìn thấy được khi nhìn trực diện, trước khi tia nhìn bị bẻ qua bất kỳ gương
+nào. Bóng ma thì ngược lại, chỉ nhìn thấy được sau khi tia nhìn đã bị bẻ qua ít nhất một gương.
+Thây ma thì luôn nhìn thấy được, dù nhìn trực diện hay qua phản chiếu.
+
+- Một số câu đố  điền sẵn một vài ô với một loại quái vật cố định.
+- Một số câu đố còn cho biết tổng số ma cà rồng, bóng ma, và thây ma ẩn trong mê cung.
+
+*Nguồn: [Bộ sưu tập câu đố của Simon Tatham](https://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/undead.html)*
+
+Để dễ hình dung hơn về logic của một tia nhìn, hãy xem xét ví dụ sau.
+
+![haunted_mirror_maze_visibility](/posts/logic_puzzle_modeling/haunted_mirror_maze_visibility.svg)
+
+Nhìn từ bên trái, tia nhìn lần lượt đi qua một ma cà rồng (nhìn thấy, vì chưa bị bẻ qua gương nào),
+một bóng ma (không thể nhìn thấy, vì chưa qua phản chiếu), và một thây ma (luôn nhìn thấy được),
+rồi bị bẻ góc $90°$ khi gặp gương. Từ đó trở đi, mọi thứ tia nhìn đi qua đều tính là phản chiếu:
+ma cà rồng giờ không thể nhìn thấy, còn bóng ma và thây ma đều nhìn thấy được. Tổng cộng có $4$ quái
+vật được nhìn thấy.
+
+Dưới đây là ví dụ cho một câu đố Haunted Mirror Maze cỡ 6×6 và lời giải.
+
+![haunted_mirror_maze_example](/posts/logic_puzzle_modeling/haunted_mirror_maze_example.svg)
+
+## 2. Mô hình hóa câu đố
+
+Một số ký hiệu dùng trong bài toán
+- $n_R$ là số hàng của lưới
+- $n_C$ là số cột của lưới
+- $M$ là tập hợp các ô $(i, j)$ đã có sẵn gương
+- $\mathcal{L}$ là tập hợp các tia nhìn. Với một tia nhìn $L \in \mathcal{L}$, gọi $H_L$ là tập hợp
+các ô mà tia nhìn đi qua trước khi bị bẻ qua tấm gương đầu tiên, và $R_L$ là tập hợp các ô mà tia nhìn
+đi qua sau đó, khi đã bị bẻ qua ít nhất một gương. Cả hai tập hợp đều không bao gồm các ô chứa gương
+- $v(L)$ là số lượng quái vật nhìn thấy của tia nhìn $L$
+- $n_V$, $n_G$, $n_Z$ lần lượt là tổng số ma cà rồng, bóng ma, và thây ma ẩn trong mê cung (nếu có)
+- $F$ là tập hợp các cặp $(i, j)$ biểu diễn tọa độ của các ô đã điền sẵn trên lưới
+- $V(i, j)$ là loại quái vật được điền trong ô $(i, j) \in F$
+
+### 2.1. Biến quyết định
+
+Với mỗi ô $(i, j)$ trong lưới, xây dựng các biến $v(i, j)$, $g(i, j)$, $z(i, j)$ thỏa mãn
+```math
+v(i, j) = \begin{cases}
+  1 & \text{nếu ô } (i, j) \text{ chứa ma cà rồng} \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+```math
+g(i, j) = \begin{cases}
+  1 & \text{nếu ô } (i, j) \text{ chứa bóng ma} \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+```math
+z(i, j) = \begin{cases}
+  1 & \text{nếu ô } (i, j) \text{ chứa thây ma} \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+### 2.2. Các ràng buộc
+
+- Các ô chứa gương thì không chứa quái vật
+```math
+\begin{cases}
+  v(i, j) = 0 \\
+  g(i, j) = 0 \\
+  z(i, j) = 0
+\end{cases}
+\\ \forall (i, j) \in M
+```
+
+- Mọi ô còn lại chứa đúng một quái vật
+```math
+v(i, j) + g(i, j) + z(i, j) = 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C, (i, j) \notin M
+```
+
+- Các ô đã điền sẵn
+```math
+\begin{cases}
+  v(i, j) = 1, \text{ nếu } V(i, j) \text{ là ma cà rồng} \\
+  g(i, j) = 1, \text{ nếu } V(i, j) \text{ là bóng ma} \\
+  z(i, j) = 1, \text{ nếu } V(i, j) \text{ là thây ma}
+\end{cases}
+\\ \forall (i, j) \in F
+```
+
+- Tổng số lượng mỗi loại quái vật (nếu có)
+```math
+\sum\limits_{0 \leq i < n_R, 0 \leq j < n_C}{v(i, j)} = n_V, \quad
+\sum\limits_{0 \leq i < n_R, 0 \leq j < n_C}{g(i, j)} = n_G, \quad
+\sum\limits_{0 \leq i < n_R, 0 \leq j < n_C}{z(i, j)} = n_Z
+```
+
+- Số lượng quái vật nhìn thấy trên mỗi tia nhìn phải đúng bằng gợi ý.
+
+  Vì ma cà rồng chỉ nhìn thấy được khi nhìn trực diện, bóng ma chỉ nhìn thấy được khi đã qua
+  phản chiếu, còn thây ma thì luôn nhìn thấy được, nên điều kiện này đơn giản là
+```math
+\sum\limits_{(i, j) \in H_L}{\big(v(i, j) + z(i, j)\big)}
++ \sum\limits_{(i, j) \in R_L}{\big(g(i, j) + z(i, j)\big)}
+= v(L), \\ \forall L \in \mathcal{L}
+```
+
+### 2.3. Hàm mục tiêu
+
+Bài toán này không có hàm mục tiêu, bởi vì ta không cần tối thiểu hóa hay tối đa hóa gì cả, việc
+cần làm chỉ là tìm ra một nghiệm chấp nhận được. Về mặt kỹ thuật, khi lập trình ta có thể để hàm
+mục tiêu là một hằng số (mình hay chọn số 0).
+
+## 3. Kết luận
+
+Đây là một câu đố có ý tưởng khá thú vị, tuy nhiên đây không phải là một câu đố khó. Các ràng buộc
+được biểu diễn khá trực diện và dễ hiểu.
+
+*Tham khảo thêm các câu đố Haunted Mirror Maze và biến thể tại [Krazydad](https://krazydad.com/haunted/).
+Code mô hình hóa Haunted Mirror Maze bằng python có tại
+[Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/haunted_mirror_maze.py).*
+
+Happy modeling! <Twemoji emoji="clinking-beer-mugs" />

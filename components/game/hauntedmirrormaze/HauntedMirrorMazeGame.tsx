@@ -3,20 +3,19 @@
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
-import troixPuzzles from '@/data/games/troixPuzzles'
-import { LocaleType, troixConfig } from '@/data/config'
+import hauntedMirrorMazePuzzles from '@/data/games/hauntedMirrorMazePuzzles'
+import { LocaleType, hauntedMirrorMazeConfig } from '@/data/config'
 import { BoardLoading } from '@/components/game/BoardLoading'
-import { GridLevelSelect } from './GridLevelSelect'
-import { troixDef } from './gridGameDefs'
+import { HauntedMirrorMazeLevelSelect } from './HauntedMirrorMazeLevelSelect'
 
-const GridPuzzleBoard = dynamic(
-  () => import('./GridPuzzleBoard').then((m) => m.GridPuzzleBoard),
+const HauntedMirrorMazeBoard = dynamic(
+  () => import('./HauntedMirrorMazeBoard').then((m) => m.HauntedMirrorMazeBoard),
   { loading: () => <BoardLoading />, ssr: false },
 )
 
-const STORAGE_KEY = 'troix-completed-levels'
+const STORAGE_KEY = 'haunted-mirror-maze-completed-levels'
 
-export function TroixGame({ locale }: { locale: LocaleType }) {
+export function HauntedMirrorMazeGame({ locale }: { locale: LocaleType }) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [completed, setCompleted] = useState<string[]>([])
 
@@ -32,7 +31,7 @@ export function TroixGame({ locale }: { locale: LocaleType }) {
   // Warm the Board chunk while the player is still browsing levels, so
   // selecting one doesn't add a network round trip on top of rendering it.
   useEffect(() => {
-    import('./GridPuzzleBoard')
+    import('./HauntedMirrorMazeBoard')
   }, [])
 
   function markCompleted(id: string) {
@@ -48,28 +47,25 @@ export function TroixGame({ locale }: { locale: LocaleType }) {
     })
   }
 
-  const selectedPuzzle = troixPuzzles.find((p) => p.id === selectedId) ?? null
+  const selectedPuzzle = hauntedMirrorMazePuzzles.find((p) => p.id === selectedId) ?? null
 
   return (
     <div className="pt-6">
       <h1 className="mb-6 text-4xl font-extrabold leading-9 tracking-tight text-gray-100 sm:text-4xl sm:leading-10">
-        {troixConfig.title[locale]}
+        {hauntedMirrorMazeConfig.title[locale]}
       </h1>
       {
         selectedPuzzle
-        ? <GridPuzzleBoard
+        ? <HauntedMirrorMazeBoard
             key={selectedPuzzle.id}
             puzzle={selectedPuzzle}
-            def={troixDef}
-            config={troixConfig}
             locale={locale}
             onComplete={() => markCompleted(selectedPuzzle.id)}
             onBack={() => setSelectedId(null)}
           />
-        : <GridLevelSelect
-            puzzles={troixPuzzles}
+        : <HauntedMirrorMazeLevelSelect
+            puzzles={hauntedMirrorMazePuzzles}
             completed={completed}
-            config={troixConfig}
             locale={locale}
             onSelect={setSelectedId}
           />

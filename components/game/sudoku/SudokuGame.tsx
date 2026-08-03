@@ -1,11 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 import sudokuPuzzles from '@/data/games/sudokuPuzzles'
 import { LocaleType, sudokuConfig } from '@/data/config'
-import { SudokuBoard } from './SudokuBoard'
+import { BoardLoading } from '@/components/game/BoardLoading'
 import { SudokuLevelSelect } from './SudokuLevelSelect'
+
+const SudokuBoard = dynamic(
+  () => import('./SudokuBoard').then((m) => m.SudokuBoard),
+  { loading: () => <BoardLoading />, ssr: false },
+)
 
 const STORAGE_KEY = 'sudoku-completed-levels'
 
@@ -20,6 +26,12 @@ export function SudokuGame({ locale }: { locale: LocaleType }) {
     } catch {
       // localStorage unavailable, ignore
     }
+  }, [])
+
+  // Warm the Board chunk while the player is still browsing levels, so
+  // selecting one doesn't add a network round trip on top of rendering it.
+  useEffect(() => {
+    import('./SudokuBoard')
   }, [])
 
   function markCompleted(id: string) {

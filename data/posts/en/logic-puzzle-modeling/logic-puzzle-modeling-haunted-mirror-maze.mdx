@@ -1,0 +1,145 @@
+---
+title: Modeling Haunted Mirror Maze puzzle
+date: 2026-08-03
+series:
+  order: 9
+  title: Modeling logic puzzles
+tags: [modeling, math, MILP, programming, python]
+summary: Modeling and solving Haunted Mirror Maze puzzle using mixed-integer linear programming.
+image: /posts/logic_puzzle_modeling/haunted_mirror_maze.svg
+authors: [default]
+---
+
+import { Twemoji } from '@/components/common/Twemoji.tsx'
+
+## 1. Introduction
+
+Haunted Mirror Maze (also known as Undead) is a logic puzzle described as follows: given an
+$n_R×n_C$ grid where some cells already contain a diagonal mirror, the player needs to fill
+every remaining cell with one of three monsters, a vampire ($V$), a ghost ($G$), or a zombie
+($Z$), satisfying the following conditions:
+- Numbers outside the grid give the number of monsters visible when looking into the grid from
+that point. A line of sight travels in a straight line and bounces $90°$ off every mirror cell
+it passes through, until it exits the grid.
+- A vampire is only visible head-on, before the line of sight has bounced off any mirror.
+A ghost is the opposite, only visible after the line of sight has bounced off at least one
+mirror. A zombie is always visible, whether head-on or reflected.
+- Some puzzles pre-fill a few cells with a fixed monster.
+- Some puzzles also give the total number of vampires, ghosts, and zombies hidden in the maze.
+
+*Source: [Simon Tatham's Portable Puzzle Collection](https://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/undead.html)*
+
+To better picture the logic of a line of sight, consider the following example.
+
+![haunted_mirror_maze_visibility](/posts/logic_puzzle_modeling/haunted_mirror_maze_visibility.svg)
+
+Looking from the left, the line of sight passes through a vampire (visible, since nothing has
+bounced off a mirror yet), a ghost (not visible, since it hasn't been reflected yet), and a
+zombie (always visible), then bounces $90°$ when it meets a mirror. From that point on,
+everything the line of sight reaches counts as reflected: the vampire is now not visible, while
+the ghost and the zombie are both visible. In total, $4$ monsters are visible.
+
+Below is an example of a 6×6 Haunted Mirror Maze puzzle and its solution.
+
+![haunted_mirror_maze_example](/posts/logic_puzzle_modeling/haunted_mirror_maze_example.svg)
+
+## 2. Modeling the puzzle
+
+Some symbols used in this problem
+- $n_R$ is the number of rows in the grid
+- $n_C$ is the number of columns in the grid
+- $M$ is the set of cells $(i, j)$ that already contain a mirror
+- $\mathcal{L}$ is the set of sight lines. For a sight line $L \in \mathcal{L}$, let $H_L$ be the
+set of cells the line of sight passes through before bouncing off its first mirror, and $R_L$
+be the set of cells it passes through after that, once it has bounced off at least one mirror.
+Both sets exclude the mirror cells themselves
+- $v(L)$ is the number of monsters visible for sight line $L$
+- $n_V$, $n_G$, $n_Z$ are respectively the total number of vampires, ghosts, and zombies hidden
+in the maze (if given)
+- $F$ is the set of pairs $(i, j)$ representing the coordinates of the pre-filled cells in the grid
+- $V(i, j)$ is the monster filled in cell $(i, j) \in F$
+
+### 2.1. Decision variables
+
+For each cell $(i, j)$ in the grid, we define variables $v(i, j)$, $g(i, j)$, $z(i, j)$ such that
+```math
+v(i, j) = \begin{cases}
+  1 & \text{if cell } (i, j) \text{ contains a vampire} \\
+  0 & \text{otherwise}
+\end{cases}
+```
+
+```math
+g(i, j) = \begin{cases}
+  1 & \text{if cell } (i, j) \text{ contains a ghost} \\
+  0 & \text{otherwise}
+\end{cases}
+```
+
+```math
+z(i, j) = \begin{cases}
+  1 & \text{if cell } (i, j) \text{ contains a zombie} \\
+  0 & \text{otherwise}
+\end{cases}
+```
+
+### 2.2. Constraints
+
+- Mirror cells contain no monster
+```math
+\begin{cases}
+  v(i, j) = 0 \\
+  g(i, j) = 0 \\
+  z(i, j) = 0
+\end{cases}
+\\ \forall (i, j) \in M
+```
+
+- Every other cell contains exactly one monster
+```math
+v(i, j) + g(i, j) + z(i, j) = 1, \\ \forall 0 \leq i < n_R, 0 \leq j < n_C, (i, j) \notin M
+```
+
+- Pre-filled cells
+```math
+\begin{cases}
+  v(i, j) = 1, \text{ if } V(i, j) \text{ is a vampire} \\
+  g(i, j) = 1, \text{ if } V(i, j) \text{ is a ghost} \\
+  z(i, j) = 1, \text{ if } V(i, j) \text{ is a zombie}
+\end{cases}
+\\ \forall (i, j) \in F
+```
+
+- Total number of each monster (if given)
+```math
+\sum\limits_{0 \leq i < n_R, 0 \leq j < n_C}{v(i, j)} = n_V, \quad
+\sum\limits_{0 \leq i < n_R, 0 \leq j < n_C}{g(i, j)} = n_G, \quad
+\sum\limits_{0 \leq i < n_R, 0 \leq j < n_C}{z(i, j)} = n_Z
+```
+
+- The number of monsters visible along each sight line matches its clue.
+
+  Since a vampire is only visible head-on, a ghost is only visible once reflected, and a
+  zombie is always visible, this condition is simply
+```math
+\sum\limits_{(i, j) \in H_L}{\big(v(i, j) + z(i, j)\big)}
++ \sum\limits_{(i, j) \in R_L}{\big(g(i, j) + z(i, j)\big)}
+= v(L), \\ \forall L \in \mathcal{L}
+```
+
+### 2.3. Objective function
+
+This problem does not have an objective function, as we are not aiming to minimize or maximize
+anything, all we need is to find a feasible solution. Technically, when programming, we can set
+the objective function to a constant (I often choose 0).
+
+## 3. Conclusion
+
+This is a puzzle with a fairly interesting idea, but it isn't really a hard one. The constraints
+are expressed quite directly and are easy to follow.
+
+*For more Haunted Mirror Maze puzzles and variations, please refer to [Krazydad](https://krazydad.com/haunted/).
+The Python code for Haunted Mirror Maze modeling is available at
+[Tung-hehe](https://github.com/Tung-hehe/logic-puzzles-solver/blob/main/src/puzzles/haunted_mirror_maze.py).*
+
+Happy modeling! <Twemoji emoji="clinking-beer-mugs" />
