@@ -127,3 +127,9 @@ h6:hover .anchor {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
+
+/* Typed.js blinking cursor on the home page bio line */
+.typed-cursor {
+  color: #FDE68A;
+  font-weight: 700;
+}

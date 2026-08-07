@@ -16,7 +16,7 @@ import { LocaleType } from "@/data/config";
 const font = Nunito({weight: "700", subsets: ['vietnamese']});
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteMetadata.siteUrl),
+  ...(siteMetadata.siteUrl ? { metadataBase: new URL(siteMetadata.siteUrl) } : {}),
   icons: {
     icon: siteMetadata.siteLogo,
   },

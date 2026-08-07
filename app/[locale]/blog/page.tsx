@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
 import { allPosts } from 'contentlayer/generated'
-import { dateSortDesc } from '@/utils/date'
+import { sortPosts } from '@/utils/date'
 import { BlogsLayout } from '@/components/blog/BlogsLayout'
 
 import { generatePageSeo } from '@/utils/seo'
@@ -13,7 +13,7 @@ export const generateMetadata = ({ params }: { params: { locale: LocaleType } })
 }
 
 export default function Page({ params }: { params: { locale: LocaleType } }) {
-  const posts = allPosts.filter(x => x.locale ===  params.locale).sort((a, b) => dateSortDesc(a.date, b.date))
+  const posts = allPosts.filter(x => x.locale ===  params.locale).sort(sortPosts)
 
   return (
     <Suspense>

@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
 import { allPosts } from 'contentlayer/generated'
-import { dateSortDesc } from '@/utils/date'
+import { sortPosts } from '@/utils/date'
 import { BlogsLayout } from '@/components/blog/BlogsLayout'
 
 import { generatePageSeo } from '@/utils/seo'
@@ -20,7 +20,7 @@ export default function Page({ params }: { params: { tag: string, locale: Locale
       const tags = post.tags.map(tag => kebabCase(tag))
       return tags.includes(kebabCase(params.tag)) && post.locale ===  params.locale
     }
-  ).sort((a, b) => dateSortDesc(a.date, b.date))
+  ).sort(sortPosts)
   return (
     <Suspense>
       <BlogsLayout

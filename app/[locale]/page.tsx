@@ -18,14 +18,14 @@ export default function Page({ params: { locale } }: HomeProps) {
           <div className="my-auto text-lg leading-7 text-gray-400">
             <div
               className="
-                bg-gradient-to-l from-blue-800 to-sky-500 mb-6 bg-clip-text
+                bg-gradient-to-r from-[#5C7AB9] via-primary to-[#A8C2FA] mb-6 bg-clip-text
                 text-4xl font-extrabold tracking-tight text-transparent
               "
             >
               <span>{homeConfig.greeting[locale]}</span>
               <Twemoji emoji="waving-hand" size="" className="ml-2"/>
             </div>
-            <h1 className="text-neutral-200 pb-2">
+            <h1 className="text-gray-100 pb-2">
               <span>{homeConfig.heading[locale]}</span>
               <span className="absolute ml-1.5 inline-flex pt-[3px]">
                 <Twemoji emoji="winking-face"/>

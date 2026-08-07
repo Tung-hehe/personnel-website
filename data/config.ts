@@ -35,9 +35,9 @@ export const homeConfig: {
   greeting: LocaleDictType
   heading: LocaleDictType
   description: {[locale: LocaleType]: string[]}
-  bios: {text: LocaleDictType, emoji: null | string}[]
-  navigation: {label: string, href: string, emoji: string}[]
-  mobileNavigation: {label: LocaleDictType, href: string, emoji: string}[]
+  bios: {text: LocaleDictType, icon: null | string}[]
+  navigation: {label: string, href: string, icon: string}[]
+  mobileNavigation: {label: LocaleDictType, href: string, icon: string}[]
   happyReading: LocaleDictType
 } = {
   featuredPosts: 5,
@@ -56,27 +56,27 @@ export const homeConfig: {
     ]
   },
   bios: [
-    {text: {vi: 'Sinh năm 2001 tại Nam Định.', en: 'Born in the year 2001 in Nam Dinh.'}, emoji: null},
-    {text: {vi: 'Tốt nghiệp HUS - VNU.', en: 'Graduated from HUS - VNU.'}, emoji: 'graduation-cap'},
-    {text: {vi: 'Sinh sống và làm việc tại Hà Nội.', en: 'Living and working in Hanoi.'}, emoji: null},
-    {text: {vi: 'Thích Toán học và Lập trình.', en: 'Passionate about math and programming.'}, emoji: 'computer'},
-    {text: {vi: 'Ham học hỏi.', en: 'Passionate learner.'}, emoji: 'face-with-monocle'},
-    {text: {vi: 'Thích đọc sách.', en: 'Love to read.'}, emoji: 'books'},
-    {text: {vi: 'Thích chơi game.', en: 'Love playing video game.'}, emoji: 'video-game'},
+    {text: {vi: 'Sinh năm 2001 tại Nam Định.', en: 'Born in the year 2001 in Nam Dinh.'}, icon: null},
+    {text: {vi: 'Tốt nghiệp HUS - VNU.', en: 'Graduated from HUS - VNU.'}, icon: 'education'},
+    {text: {vi: 'Sinh sống và làm việc tại Hà Nội.', en: 'Living and working in Hanoi.'}, icon: null},
+    {text: {vi: 'Thích Toán học và Lập trình.', en: 'Passionate about math and programming.'}, icon: 'programming'},
+    {text: {vi: 'Ham học hỏi.', en: 'Passionate learner.'}, icon: 'curious'},
+    {text: {vi: 'Thích đọc sách.', en: 'Love to read.'}, icon: 'reading'},
+    {text: {vi: 'Thích chơi game.', en: 'Love playing video game.'}, icon: 'gaming'},
   ],
   navigation: [
-    {label: 'Posts', href: '/blog', emoji: 'memo'},
-    {label: 'Projects', href: '/project', emoji: 'hammer-and-wrench'},
-    {label: 'Games', href: '/game', emoji: 'joystick'},
-    {label: 'Tags', href: '/tag', emoji: 'dna'},
-    {label: 'About', href: '/about', emoji: 'face-with-monocle'},
+    {label: 'Posts', href: '/blog', icon: 'posts'},
+    {label: 'Projects', href: '/project', icon: 'projects'},
+    {label: 'Games', href: '/game', icon: 'games'},
+    {label: 'Tags', href: '/tag', icon: 'tags'},
+    {label: 'About', href: '/about', icon: 'about'},
   ],
   mobileNavigation: [
-    {label: {vi: 'Các dự án mình đã làm', en: 'What have I built?'}, href: '/project', emoji: 'hammer-and-wrench'},
-    {label: {vi: 'Các bài viết của mình', en: 'My writings'}, href: '/blog', emoji: 'memo'},
-    {label: {vi: 'Chơi những game mình đã làm', en: 'Play games I built'}, href: '/game', emoji: 'joystick'},
-    {label: {vi: 'Các chủ đề bài viết', en: 'All Post topics'}, href: '/tag', emoji: 'dna'},
-    {label: {vi: 'Nhiều hơn về mình', en: 'More about me'}, href: '/about', emoji: 'face-with-monocle'},
+    {label: {vi: 'Dự án cá nhân', en: 'What have I built?'}, href: '/project', icon: 'projects'},
+    {label: {vi: 'Các bài viết của mình', en: 'My writings'}, href: '/blog', icon: 'posts'},
+    {label: {vi: 'Chơi game mình đã làm', en: 'Play games I built'}, href: '/game', icon: 'games'},
+    {label: {vi: 'Các chủ đề bài viết', en: 'All post topics'}, href: '/tag', icon: 'tags'},
+    {label: {vi: 'Nhiều hơn về mình', en: 'More about me'}, href: '/about', icon: 'about'},
   ],
   happyReading: {vi: "Chúc bạn đọc vui vẻ!", en: 'Happy reading!'}
 }
