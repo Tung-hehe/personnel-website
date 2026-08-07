@@ -1,0 +1,285 @@
+---
+title: "Khóa luận tốt nghiệp và những câu chuyện - Phần 4: Vấn đề tràn bộ nhớ và cải thiện mô hình"
+date: 2026-08-07
+series:
+  order: 4
+  title: Khóa luận tốt nghiệp và những câu chuyện
+tags: [research, MILP, programming, python]
+summary: Vấn đề tràn bộ nhớ và các kỹ thuật cải thiện tốc độ/chất lượng nghiệm.
+image: /posts/undergraduated_thesis/thumbnail.svg
+authors: [default]
+---
+
+## 1. Vấn đề tràn bộ nhớ
+
+Mô hình hoàn chỉnh ở phần trước mô tả đúng bài toán, nhưng với dữ liệu thật của một học kỳ thì mô
+hình có từ 1.3 đến 1.5 triệu biến và 1.7 đến 2 triệu ràng buộc. Mình đã từng lập trình mô hình này
+và để cho máy tính giải, treo máy qua đêm, hôm sau ngủ dậy thấy máy tính đã chạy được hơn 8 tiếng
+sau đó bị dừng vì tràn bộ nhớ và quan trọng nhất là vẫn chưa có một nghiệm chấp nhận nào được tìm thấy.
+
+Phản ứng đầu tiên của mình khi đó là chạy lại 1 lần nữa - kết quả vẫn như vậy. Sau đó mình lục tung
+đống code xem có bug ở đâu không - không tìm thấy gì cả. Vậy là mình ngồi xem lại mô hình - không thấy
+gì, mô hình đã mô tả rất đúng bài toán, thậm chí còn được thu gọn vì đã phá tính đối xứng rồi.
+
+Cuối cùng mình nhận ra không có gì sai cả, chỉ là kích cỡ bài toán lớn quá không thể giải quyết chỉ
+trong 1 lần giải được. Và một cách giải quyết rất tự nhiên thôi, to quá không giải quyết được thì chẻ
+nhỏ ra và giải từng phần một.
+
+## 2. Chia bài toán thành hai giai đoạn
+
+Thay vì giải một mô hình khổng lồ duy nhất, bài toán được tách thành 2 giai đoạn và giải lần lượt.
+
+<svg viewBox="0 0 600 470" xmlns="http://www.w3.org/2000/svg" style={{width: '100%', maxWidth: '620px', display: 'block', margin: '2rem auto'}}>
+  <defs>
+    <marker id="arrow-split" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7AA2F7" />
+    </marker>
+  </defs>
+
+  <rect x="110" y="10" width="380" height="64" rx="12" fill="#1A2130" stroke="#64748B" strokeWidth="1.5" strokeDasharray="6 4" />
+  <text x="300" y="36" textAnchor="middle" fontSize="15" fontWeight="700" fill="#F1F5F9">Mô hình gốc</text>
+  <text x="300" y="58" textAnchor="middle" fontSize="12.5" fill="#94A3B8">quá lớn, tràn bộ nhớ</text>
+
+  <line x1="300" y1="74" x2="300" y2="110" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-split)" />
+
+  <rect x="80" y="118" width="440" height="86" rx="12" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="146" textAnchor="middle" fontSize="15" fontWeight="700" fill="#F1F5F9">Giai đoạn 1</text>
+  <text x="300" y="168" textAnchor="middle" fontSize="13" fill="#CBD5E1">Xếp thời gian cho môn thi</text>
+  <text x="300" y="188" textAnchor="middle" fontSize="12" fill="#94A3B8">biến: x(e, p), t(e', e, n)</text>
+
+  <line x1="300" y1="204" x2="300" y2="248" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-split)" />
+  <text x="316" y="230" fontSize="11.5" fill="#94A3B8">E_p: ca thi của từng môn thi</text>
+
+  <rect x="80" y="256" width="440" height="86" rx="12" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="284" textAnchor="middle" fontSize="15" fontWeight="700" fill="#F1F5F9">Giai đoạn 2</text>
+  <text x="300" y="306" textAnchor="middle" fontSize="13" fill="#CBD5E1">Xếp phòng cho môn thi</text>
+  <text x="300" y="326" textAnchor="middle" fontSize="12" fill="#94A3B8">biến: y(e, r)</text>
+
+  <line x1="300" y1="342" x2="300" y2="380" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-split)" />
+
+  <rect x="140" y="388" width="320" height="62" rx="12" fill="#7AA2F7" fillOpacity="0.16" stroke="#7AA2F7" strokeWidth="2" />
+  <text x="300" y="426" textAnchor="middle" fontSize="15.5" fontWeight="700" fill="#F1F5F9">Lịch thi hoàn chỉnh</text>
+</svg>
+
+### 2.1. Số phòng yêu cầu tối thiểu
+
+Tách giai đoạn dễ khiến giai đoạn 1 xếp thời gian xong nhưng giai đoạn 2 lại không đủ phòng để xếp.
+Để tránh việc này, định nghĩa **số phòng yêu cầu tối thiểu** $n_e$ của môn thi $e$ là số phòng ít nhất cần có để
+chắc chắn đủ chỗ cho môn đó.
+
+Ví dụ với 6 phòng thi sức chứa $10, 10, 20, 20, 30, 30$, môn thi có $60$ sinh viên cần ít nhất $4$ phòng
+($n_e = 4$), vì bất kỳ 4 phòng nào trong 6 phòng trên cũng đủ chỗ. Chỉ cần đảm bảo tại mỗi ca thi, tổng số
+phòng yêu cầu không vượt quá tổng số phòng thi tối đa $M_r$ thì giai đoạn 2 chắc chắn xếp đủ phòng.
+
+### 2.2. Mô hình xếp thời gian cho môn thi
+
+Giữ nguyên biến $x(e, p)$, $t(e', e, n)$ và hàm mục tiêu ở Phần 3, bỏ hết biến/ràng buộc liên quan đến
+phòng thi, thêm ràng buộc về số phòng yêu cầu tối thiểu
+
+<div style={{border: '1.5px solid rgba(122,162,247,0.5)', borderRadius: '14px', padding: '1.75rem 1.75rem 1.5rem', background: 'rgba(122,162,247,0.07)', margin: '1.75rem 0'}}>
+
+```math
+\begin{aligned}
+\text{minimize} \quad
+  & \alpha \sum \limits_{s \in S} \sum \limits_{\substack{e \neq e' \\ e, e' \in E_s}} \sum \limits_{n = f(k_e)}^{g(e) - 1} \gamma^{g(e) - n} \cdot t(e', e, n)
+  + \beta \sum \limits_{p \in P_l} \sum \limits_{\substack{e \in E \\ k_e \geq \sigma}} k_e \cdot q_e \cdot x(e, p) \\[0.9em]
+\text{subject to} \quad
+  & \sum \limits_{p \in P} x(e, p) = 1, \quad \forall e \in E \\[0.6em]
+  & \sum \limits_{e \in E_s} x(e, p) \leq 1, \quad \forall s \in S, p \in P \\[0.6em]
+  & x(e, p) = 0, \quad \forall e \in E, p \in P_e \\[0.6em]
+  & x(e, p) + \sum \limits_{q \in P(p, f(k_e))} x(e', q) \leq 1, \quad \forall s \in S, e \neq e' \in E_s, p \in P \\[0.6em]
+  & \sum \limits_{e \in E} n_e \cdot x(e, p) \leq M_r, \quad \forall p \in P \\[0.6em]
+  & x(e', p) + x(e, p + n) \leq 1 + t(e', e, n), \quad \forall p, p + n \in P, s \in S, e \neq e' \in E_s, f(k_e) \leq n < g(e) \\[0.6em]
+  & x(e, p) \in \{0, 1\}, \quad \forall e \in E, p \in P \\[0.6em]
+  & t(e', e, n) \in \{0, 1\}, \quad \forall s \in S, e \neq e' \in E_s, f(k_e) \leq n < g(e)
+\end{aligned}
+```
+
+</div>
+
+### 2.3. Mô hình xếp phòng cho môn thi
+
+Sau khi giải xong giai đoạn 1, với mỗi ca thi $p$ ta có tập $E_p$ các môn thi được xếp vào ca đó. Giai
+đoạn này chỉ còn cần xếp phòng, với thêm mục tiêu hạn chế tổng số phòng sử dụng (vì $n_e$ luôn $\geq$
+số phòng thật sự cần dùng)
+
+<div style={{border: '1.5px solid rgba(122,162,247,0.5)', borderRadius: '14px', padding: '1.75rem 1.75rem 1.5rem', background: 'rgba(122,162,247,0.07)', margin: '1.75rem 0'}}>
+
+```math
+\begin{aligned}
+\text{minimize} \quad & \sum \limits_{r \in R} \sum \limits_{e \in E} y(e, r) \\[0.9em]
+\text{subject to} \quad
+  & y(e, r) = 0, \quad \forall e \in E, r \in R_e \\[0.6em]
+  & \sum \limits_{r \in R} c_r \cdot y(e, r) \leq q_e, \quad \forall e \in E \\[0.6em]
+  & \sum \limits_{e \in E_p} y(e, r) \leq 1, \quad \forall r \in R, p \in P \\[0.6em]
+  & y(e, r) \in \{0, 1\}, \quad \forall e \in E, r \in R
+\end{aligned}
+```
+
+</div>
+
+### 2.4. Đánh đổi cho việc chia nhỏ
+
+Nếu để ý kỹ bạn sẽ thấy việc sử dụng "số phòng yêu cầu tối thiểu" đã khiến mô hình có một lỗ hổng, đó là
+một số môn sẽ yêu cầu quá nhiều phòng. Hãy xem lại ví dụ với 6 phòng thi sức chứa $10, 10, 20, 20, 30, 30$,
+môn thi có $60$ sinh viên. Tất nhiên với 4 phòng thi bất kỳ kiểu gì cũng xếp được môn này nhưng có thể môn này
+chỉ cần 2 phòng (30, 30) hoặc 3 phòng (10, 20, 30) thôi là đủ rồi.
+
+Mình hoàn toàn nhận thức được điều đó nhưng sau nhiều thử nghiệm với nhiều cách khác nhau mình vẫn chọn làm cách
+này vì hai lý do sau:
+
+- Số lượng phòng trong bộ dữ liệu mình làm việc là dư thừa (tức là mình có thể phân chia phòng thoải mái)
+- Mối quan tâm chính của bài toán này tại trường Đại học Khoa học Tự nhiên là các vấn đề về thời gian
+
+Sau khi đã chia nhỏ, giai đoạn 2 giải rất nhanh (dưới 1 giây), nhưng giai đoạn 1 vẫn chạy chậm và nghiệm chưa đủ
+tốt - đó là lý do cho phần tiếp theo.
+
+## 3. Cải thiện mô hình bằng tìm kiếm địa phương
+
+Ý tưởng: giải giai đoạn 1 đến khi có một **nghiệm khởi tạo** chấp nhận được, sau đó lặp lại một khung chung để cải
+thiện dần - thu hẹp không gian tìm kiếm quanh nghiệm hiện tại theo một "quy tắc riêng" và giải lại, lặp lại quá trình
+cho đến khi không tìm được nghiệm tốt hơn.
+
+<svg viewBox="0 0 620 520" xmlns="http://www.w3.org/2000/svg" style={{width: '100%', maxWidth: '620px', display: 'block', margin: '2rem auto'}}>
+  <defs>
+    <marker id="arrow-loop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7AA2F7" />
+    </marker>
+  </defs>
+
+  <rect x="150" y="10" width="300" height="56" rx="10" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="44" textAnchor="middle" fontSize="14" fontWeight="700" fill="#F1F5F9">Nghiệm hiện tại S</text>
+
+  <line x1="300" y1="66" x2="300" y2="100" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-loop)" />
+
+  <rect x="120" y="100" width="360" height="74" rx="10" fill="#1A2130" stroke="#7AA2F7" strokeOpacity="0.55" strokeWidth="1.5" strokeDasharray="6 4" />
+  <text x="300" y="128" textAnchor="middle" fontSize="13.5" fontWeight="700" fill="#F1F5F9">Thu hẹp bài toán quanh S</text>
+  <text x="300" y="150" textAnchor="middle" fontSize="11.5" fill="#94A3B8">(quy tắc riêng của từng kỹ thuật)</text>
+
+  <line x1="300" y1="174" x2="300" y2="208" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-loop)" />
+
+  <rect x="120" y="208" width="360" height="56" rx="10" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="242" textAnchor="middle" fontSize="13" fill="#F1F5F9">Giải lại (Mục 2.2), được nghiệm S'</text>
+
+  <line x1="300" y1="264" x2="300" y2="298" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-loop)" />
+
+  <polygon points="300,295 450,350 300,405 150,350" fill="#262C3B" stroke="#7AA2F7" strokeWidth="1.5" />
+  <text x="300" y="346" textAnchor="middle" fontSize="12" fill="#F1F5F9">S' tốt hơn</text>
+  <text x="300" y="362" textAnchor="middle" fontSize="12" fill="#F1F5F9">S?</text>
+
+  <text x="440" y="335" fontSize="12" fill="#94A3B8">có</text>
+  <path d="M450,350 L580,350 L580,38 L452,38" fill="none" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-loop)" />
+  <text x="515" y="26" textAnchor="middle" fontSize="11.5" fill="#94A3B8">S ← S', lặp lại</text>
+
+  <text x="310" y="425" fontSize="12" fill="#94A3B8">không</text>
+  <line x1="300" y1="405" x2="300" y2="438" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-loop)" />
+
+  <rect x="150" y="440" width="300" height="56" rx="10" fill="#7AA2F7" fillOpacity="0.16" stroke="#7AA2F7" strokeWidth="2" />
+  <text x="300" y="474" textAnchor="middle" fontSize="14" fontWeight="700" fill="#F1F5F9">Dừng, trả về nghiệm S</text>
+</svg>
+
+### 3.1. Kỹ thuật thứ nhất - thu hẹp không gian quanh mỗi môn thi
+
+Với nghiệm hiện tại, môn thi $e$ đang xếp ở ca thi $p$. Xây dựng tập $C(e, \rho)$ gồm các ca thi cách
+$p$ không quá $\rho$ ca ($\rho$ cho trước) rồi giới hạn mỗi môn thi chỉ được xếp trong tập này. Ví dụ
+$e$ ở ca $6$, $\rho = 3$ thì $C(e, 3) = \{3, ..., 9\}$. Đây chính là "quy tắc riêng" điền vào khung
+chung ở trên:
+
+<svg viewBox="0 0 600 290" xmlns="http://www.w3.org/2000/svg" style={{width: '100%', maxWidth: '600px', display: 'block', margin: '2rem auto'}}>
+  <defs>
+    <marker id="arrow-tech1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7AA2F7" />
+    </marker>
+  </defs>
+
+  <rect x="90" y="10" width="420" height="60" rx="10" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="46" textAnchor="middle" fontSize="14" fill="#F1F5F9">Môn thi e đang xếp ở ca thi p</text>
+
+  <line x1="300" y1="70" x2="300" y2="104" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-tech1)" />
+
+  <rect x="90" y="104" width="420" height="68" rx="10" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="144" textAnchor="middle" fontSize="14" fill="#F1F5F9">C(e, ρ) = các ca thi cách p không quá ρ ca</text>
+
+  <line x1="300" y1="172" x2="300" y2="206" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-tech1)" />
+
+  <rect x="70" y="206" width="460" height="68" rx="10" fill="#7AA2F7" fillOpacity="0.16" stroke="#7AA2F7" strokeWidth="2" />
+  <text x="300" y="246" textAnchor="middle" fontSize="14" fontWeight="700" fill="#F1F5F9">Giới hạn: e chỉ được xếp lại trong C(e, ρ)</text>
+</svg>
+
+### 3.2. Kỹ thuật thứ hai - cố định các môn đã "ổn"
+
+Môn thi $e$ được gọi là có thời gian ôn tập tốt nếu mọi sinh viên đăng ký $e$ đều có thời gian ôn tập
+môn $e$ lớn hơn ngưỡng $\sigma$ cho trước. "Quy tắc riêng" của kỹ thuật này là một phép phân loại cho
+từng môn thi:
+
+<svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style={{width: '100%', maxWidth: '600px', display: 'block', margin: '2rem auto'}}>
+  <defs>
+    <marker id="arrow-tech2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7AA2F7" />
+    </marker>
+  </defs>
+
+  <rect x="220" y="10" width="200" height="50" rx="10" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="320" y="40" textAnchor="middle" fontSize="14" fill="#F1F5F9">Với mỗi môn thi e</text>
+
+  <line x1="320" y1="60" x2="320" y2="94" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-tech2)" />
+
+  <polygon points="320,94 500,150 320,206 140,150" fill="#262C3B" stroke="#7AA2F7" strokeWidth="1.5" />
+  <text x="320" y="146" textAnchor="middle" fontSize="12" fill="#F1F5F9">Mọi SV đăng ký e đều có</text>
+  <text x="320" y="162" textAnchor="middle" fontSize="12" fill="#F1F5F9">thời gian ôn tập &gt; σ ca?</text>
+
+  <text x="345" y="185" fontSize="12" fill="#94A3B8">có</text>
+  <line x1="500" y1="150" x2="500" y2="234" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-tech2)" />
+
+  <text x="105" y="185" fontSize="12" fill="#94A3B8">không</text>
+  <line x1="140" y1="150" x2="140" y2="234" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-tech2)" />
+
+  <rect x="380" y="240" width="240" height="64" rx="10" fill="#7AA2F7" fillOpacity="0.16" stroke="#7AA2F7" strokeWidth="2" />
+  <text x="500" y="266" textAnchor="middle" fontSize="13" fontWeight="700" fill="#F1F5F9">Cố định e đúng vị trí</text>
+  <text x="500" y="286" textAnchor="middle" fontSize="13" fontWeight="700" fill="#F1F5F9">ca thi hiện tại trong S</text>
+
+  <rect x="20" y="240" width="240" height="64" rx="10" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="140" y="266" textAnchor="middle" fontSize="13" fill="#F1F5F9">Không ràng buộc thêm</text>
+  <text x="140" y="286" textAnchor="middle" fontSize="13" fill="#F1F5F9">(e được xếp lại tự do)</text>
+</svg>
+
+### 3.3. Thuật toán xếp lịch thi hoàn chỉnh
+
+<svg viewBox="0 0 600 410" xmlns="http://www.w3.org/2000/svg" style={{width: '100%', maxWidth: '620px', display: 'block', margin: '2rem auto'}}>
+  <defs>
+    <marker id="arrow-algo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7AA2F7" />
+    </marker>
+  </defs>
+
+  <rect x="80" y="10" width="440" height="78" rx="12" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="42" textAnchor="middle" fontSize="14.5" fontWeight="700" fill="#F1F5F9">Giải mô hình xếp thời gian (Mục 2.2)</text>
+  <text x="300" y="66" textAnchor="middle" fontSize="12.5" fill="#94A3B8">→ nghiệm khởi tạo S</text>
+
+  <line x1="300" y1="88" x2="300" y2="124" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-algo)" />
+
+  <rect x="80" y="124" width="440" height="60" rx="12" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="160" textAnchor="middle" fontSize="14" fill="#F1F5F9">Cải thiện bằng Kỹ thuật thứ nhất (Mục 3.1)</text>
+
+  <line x1="300" y1="184" x2="300" y2="220" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-algo)" />
+
+  <rect x="80" y="220" width="440" height="60" rx="12" fill="#262C3B" stroke="#7AA2F7" strokeOpacity="0.6" strokeWidth="1.5" />
+  <text x="300" y="256" textAnchor="middle" fontSize="14" fill="#F1F5F9">Cải thiện bằng Kỹ thuật thứ hai (Mục 3.2)</text>
+
+  <line x1="300" y1="280" x2="300" y2="316" stroke="#7AA2F7" strokeWidth="1.6" markerEnd="url(#arrow-algo)" />
+
+  <rect x="80" y="316" width="440" height="78" rx="12" fill="#7AA2F7" fillOpacity="0.16" stroke="#7AA2F7" strokeWidth="2" />
+  <text x="300" y="348" textAnchor="middle" fontSize="14.5" fontWeight="700" fill="#F1F5F9">Giải mô hình xếp phòng (Mục 2.3)</text>
+  <text x="300" y="372" textAnchor="middle" fontSize="12.5" fill="#94A3B8">→ lịch thi hoàn chỉnh</text>
+</svg>
+
+Toàn bộ các bài toán quy hoạch hỗn hợp nguyên ở từng bước được giải bằng [Gurobi](https://www.gurobi.com/) 10.0.
+
+## 4. Kết luận
+
+Trên đây là thuật toán cốt lõi cho nghiên cứu của bọn mình, tuy nhiên đây mới chỉ là lý thuyết trên giấy và để có thể đem
+lại kết quả tốt vẫn cần rất nhiều những kỹ thuật khác liên quan đế cấu trúc dữ liệu và lập trình. Nhưng mình sẽ không trình
+bày ở đây vì đó là phần mà Quý Anh và Quân đảm nhận. Phần sau sẽ là phần cuối của series, mình sẽ trình bày về các kết quả
+đạt được của dự án này và một chút cảm nhận cá nhân.
+
+Đọc tiếp [Phần 5](/blog/undergraduated-thesis-part-5-results-and-conclusion)

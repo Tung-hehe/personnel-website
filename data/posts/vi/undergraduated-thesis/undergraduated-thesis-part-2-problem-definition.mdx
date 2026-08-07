@@ -1,0 +1,55 @@
+---
+title: "Khóa luận tốt nghiệp và những câu chuyện - Phần 2: Định nghĩa bài toán"
+date: 2026-08-07
+series:
+  order: 2
+  title: Khóa luận tốt nghiệp và những câu chuyện
+tags: [research, MILP, programming, python]
+summary: 'Định ngĩa bài toán xếp lịch thi - những đối tượng quan tâm, ràng buộc và mục tiêu của bài toán.'
+image: /posts/undergraduated_thesis/thumbnail.svg
+authors: [default]
+---
+
+## 1. Các đối tượng quan tâm
+
+Bài toán xoay quanh 5 đối tượng chính:
+
+- **Môn thi**: mỗi môn thi có số lượng sinh viên đăng ký, thời gian thi (không quá 120 phút) và hình
+thức thi (viết, vấn đáp, trắc nghiệm, trên máy, ...) - hình thức thi sẽ quyết định môn đó được phép xếp
+vào loại phòng nào.
+- **Phòng thi**: mỗi phòng có sức chứa và loại phòng (phòng thường hoặc phòng máy) riêng.
+- **Ca thi**: mỗi ngày thi gồm 3 ca, mỗi ca dài 120 phút. Để tiện tính toán, thay vì làm việc với
+ngày/giờ cụ thể, các ca thi được đánh số liên tục từ đầu đến cuối kỳ thi - ngày đầu tiên là ca 1, 2, 3;
+ngày thứ hai là ca 4, 5, 6; cứ thế cho đến hết kỳ thi.
+- **Sinh viên**: mỗi bạn gắn với một danh sách các môn thi mình đăng ký trong kỳ.
+- **Thời gian ôn tập**: với một sinh viên, đây là số ca thi nằm giữa 2 môn thi liên tiếp của bạn đó -
+hay thời gian bạn có thể dùng để ôn bài trước khi bước vào môn tiếp theo. Ví dụ sinh viên A thi
+môn 1 vào ca 1, môn 2 vào ca 5, thì thời gian ôn tập cho môn 2 là 3 ca (ca 2, 3, 4).
+
+## 2. Ràng buộc
+
+1. Mỗi môn thi được xếp vào đúng một ca thi.
+2. Tại một ca thi, mỗi sinh viên chỉ thi tối đa một môn - hai môn của cùng một sinh viên không được
+trùng ca.
+3. Môn thi không được xếp vào ca thi không phù hợp - ví dụ môn vấn đáp có quá đông sinh viên thì không
+nên thi vào buổi chiều vì sẽ kéo dài đến tối.
+4. Với mỗi sinh viên, môn thi $k$ tín chỉ phải đảm bảo thời gian ôn tập tối thiểu $f(k)$ ca - môn càng
+nhiều tín chỉ, nội dung càng nhiều, thì càng cần nhiều thời gian để ôn thi.
+5. Môn thi không được xếp vào phòng không phù hợp với hình thức thi của nó - ví dụ thi trên máy thì
+bắt buộc phải xếp vào phòng máy.
+6. Tổng sức chứa các phòng được phân cho một môn không được nhỏ hơn số sinh viên đăng ký môn đó - đơn
+giản là phải đủ chỗ ngồi cho tất cả mọi người.
+7. Tại một ca thi, một phòng chỉ được phân cho tối đa một môn - không thể ghép 2 môn thi khác nhau vào
+chung một phòng cùng lúc.
+
+## 3. Mục tiêu bài toán
+
+Bài toán gồm 2 mục tiêu sau:
+
+- Hạn chế số lần sinh viên có ít thời gian ôn tập cho một môn thi.
+- Hạn chế xếp môn thi nhiều tín chỉ (thời gian thi dài) vào ca cuối trong ngày.
+
+Như vậy bài toán đã được định nghĩa đầy đủ, trong phần tiếp theo mình sẽ trình bày cách mô hình hóa
+bài toán này bằng tối ưu tuyến tính hỗn hợp nguyên (MILP).
+
+Đọc tiếp [Phần 3](/blog/undergraduated-thesis-part-3-milp-model)

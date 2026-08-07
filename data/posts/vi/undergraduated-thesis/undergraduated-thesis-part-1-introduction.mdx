@@ -1,0 +1,48 @@
+---
+title: "Khóa luận tốt nghiệp và những câu chuyện - Phần 1: Giới thiệu bài toán"
+date: 2026-08-07
+series:
+  order: 1
+  title: Khóa luận tốt nghiệp và những câu chuyện
+tags: [research, MILP, programming, python]
+summary: Khóa luận tốt nghiệp của mình và các câu chuyện liên quan
+image: /posts/undergraduated_thesis/thumbnail.svg
+authors: [default]
+---
+
+Vào một ngày đẹp trời tháng 8, khi mở máy tính lên làm việc, mình vô tình bấm nhầm vào thư mục
+`PersonelProject` và thấy ở trong đó có một project được modified lần cuối vào 3 năm trước. Đó chính
+là khóa luận tốt nghiệp của mình, bài nghiên cứu gắn liền với nhiều câu chuyện và dấu mốc quan trọng
+trong công việc của mình. Mở project này lên thấy những công thức và những dòng code ngây ngô của những
+ngày đó lại khiến bao nhiêu ký ức ùa về. Vậy nên mình quyết định viết series này để chia sẻ nội dung
+nghiên cứu và các câu chuyện liên quan.
+
+Đề tài của mình có tên là "Bài toán xếp lịch thi trường Đại học Khoa học Tự nhiên", thực hiện cùng 2
+người bạn [Quý Anh](https://github.com/QuyAnh2005) và [Quân Persie](https://github.com/quanpersie2001)
+dưới sự hướng dẫn của một người thầy mình rất mến mộ. Quân và Qúy Anh vốn là 2 chiến hữu thời đại học
+của mình, mỗi đứa lại có một điểm mạnh riêng và khá hợp nhau nên đã tạo thành bộ 3 "quái vật" càn quét
+rất nhiều môn học và đạt được thành tích không tệ. Khoe thêm một chút, Quý Anh là thủ khoa cả đầu vào
+và đầu ra của ngành mình năm đó, Quân thì rất xuất sắc và biết khá nhiều về công nghệ so với bạn bè
+cùng trang lứa.
+
+Đến dự án này công việc được chia theo thế mạnh của từng người như sau:
+
+    - Mình phát triển thuật toán
+    - Quý Anh phụ trách phần dữ liệu
+    - Quân phát triển về mặt công nghệ
+
+Nghe qua thì tưởng đây là một đề tài đơn giản, tuy nhiên thực tế lập lịch thi thủ công mất đến nhiều tuần,
+thậm chí là vài tháng để hoàn thành. Để tưởng tượng bài toán khó đến mức nào, hãy xem một ví dụ sau: Giả sử
+ta cần xếp lịch cho 21 môn thi trong 1 tuần, mỗi ngày có 3 ca thi, sao cho mỗi ca thi chỉ có một môn thi.
+
+Chỉ dùng một công thức đơn giản ta đã có thể tính được số lượng biến thể lịch thi có thể có là
+`51.090.942.171.709.440.000` - con số này tương đương với việc nếu 1 giây chúng ta xử lý được 1 tỷ biến thể
+thì phải mất đến 1620 năm mới có thể xử lý hết.
+
+Wow, quả là một con số bất ngờ đúng không. Đó mới chỉ là lập lịch cho một số lượng môn thi rất nhỏ trong thời
+gian ngắn thôi, còn thực tế nghiên cứu của bọn mình áp dụng cho một lịch thi kéo dài cả tháng với vài trăm môn
+thi và hàng nghìn sinh viên cộng thêm hàng tá ràng buộc phức tạp khác nữa.
+
+Cùng xem xem bọn mình đã giải quyết bài toán này như thế nào trong các bài viết tiếp theo của series này nhé.
+
+Đọc tiếp [Phần 2](/blog/undergraduated-thesis-part-2-problem-definition)

@@ -1,0 +1,210 @@
+---
+title: "Khóa luận tốt nghiệp và những câu chuyện - Phần 3: Mô hình hóa bài toán"
+date: 2026-08-07
+series:
+  order: 3
+  title: Khóa luận tốt nghiệp và những câu chuyện
+tags: [research, MILP, programming, python]
+summary: Mô hình hóa bài toán xếp lịch thi bằng tối ưu tuyến tính hỗn hợp nguyên.
+image: /posts/undergraduated_thesis/thumbnail.svg
+authors: [default]
+---
+
+## 1. Mô hình bài toán gốc
+
+### 1.1. Biến quyết định
+
+Gọi $E, P, R$ lần lượt là tập môn thi, ca thi, phòng thi.
+
+**Biến xếp ca thi.** Với mỗi môn thi $e \in E$ và ca thi $p \in P$
+
+```math
+x(e, p) = \begin{cases}
+  1 & \text{nếu môn thi } e \text{ được xếp vào ca thi } p \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+**Biến xếp phòng thi.** Với mỗi môn thi $e \in E$ và phòng thi $r \in R$
+
+```math
+y(e, r) = \begin{cases}
+  1 & \text{nếu môn thi } e \text{ được xếp vào phòng thi } r \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+**Biến liên kết ca thi - phòng thi.** Với mỗi $e \in E$, $p \in P$, $r \in R$
+
+```math
+z(e, p, r) = \begin{cases}
+  1 & \text{nếu môn thi } e \text{ được xếp vào ca thi } p \text{ và phòng thi } r \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+Biến $z$ liên hệ với $x, y$ qua $z(e, p, r) = x(e, p) \cdot y(e, r)$, tuyến tính hóa bằng
+
+```math
+\begin{cases}
+  z(e, p, r) \leq x(e, p) + y(e, r) \\
+  x(e, p) \leq z(e, p, r) \\
+  y(e, r) \leq z(e, p, r)
+\end{cases}
+\quad \forall e \in E, p \in P, r \in R
+```
+
+### 1.2. Các ràng buộc
+
+- Mỗi môn thi xếp vào đúng một ca thi
+```math
+\sum \limits_{p \in P} x(e, p) = 1, \quad \forall e \in E
+```
+- Tại một ca thi, mỗi sinh viên thi tối đa một môn ($S$: tập sinh viên, $E_s$: các môn thi của
+sinh viên $s$)
+```math
+\sum \limits_{e \in E_s} x(e, p) \leq 1, \quad \forall s \in S, p \in P
+```
+- Môn thi không xếp vào ca thi không phù hợp ($P_e$: các ca không phù hợp với môn $e$)
+```math
+x(e, p) = 0, \quad \forall e \in E, p \in P_e
+```
+- Thời gian ôn tập tối thiểu ($k_e$: số tín chỉ môn $e$, $f(k)$: thời gian ôn tối thiểu của môn $k$
+tín chỉ, $P(p, f(k_e))$: các ca đứng trước $p$ không quá $f(k_e)$ ca)
+```math
+x(e, p) + \sum \limits_{q \in P(p, f(k_e))} x(e', q) \leq 1, \quad \forall s \in S, e \neq e' \in E_s, p \in P
+```
+- Môn thi không xếp vào phòng không phù hợp ($R_e$: các phòng không phù hợp với môn $e$)
+```math
+y(e, r) = 0, \quad \forall e \in E, r \in R_e
+```
+- Đủ chỗ cho môn thi ($c_r$: sức chứa phòng $r$, $q_e$: số sinh viên đăng ký môn $e$)
+```math
+\sum \limits_{r \in R} c_r \cdot y(e, r) \leq q_e, \quad \forall e \in E
+```
+- Một phòng chỉ phân cho tối đa một môn tại một ca thi
+```math
+\sum \limits_{e \in E} z(e, p, r) \leq 1, \quad \forall r \in R, p \in P
+```
+
+### 1.3. Hàm mục tiêu
+
+Gọi $g(e)$ là thời gian ôn tập lý tưởng của môn $e$, và $t(e', e, n)$ là biến
+nhị phân thỏa mãn
+
+```math
+t(e', e, n) = \begin{cases}
+  1 & \text{nếu môn thi } e' \text{ xếp trước môn thi } e \text{ đúng } n \text{ ca} \\
+  0 & \text{ngược lại}
+\end{cases}
+```
+
+tuyến tính hóa mối quan hệ của biến này với các biến quyết định như sau
+
+```math
+x(e', p) + x(e, p + n) \leq 1 + t(e', e, n), \quad \forall p \in P, p + n \in P
+```
+
+(với mọi $s \in S$, $e \neq e' \in E_s$, $f(k_e) \leq n < g(e)$).
+
+**Thành phần 1 - hạn chế thời gian ôn tập ngắn.** Với hằng số $\gamma > 1$, mỗi lần môn $e'$ xếp
+trước môn $e$ đúng $n < g(e)$ ca, hàm phạt tăng thêm $\gamma^{g(e) - n}$ - thời gian ôn càng ngắn thì
+phạt càng nặng
+
+```math
+\text{minimize} \quad \sum \limits_{s \in S} \sum \limits_{\substack{e \neq e' \\ e, e' \in E_s}} \sum \limits_{n = f(k_e)}^{g(e) - 1} \gamma^{g(e) - n} \cdot t(e', e, n)
+```
+
+**Thành phần 2 - hạn chế môn nhiều tín chỉ vào ca cuối ngày.** Với $P_l$ là tập các ca cuối ngày,
+môn thi được coi là nhiều tín chỉ nếu $k_e \geq \sigma$
+
+```math
+\text{minimize} \quad \sum \limits_{p \in P_l} \sum \limits_{\substack{e \in E \\ k_e \geq \sigma}} k_e \cdot q_e \cdot x(e, p)
+```
+
+**Hàm mục tiêu tổng hợp.** Kết hợp 2 thành phần trên với trọng số $\alpha, \beta \geq 0$
+
+```math
+\text{minimize} \quad \alpha \sum \limits_{s \in S} \sum \limits_{\substack{e \neq e' \\ e, e' \in E_s}} \sum \limits_{n = f(k_e)}^{g(e) - 1} \gamma^{g(e) - n} \cdot t(e', e, n) + \beta \sum \limits_{p \in P_l} \sum \limits_{\substack{e \in E \\ k_e \geq \sigma}} k_e \cdot q_e \cdot x(e, p)
+```
+
+## 2. Phá tính đối xứng
+
+**Vấn đề:** Nhìn lại biến $y(e, r)$ ở trên - solver phải quyết định chính xác *phòng nào trong số $R$* được dùng
+cho môn $e$. Nhưng nếu 2 phòng $r_1, r_2$ cùng loại, cùng sức chứa thì việc dùng $r_1$ hay $r_2$ cho
+môn $e$ không khác gì nhau về mặt kết quả - đổi chỗ 2 phòng này cho nhau ta vẫn có đúng một lịch thi
+đó. Solver không biết điều đó, nó vẫn coi $k$ phòng giống hệt nhau là $k!$ phương án khác nhau và phải
+xét hết - không gian tìm kiếm phình to một cách vô nghĩa.
+
+**Giải pháp:** Thay vì hỏi "phòng nào", ta chỉ cần hỏi "bao nhiêu phòng
+của một nhóm". Gọi một **nhóm phòng** là tập các phòng cùng loại, cùng sức chứa; $G$ là tập các nhóm
+phòng, $q_g$ và $c_g$ lần lượt là số phòng và sức chứa của nhóm $g$. Thay vì $y(e, r)$, $z(e, p, r)$,
+ta dùng 2 biến nguyên không âm
+
+```math
+u(e, g) = \text{số phòng nhóm } g \text{ phân cho môn thi } e
+```
+
+```math
+v(e, p, g) = \text{số phòng nhóm } g \text{ phân cho môn thi } e \text{ vào ca thi } p
+```
+
+Như vậy, mối liên hệ giữa các biến mới là $v(e, p, g) = x(e, p) \cdot u(e, g)$, tuyến tính hóa bằng
+
+```math
+\begin{cases}
+  v(e, p, g) + q_g \leq q_g \cdot x(e, p) + u(e, g) \\
+  q_g \cdot x(e, p) \leq v(e, p, g) \\
+  u(e, g) \leq v(e, p, g)
+\end{cases}
+\quad \forall e \in E, p \in P, g \in G
+```
+
+**Viết lại ràng buộc phòng thi.** Ba ràng buộc về phòng thi ở Mục 1.2 được viết lại thành
+
+```math
+u(e, g) = 0, \quad \forall e \in E, g \in G_e
+```
+```math
+\sum \limits_{g \in G} c_g \cdot u(e, g) \leq q_e, \quad \forall e \in E
+```
+```math
+\sum \limits_{e \in E} v(e, p, g) \leq q_g, \quad \forall g \in G, p \in P
+```
+
+## 3. Mô hình hoàn chỉnh
+
+Gộp toàn bộ biến, ràng buộc và hàm mục tiêu ta có mô hình gốc của bài toán là
+
+<div style={{border: '1.5px solid rgba(122,162,247,0.5)', borderRadius: '14px', padding: '1.75rem 1.75rem 1.5rem', background: 'rgba(122,162,247,0.07)', margin: '1.75rem 0'}}>
+
+```math
+\begin{aligned}
+\text{minimize} \quad
+  & \alpha \sum \limits_{s \in S} \sum \limits_{\substack{e \neq e' \\ e, e' \in E_s}} \sum \limits_{n = f(k_e)}^{g(e) - 1} \gamma^{g(e) - n} \cdot t(e', e, n)
+  + \beta \sum \limits_{p \in P_l} \sum \limits_{\substack{e \in E \\ k_e \geq \sigma}} k_e \cdot q_e \cdot x(e, p) \\[0.9em]
+\text{subject to} \quad
+  & \sum \limits_{p \in P} x(e, p) = 1, \quad \forall e \in E \\[0.6em]
+  & \sum \limits_{e \in E_s} x(e, p) \leq 1, \quad \forall s \in S, p \in P \\[0.6em]
+  & x(e, p) = 0, \quad \forall e \in E, p \in P_e \\[0.6em]
+  & x(e, p) + \sum \limits_{q \in P(p, f(k_e))} x(e', q) \leq 1, \quad \forall s \in S, e \neq e' \in E_s, p \in P \\[0.6em]
+  & u(e, g) = 0, \quad \forall e \in E, g \in G_e \\[0.6em]
+  & \sum \limits_{g \in G} c_g \cdot u(e, g) \leq q_e, \quad \forall e \in E \\[0.6em]
+  & \sum \limits_{e \in E} v(e, p, g) \leq q_g, \quad \forall g \in G, p \in P \\[0.6em]
+  & v(e, p, g) + q_g \leq q_g \cdot x(e, p) + u(e, g), \quad \forall e \in E, p \in P, g \in G \\[0.6em]
+  & q_g \cdot x(e, p) \leq v(e, p, g), \quad \forall e \in E, p \in P, g \in G \\[0.6em]
+  & u(e, g) \leq v(e, p, g), \quad \forall e \in E, p \in P, g \in G \\[0.6em]
+  & x(e', p) + x(e, p + n) \leq 1 + t(e', e, n), \quad \forall p, p + n \in P, s \in S, e \neq e' \in E_s, f(k_e) \leq n < g(e) \\[0.6em]
+  & x(e, p) \in \{0, 1\}, \quad \forall e \in E, p \in P \\[0.6em]
+  & u(e, g), v(e, p, g) \in \mathbb{Z}_{\geq 0}, \quad \forall e \in E, p \in P, g \in G \\[0.6em]
+  & t(e', e, n) \in \{0, 1\}, \quad \forall s \in S, e \neq e' \in E_s, f(k_e) \leq n < g(e)
+\end{aligned}
+```
+
+</div>
+
+Đây là mô hình mô tả đúng và đủ bài toán xếp lịch thi. Khi viết xong mô hình này mình tràn đầy hi vọng vào kết quả khi
+đưa vào máy tính để giải, và đó cũng chính là lúc vấn đề lớn nhất của nghiên cứu xuất hiện. Hãy đọc phần tiếp theo để biết
+vấn đề đó là gì và mình đã giải quyết nó như thế nào nhé.
+
+Đọc tiếp [Phần 4](/blog/undergraduated-thesis-part-4-improvement-techniques)
