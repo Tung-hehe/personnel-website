@@ -108,6 +108,24 @@ h6:hover .anchor {
 /* END: Auto link header icon */
 
 
+/* Model summary box (undergraduated thesis series) */
+.model-summary-box {
+  border: 1.5px solid rgba(122, 162, 247, 0.5);
+  border-radius: 14px;
+  background: rgba(122, 162, 247, 0.07);
+  margin: 1.75rem 0;
+  padding: 1.75rem 1.75rem 1.5rem;
+  overflow-x: auto;
+}
+@media (max-width: 640px) {
+  .model-summary-box {
+    padding: 1rem 0.85rem 0.85rem;
+  }
+  .model-summary-box .katex {
+    font-size: 0.8em;
+  }
+}
+
 /* custom scrollbar */
 ::-webkit-scrollbar {
   width: 20px;
