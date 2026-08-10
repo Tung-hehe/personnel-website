@@ -52,14 +52,17 @@ hiển thị đúng ở mọi nơi.
 
 ## Cách dùng
 
-Chuẩn bị Python, cài 2 thư viện `jinja2` và `pyyaml`, viết nội dung thư vào một file YAML rồi chạy
+Truy cập [love-letter](https://love-letter.tungtt.dev/app/index.html) để tạo thư một cách nhanh gọn mà không
+cần cài thêm bất cứ công cụ gì.
+
+Dành cho anh em lập trình viên thích dùng terminal: chuẩn bị Python, cài 2 thư viện `jinja2` và `pyyaml`, viết
+nội dung thư vào một file YAML (ví dụ input.yaml) rồi chạy
 
 ```bash
-python generate.py
+python generate.py --content input.yaml --output output.html
 ```
 
-Script sẽ hỏi bạn chọn file nội dung và mẫu giao diện, sau đó xuất ra một file `.html` duy nhất trong
-`output/` - gửi file đó cho người nhận là xong.
+Script sẽ hỏi bạn chọn mẫu giao diện, sau đó xuất ra một file `.html` - gửi file đó cho người nhận là xong.
 
 *Code có tại [Tung-hehe/love-letter](https://github.com/Tung-hehe/love-letter)*
 
