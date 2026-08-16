@@ -9,6 +9,7 @@ import type { MDXComponents } from 'mdx/types'
 
 import { BlogInformation } from '@/components/blog/BlogInformation'
 import { Comments } from '@/components/blog/Comments'
+import { LoveLetterDemo } from '@/components/blog/LoveLetterDemo'
 import { Pre } from '@/components/blog/Pre'
 import { Tag } from '@/components/blog/Tag'
 
@@ -18,6 +19,7 @@ import { LocaleType, defaultLocale } from '@/data/config'
 
 const mdxComponents: MDXComponents = {
   pre: ({ children }) => <Pre>{children}</Pre>,
+  LoveLetterDemo,
 }
 
 export const generateMetadata = ({ params }: { params: { slug: string, locale: LocaleType } }) => {
