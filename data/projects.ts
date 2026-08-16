@@ -47,7 +47,7 @@ const projectsData: Project[] = [
     },
     imgSrc: '/projects/love_letter_project.png',
     builtWith: ['Python', 'Jinja2', 'HTML/CSS', 'Javascript'],
-    href: 'https://love-letter.tungtt.dev/app/index.html',
+    href: 'https://love-letter.tungtt.dev',
   },
 ]
 
