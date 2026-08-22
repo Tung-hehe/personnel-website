@@ -11,28 +11,34 @@ import { Footer } from "@/components/common/Footer"
 import { siteMetadata } from "@/data/siteMetadata"
 import { commonConfig } from '@/data/config'
 import { ScrollTopButton } from "@/components/common/ScrollTopButton"
-import { LocaleType } from "@/data/config";
+import { LocaleType, defaultLocale } from "@/data/config";
 
 const font = Nunito({weight: "700", subsets: ['vietnamese']});
 
-export const metadata: Metadata = {
-  ...(siteMetadata.siteUrl ? { metadataBase: new URL(siteMetadata.siteUrl) } : {}),
-  icons: {
-    icon: siteMetadata.siteLogo,
-  },
-  title: {
-    default: siteMetadata.siteName,
-    template: `%s - ${siteMetadata.siteName}`
-  },
-  description: siteMetadata.description,
-  openGraph: {
-    type: 'website',
-    url: siteMetadata.siteUrl,
-    images: [siteMetadata.socialBanner],
-  },
-  twitter: {
-    card: 'summary_large_image'
-  },
+export const generateMetadata = ({ params: { locale } }: { params: { locale: LocaleType } }): Metadata => {
+  const feedPath = locale === defaultLocale ? '/feed.xml' : `/${locale}/feed.xml`
+  return {
+    ...(siteMetadata.siteUrl ? { metadataBase: new URL(siteMetadata.siteUrl) } : {}),
+    icons: {
+      icon: siteMetadata.siteLogo,
+    },
+    title: {
+      default: siteMetadata.siteName,
+      template: `%s - ${siteMetadata.siteName}`
+    },
+    description: siteMetadata.description,
+    openGraph: {
+      type: 'website',
+      url: siteMetadata.siteUrl,
+      images: [siteMetadata.socialBanner],
+    },
+    twitter: {
+      card: 'summary_large_image'
+    },
+    alternates: {
+      types: { 'application/rss+xml': feedPath },
+    },
+  }
 };
 
 export const viewport: Viewport = {

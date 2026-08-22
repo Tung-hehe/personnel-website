@@ -89,6 +89,7 @@ export const blogConfig: {
   words: LocaleDictType
   paginationUrl: string
   readMore: LocaleDictType
+  relatedPosts: LocaleDictType
 } = {
   title: {vi: 'Tất cả bài viết', en: 'All posts'},
   noPost: {vi: 'Không tìm thấy bài viết nào', en: 'No posts were found'},
@@ -97,6 +98,7 @@ export const blogConfig: {
   words: {vi: 'từ', en: 'words'},
   paginationUrl: '/blog',
   readMore: {vi: 'Đọc tiếp', en: 'Read more'},
+  relatedPosts: {vi: 'Bài viết liên quan', en: 'Related posts'},
 }
 
 export const tagsConfig = {title: 'Tags', tagSelect: 'Tag'}

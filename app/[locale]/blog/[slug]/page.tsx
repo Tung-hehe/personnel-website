@@ -11,9 +11,11 @@ import { BlogInformation } from '@/components/blog/BlogInformation'
 import { Comments } from '@/components/blog/Comments'
 import { LoveLetterDemo } from '@/components/blog/LoveLetterDemo'
 import { Pre } from '@/components/blog/Pre'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 import { Tag } from '@/components/blog/Tag'
 
 import { generatePageSeo } from '@/utils/seo'
+import { dateSortDesc } from '@/utils/date'
 import { siteMetadata } from '@/data/siteMetadata'
 import { LocaleType, defaultLocale } from '@/data/config'
 
@@ -42,6 +44,26 @@ export default function Page({ params }: { params: { slug: string, locale: Local
   ).sort(
     (a, b) => a.order - b.order
   )
+  const relatedPosts = allPosts
+    .filter(p => p.locale === params.locale && p.slug !== post.slug)
+    .map(p => ({
+      post: p,
+      inSeries: post.series ? p.series?.title === post.series.title : false,
+      overlap: p.tags.filter(tag => post.tags.includes(tag)).length,
+    }))
+    .filter(({ inSeries, overlap }) => inSeries || overlap > 0)
+    .sort((a, b) => {
+      // Ưu tiên các bài cùng series lên đầu, gần bài đang đọc nhất trước
+      if (a.inSeries !== b.inSeries) return a.inSeries ? -1 : 1
+      if (a.inSeries) {
+        const distanceA = Math.abs((a.post.series?.order ?? 0) - (post.series?.order ?? 0))
+        const distanceB = Math.abs((b.post.series?.order ?? 0) - (post.series?.order ?? 0))
+        return distanceA - distanceB
+      }
+      return b.overlap - a.overlap || dateSortDesc(a.post.date, b.post.date)
+    })
+    .slice(0, 3)
+    .map(({ post }) => post)
   const MDXContent = useMDXComponent(post.body.code)
 
   return (
@@ -90,6 +112,7 @@ export default function Page({ params }: { params: { slug: string, locale: Local
         <div className="prose max-w-none pb-8 pt-6 space-y-6">
           <MDXContent components={mdxComponents}/>
         </div>
+        <RelatedPosts posts={relatedPosts} locale={params.locale}/>
         <div className="prose max-w-none pb-8 pt-6 space-y-6">
           <Comments slug={post.slug}/>
         </div>
