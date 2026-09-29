@@ -1,28 +1,27 @@
 ---
-title: "Love Letter and Its Glow-Up - Part 2: From Couples' Love Letters to Letters for Any Occasion"
+title: "Love Letter - Part 2: From Couples' Love Letters to Letters for Any Occasion"
 date: 2026-09-29
 series:
   order: 2
-  title: Love Letter and Its Glow-Up
-tags: [project, python, typescript]
-summary: Love Letter used to be just for love letters. It has now grown into "Thư Tay" - a web app for writing letters to anyone, about anything.
+  title: Love Letter
+tags: [project, python, typescript, astro]
+summary: From 11 love-letter templates, Love Letter has grown into 19 templates for every kind of relationship - and into a full web app, my first project built with Astro.
 image: /posts/love_letter_project/love_letter_project.png
 authors: [default]
 ---
 
 import { Twemoji } from '@/components/common/Twemoji.tsx'
 
-In [part one](/en/blog/love-letter-project), Love Letter was built just to send love letters - the 11
-templates back then were all about romance. But what I actually loved wasn't "writing love letters," it
-was sitting down and putting hard-to-say things into words - and that isn't unique to romance. So Love
-Letter stopped being just about "love letters" <Twemoji emoji="sparkles" />.
+In [part one](/en/blog/love-letter-project), Love Letter was built to do one thing: write love letters.
+The 11 templates back then all revolved around the same theme - romance. But the more I worked on it,
+the more I realized what I actually loved wasn't "writing love letters" - it was sitting down and turning
+hard-to-say things into words, and that isn't something romance has a monopoly on. So Love Letter slowly
+grew past its own name <Twemoji emoji="sparkles" />.
 
 ## No longer just about two people
 
-From 11 templates built purely for romance, the project is now up to 19: friendship, siblings,
-"comrades," family (3/4/5-person versions), farewell, celebration. The name "Love Letter" started
-feeling too narrow too, so the app got renamed to **Thư Tay** ("handwritten letter") - fit for any
-occasion.
+From 11 templates built purely around romance, the project now has 19: friendship, siblings, "comrades,"
+family (in 3-, 4- and 5-person versions), farewell letters, and celebration letters.
 
 Try a few of the new templates below:
 
@@ -37,41 +36,34 @@ Try a few of the new templates below:
   { slug: 'chuc_mung', label: 'Celebration' },
 ]} />
 
-## The CLI wasn't enough anymore
+## Turning it into a web app
 
-When a letter only ever went to one person, making them install Python was tolerable. But once letters
-could go to parents, friends, coworkers, that technical barrier worked against the whole point.
+At first, this project was just for me. But as the number of templates kept growing, I started wanting
+to share it with more people - and the CLI version, handy as it was for a programmer, wasn't exactly
+something you hand to your family or friends to try. So I built a web app with Astro + TypeScript,
+deployed at [love-letter.tungtt.dev](https://love-letter.tungtt.dev/): open the link and start writing
+right away, nothing to install.
 
-So I built a web app with Astro + TypeScript, deployed at
-[love-letter.tungtt.dev](https://love-letter.tungtt.dev/): open the link and start writing, nothing to
-install. To run entirely in the browser with no backend, I ported all 19 Jinja2 templates to a small
-Jinja2-like interpreter written in TypeScript (`tiny-jinja.ts`). Because of that, your letter never
-leaves your device: no server, no account, nobody can read what you write.
+This was the first time I'd built a full web app, and my first time touching Astro too. Lucky for me, AI
+help exists now (I used Claude), so learning and building at the same time wasn't nearly as rough as it
+used to be - the whole thing came together in under a week. Building a product while picking up a new
+piece of tech on the side felt worth it.
 
-## A smoother writing flow, for any occasion
+If you can, try the app on desktop to get the full experience of what I built.
 
-The app now has a **Library** that saves multiple letters right in the browser (no account, no cloud).
-The compose screen has a title, date, greeting, paragraph-based content (with manual page breaks), a
-closing, a signature, and a postscript. On the **style picker**, every template ships with a preview in
-its own voice - so you get a feel for the mood before writing; pick a style for an empty letter and that
-sample text fills in as a starting point.
-
-Desktop gets a live preview pane right next to the form; mobile gets a dedicated preview screen before
-you download or share.
-
-## Sending it off is still just as simple
-
-The output is still **a single `.html` file**, sendable through any chat app. Mobile now has a Share
-button that opens the native share sheet directly, no manual download needed.
-
-The CLI is still there for anyone who wants to dig deeper, plus a new `generate_all.py` script that
-renders one letter against all 19 templates at once for comparison.
+The CLI is still around for anyone who wants to dig deeper, along with a new script -
+`generate_all.py` - that renders the same content against all 19 templates at once, handy for comparing
+which one fits best.
 
 ## Closing thoughts
 
-Something that started because my handwriting is bad and I wanted to send a nice love letter is now a
-small app my family and friends use too - for anything hard to say out loud, to anyone.
+I honestly didn't expect a small spark of inspiration to grow this far. There's a bit of bittersweetness
+to it too - the original goal, writing a letter for one specific person, isn't the only thing this
+project is about anymore. But that's fine; getting to share it with more people is its own kind of joy.
+
+If you try it and run into a bug, or have an idea for a new letter theme, leave a comment - I'll keep
+building on it.
 
 *Code available at [Tung-hehe/love-letter](https://github.com/Tung-hehe/love-letter)*
 
-Happy coding, and I hope whatever letter you write gets fully received <Twemoji emoji="family" />
+Happy coding, and I hope whatever letter you write gets fully received <Twemoji emoji="love-letter" />
