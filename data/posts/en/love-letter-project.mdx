@@ -53,19 +53,26 @@ Try them out below:
   { slug: 'ngay_nho', label: 'Longing Days' },
 ]} />
 
+There are 11 templates for now, and I'll add more in the future (maybe 😊).
+
 ## How to use it
 
 Get Python ready, install the `jinja2` and `pyyaml` libraries, write your
-letter's content into a YAML file, then run
+letter's content into a YAML file (e.g. input.yaml), then run
 
 ```bash
-python generate.py
+python generate.py --content input.yaml --output output.html
 ```
 
-The script will ask you to pick a content file and a template, then output a
-single `.html` file in `output/` - send that file to the recipient and you're
-done.
+The script will ask you to pick a template, then output a single `.html`
+file - send that file to the recipient and you're done.
 
 *Code available at [Tung-hehe/love-letter](https://github.com/Tung-hehe/love-letter)*
+
+## Closing thoughts
+
+Honestly, I still think a handwritten letter is more sincere, and I'd choose
+that if I could. But if you have handwriting problems like mine, this is not
+a bad product.
 
 Happy coding, and may your feelings be fully received through every letter! <Twemoji emoji="love-letter" />
